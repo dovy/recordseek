@@ -29,20 +29,20 @@ angular.module( 'recordseekApp' )
             $scope.busy = true;
             fsCurrentUserCache.getUser().then(function(user) {
                 fsAPI.getCollectionsForUser(user.id).then(function(response) {
-                    $scope.homeFolder = _.find(response.getCollections(), function(collection) { return !collection.title; });
-                    $scope.folders = _.reject(response.getCollections(), function(collection) { return !collection.title; });
-                    $scope.allDescriptionsCount = _.reduce(response.getCollections(), function(sum, collection) {
-                        return sum + collection.size;
-                    }, 0);
-                    $scope.busy = false;
-                    // if a folder was previously selected, find it in the newly-read collections
-                    if ($scope.selectedFolder && scope.selectedFolder !== 'all') {
-                        $scope.selectedFolder = _.find(response.getCollections(), {id: $scope.selectedFolder.id});
-                    }
-                    $scope.selectFolder($scope.selectedFolder || $scope.homeFolder).then(function() {
-                        $scope.ready = true;
-                    });
-                    console.log($scope);
+                    //$scope.homeFolder = _.find(response.getCollections(), function(collection) { return !collection.title; });
+                    //$scope.folders = _.reject(response.getCollections(), function(collection) { return !collection.title; });
+                    //$scope.allDescriptionsCount = _.reduce(response.getCollections(), function(sum, collection) {
+                    //    return sum + collection.size;
+                    //}, 0);
+                    //$scope.busy = false;
+                    //// if a folder was previously selected, find it in the newly-read collections
+                    //if ($scope.selectedFolder && scope.selectedFolder !== 'all') {
+                    //    $scope.selectedFolder = _.find(response.getCollections(), {id: $scope.selectedFolder.id});
+                    //}
+                    //$scope.selectFolder($scope.selectedFolder || $scope.homeFolder).then(function() {
+                    //    $scope.ready = true;
+                    //});
+                    console.log(response.getCollections());
                 });
             });
 

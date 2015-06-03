@@ -25,7 +25,7 @@ angular
     ['$rootScope', '$location', '$cookies', '$window', function( $rootScope, $location, $cookie, $window ) {
 
         // For debugging purposes obviously
-        $rootScope.debug = true;
+        $rootScope.debug = false;
         $rootScope.service = "";
         $rootScope.expires = 15; // Mins until the cookie is expired
 
