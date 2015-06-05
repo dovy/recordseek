@@ -12,9 +12,10 @@ angular.module( 'recordseekApp' )
     'fsAPI', ['_',function( fsCurrentUserCache, fsAgentCache ) {
         /* jshint camelcase:false */
         //this.client_id = 'WCQY-7J1Q-GKVV-7DNM-SQ5M-9Q5H-JX3H-CMJK';
-        this.client_id = 'a0T3000000ByxnUEAR';
-        this.environment = 'sandbox';
-        this.redirect_uri = 'http://localhost:9000/share';
+        //this.client_id = 'a0T3000000ByxnUEAR';
+        this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
+        this.environment = 'production';
+        this.redirect_uri = 'http://recordseek.com/auth/';
         this.authToken = "";
 
         this.setClientId = function( appKey ) {
