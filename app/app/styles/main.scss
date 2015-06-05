@@ -382,3 +382,16 @@ a {
         margin: 0;
     }
 }
+
+.serviceSelect a {
+    .img-thumbnail {
+        -webkit-transition: 0.5s linear all;
+        transition: 0.5s linear all;
+    }
+    &:hover {
+        .img-thumbnail {
+            background-color: #f8f8f8;
+            border: 1px solid #aaa;
+        }
+    }
+}

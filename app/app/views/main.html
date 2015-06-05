@@ -1,13 +1,26 @@
-<div class="hide alert alert-info text-center" role="alert">Welcome to the new RecordSeek. We have a <em>bunch</em> of new goodies for you! &nbsp;&nbsp;&nbsp;&nbsp;<a href="" class="btn btn-primary btn-sm" target="_blank">Learn More</a></div>
+<div class="alert alert-info text-center" role="alert">Welcome to the new RecordSeek. We have a <em>bunch</em> of
+    new goodies for you! &nbsp;&nbsp;&nbsp;&nbsp;<a href="http://dovy.io/recordseek/recordseek-redesigned-from-the-ground-up/" class="btn btn-primary btn-sm" target="_blank">Learn
+        More</a></div>
 
 <div class="jumbotron">
-  <h1>Create a Source</h1>
-  <p class="lead">
-    Please select a service to add your source to.
-  </p>
-</div>
+    <h1>Create a Source</h1>
 
-<div class="row container-fluid">
-  <a href="#/fs-source" class="well text-center col-xs-5">FamilySearch</a>
-  <a href="#/a-source" class="well text-center col-xs-5 col-xs-offset-2">Ancestry</a>
+    <p class="lead">
+        Please select a service to add your source to.
+    </p>
+</div>
+<div class="container-fluid serviceSelect">
+    <div class="row">
+        <div class="col-sm-6 col-xs-12"><a ng-href="#/fs-source"><img src="images/familysearch.png"
+                                                                      class="img-responsive img-thumbnail" popover-placement="bottom"
+                                                                      popover="FamilySearch.org"
+                                                                      popover-trigger="mouseenter"></a>
+        </div>
+        <div class="col-sm-6 col-xs-12"><a ng-href="#/a-source"><img src="images/ancestry.png"
+                                                                     class="img-responsive img-thumbnail" popover-placement="bottom"
+                                                                     popover="Ancestry.com"
+                                                                     popover-trigger="mouseenter"></a>
+        </div>
+
+    </div>
 </div>
