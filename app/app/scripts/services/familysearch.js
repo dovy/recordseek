@@ -9,7 +9,7 @@
  */
 angular.module( 'recordseekApp' )
     .provider(
-    'fsAPI', ['_',function( fsCurrentUserCache, fsAgentCache ) {
+    'fsAPI', ['_', function( fsCurrentUserCache, fsAgentCache ) {
         /* jshint camelcase:false */
 
         // Beta testing. Old FS Reference Client Key, Local only!
@@ -30,7 +30,7 @@ angular.module( 'recordseekApp' )
         //*
         this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
         this.environment = 'production';
-        this.redirect_uri = 'http://recordseek.com/auth/';
+        this.redirect_uri = document.location.protocol + '//recordseek.com/auth/';
         //*/
 
 
