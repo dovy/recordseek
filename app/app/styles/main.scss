@@ -1,5 +1,5 @@
 @import "_variables.scss";
-$icon-font-path: "glyphicons/";
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
