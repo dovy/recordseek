@@ -35,7 +35,6 @@ angular
             return;
         }
 
-        $rootScope.personURL = 'https://familysearch.org/tree/#view=ancestor&person=';
         $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
 
         if ( $location.$$search && $location.$$search.url ) {
