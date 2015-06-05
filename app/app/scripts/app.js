@@ -35,6 +35,9 @@ angular
             return;
         }
 
+        $rootScope.personURL = 'https://familysearch.org/tree/#view=ancestor&person=';
+        $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
+
         if ( $location.$$search && $location.$$search.url ) {
             var obj = $location.$$search;
 
@@ -78,7 +81,8 @@ angular
 
             }
 
-            if ( $rootScope.data.notes ) {
+
+            if ( $rootScope.data.notes && $rootScope.data.notes.trim() != "" ) {
                 $rootScope.data.notes += '\n\n';
             } else {
                 $rootScope.data.notes = '';
@@ -244,6 +248,10 @@ angular
                 controller: 'FsResultsCtrl'
             }
         )
+            .when('/fs-create', {
+              templateUrl: 'views/fs-create.html',
+              controller: 'FsCreateCtrl'
+            })
             .otherwise(
             {
                 redirectTo: '/'

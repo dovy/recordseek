@@ -4,12 +4,14 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 @import "_bootswatch.scss";
+@import "timer-loader.scss";
 .header {
     .dropdown-menu {
         right: 0;
         left: inherit;
     }
 }
+
 
 .browsehappy {
     margin: 0.2em 0;
@@ -348,11 +350,11 @@ a {
     .header-fixed > tbody > tr > td,
     .header-fixed > thead > tr > th {
         &.select {
-            width: 7%;
+            width: 9%;
             min-width: 60px;
         }
         &.person {
-            width: 30%;
+            width: 28%;
             min-width: 60px;
         }
         &.events {

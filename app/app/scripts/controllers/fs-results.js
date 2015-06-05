@@ -13,20 +13,19 @@ angular.module( 'recordseekApp' )
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', '$window', function( $rootScope, $location, $scope, fsAPI, fsUtils, $window ) {
 
         $rootScope.service = "FamilySearch";
+        fsAPI.getAccessToken();
 
         $scope.goBack = function() {
             $location.path( '/fs-search' );
         };
         $scope.goNext = function( $pid, $name ) {
             $rootScope.data.attach = {
-                'pid' : $pid,
-                'name' : $name
+                pid: $pid,
+                name: $name,
+                justification: ''
             };
             $location.path( '/fs-attach' );
         };
-
-        $scope.personURL = 'https://familysearch.org/tree/#view=ancestor&person=';
-
 
         $scope.pageChanged = function() {
             delete $scope.searchResults;
@@ -83,12 +82,14 @@ angular.module( 'recordseekApp' )
                 function() {
                     $scope.min = ($scope.currentPage * 15) - 14;
                     $scope.max = $scope.currentPage * 15;
+
                     if ( $scope.min < 1 ) {
                         $scope.min = 1;
                     }
-                    if ( $scope.max > $scope.bigTotalItems ) {
+                    if ( $scope.bigTotalItems && $scope.max > $scope.bigTotalItems ) {
                         $scope.max = $scope.bigTotalItems;
                     }
+
                     fsAPI.getPersonSearch(
                         searchData
                     ).then(
@@ -98,6 +99,11 @@ angular.module( 'recordseekApp' )
                             $scope.maxSize = 5;
                             $scope.bigTotalItems = response.getResultsCount();
                             $scope.index = response.getIndex();
+
+                            if ( $scope.max > $scope.bigTotalItems ) {
+                                $scope.max = $scope.bigTotalItems;
+                            }
+
                             //$scope.context = response.getContext();
 
                             function getRelativeData( persons ) {
@@ -140,7 +146,7 @@ angular.module( 'recordseekApp' )
                                     }
                                 );
                             }
-                            console.log($scope.searchResults);
+                            //console.log($scope.searchResults);
                         }
                     );
                 }

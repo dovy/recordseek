@@ -7,11 +7,13 @@
  * # FsCompleteCtrl
  * Controller of the recordseekApp
  */
-angular.module('recordseekApp')
-  .controller('FsCompleteCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+angular.module( 'recordseekApp' )
+    .controller(
+    'FsCompleteCtrl', ['fsAPI', 'fsUtils', '$rootScope', '$scope', '$location', function( fsAPI, fsUtils, $rootScope, $scope, $location ) {
+        $rootScope.service = "FamilySearch";
+        $scope.goSearch = function() {
+            $location.path( '/fs-search' );
+        };
+
+    }]
+);
