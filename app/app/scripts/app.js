@@ -71,7 +71,7 @@ angular
                     var $split = $rootScope.data.url.split( '/' );
                     $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed '.$rootScope.data.time + '), '.$rootScope.data.description + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
                 } else if ( !$rootScope.data.citation ) {
-                    $rootScope.data.citation = '"' + $rootScope.data.title + '." ' + $rootScope.data.title + '. N.p., n.d. Web. ' + $rootScope.data.time + '.<' + $rootScope.data.url + '>.';
+                    $rootScope.data.citation = '"' + $rootScope.data.title + '." ' + $rootScope.data.title + '. N.p., n.d. Web. ' + $rootScope.data.time + '. <' + $rootScope.data.url + '>.';
                 }
 
                 var $dSplit = $rootScope.data.url.split( '//' );
@@ -100,7 +100,6 @@ angular
             }
 
 
-
             $location.url( $location.path() );
         } else {
 
@@ -125,14 +124,14 @@ angular
                 }
             }
         );
-        if (!$rootScope.data) {
+        if ( !$rootScope.data ) {
             $rootScope.data = {};
         }
 
         $rootScope.auth = {};
 
         $rootScope.resetSearch = function() {
-            if ($rootScope.data.search && $rootScope.data.search.advanced) {
+            if ( $rootScope.data.search && $rootScope.data.search.advanced ) {
                 var advanced = $rootScope.data.search.advanced;
             }
             $rootScope.data.search = {
@@ -159,7 +158,7 @@ angular
                 fatherSurnameExact: '',
                 pid: ''
             };
-            if (advanced) {
+            if ( advanced ) {
                 $rootScope.data.search.advanced = advanced;
             }
         };
@@ -168,13 +167,13 @@ angular
             $rootScope.resetSearch();
             $rootScope.data.search.advanced = false;
         }
-        $rootScope.isEmpty = function (obj) {
-            for (var i in obj) if (obj.hasOwnProperty(i)) return false;
+        $rootScope.isEmpty = function( obj ) {
+            for ( var i in obj ) if ( obj.hasOwnProperty( i ) ) return false;
             return true;
         };
     }]
 )
-    .constant('_', _)
+    .constant( '_', _ )
     .config(
     function( $routeProvider ) {
         $routeProvider
@@ -248,10 +247,12 @@ angular
                 controller: 'FsResultsCtrl'
             }
         )
-            .when('/fs-create', {
-              templateUrl: 'views/fs-create.html',
-              controller: 'FsCreateCtrl'
-            })
+            .when(
+            '/fs-create', {
+                templateUrl: 'views/fs-create.html',
+                controller: 'FsCreateCtrl'
+            }
+        )
             .otherwise(
             {
                 redirectTo: '/'

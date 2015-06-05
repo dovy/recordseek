@@ -18,10 +18,11 @@ angular.module( 'recordseekApp' )
         $scope.goBack = function() {
             $location.path( '/fs-search' );
         };
-        $scope.goNext = function( $pid, $name ) {
+        $scope.goNext = function( $pid, $name, $url ) {
             $rootScope.data.attach = {
                 pid: $pid,
                 name: $name,
+                url: $url,
                 justification: ''
             };
             $location.path( '/fs-attach' );
@@ -115,6 +116,7 @@ angular.module( 'recordseekApp' )
                                     data.push(
                                         {
                                             'pid': persons[i].id,
+                                            'url': persons[i].$getPersistentIdentifier(),
                                             'name': persons[i].$getDisplayName(),
                                             'gender': persons[i].$getDisplayGender(),
                                             'data': persons[i]
@@ -123,6 +125,8 @@ angular.module( 'recordseekApp' )
                                 }
                                 return data;
                             }
+
+                            console.log(results);
 
                             $scope.searchResults = [];
 
@@ -136,6 +140,7 @@ angular.module( 'recordseekApp' )
                                         'name': primaryPerson.$getDisplayName(),
                                         'birthDate': primaryPerson.$getBirthDate(),
                                         'gender': primaryPerson.$getDisplayGender(),
+                                        'url': primaryPerson.$getPersistentIdentifier(),
                                         'birthPlace': primaryPerson.$getBirthPlace(),
                                         'deathDate': primaryPerson.$getDeathDate(),
                                         'deathPlace': primaryPerson.$getDeathPlace(),
@@ -146,7 +151,7 @@ angular.module( 'recordseekApp' )
                                     }
                                 );
                             }
-                            //console.log($scope.searchResults);
+                            console.log($scope.searchResults);
                         }
                     );
                 }

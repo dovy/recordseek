@@ -25,7 +25,7 @@
                 <td colspan="5">No Results Found</td>
             </tr>
             <tr ng-repeat="result in searchResults" class="ng-hide" ng-show="searchResults">
-                <td class="select vert-align"><a class="btn btn-xs btn-default" ng-click="goNext('{{result.pid}}', '{{result.name}}')">Select</a><br/><span
+                <td class="select vert-align"><a class="btn btn-xs btn-default" ng-click="goNext('{{result.pid}}', '{{result.name}}', '{{result.url}}')">Select</a><br/><span
                         class="confidence"
                         popover-placement="right"
                         popover="How well this matches your search."
@@ -37,7 +37,7 @@
                         class="glyphicon glyphicon-{{result.confidence >= 5 ? 'star' : 'star-empty'}}"></i></span><i></i>
                 </td>
                 <td class="person"><i
-                        class="glyphicon glyphicon-stop {{result.gender}}"></i><a href="{{$parent.personURL}}{{result.pid}}" popover-placement="right"
+                        class="glyphicon glyphicon-stop {{result.gender}}"></i><a href="{{result.url}}" popover-placement="right"
                                       popover="View on FamilySearch"
                                       popover-trigger="mouseenter" target="_blank">{{result.name}}</a><br/>
                     <small>{{result.pid}}</small>
@@ -70,14 +70,14 @@
                 </td>
                 <td class="parents"><span ng-repeat="father in result.father"><i
                         class="glyphicon glyphicon-stop {{father.gender}}"></i><a
-                        href="{{$parent.$parent.personURL}}{{father.pid}}" target="_blank">{{father.name}}</a></span>
+                        href="{{father.url}}" target="_blank">{{father.name}}</a></span>
                 <span ng-repeat="mother in result.mother"><i
                         class="glyphicon glyphicon-stop {{mother.gender}}"></i><a
-                        href="{{$parent.$parent.personURL}}{{mother.pid}}" target="_blank">{{mother.name}}</a></span>
+                        href="{{mother.url}}" target="_blank">{{mother.name}}</a></span>
                 </td>
                 <td class="spouse"><span ng-repeat="spouse in result.spouse"><i
                         class="glyphicon glyphicon-stop {{spouse.gender}}"></i><a
-                        href="{{$parent.$parent.personURL}}{{spouse.pid}}" target="_blank">{{spouse.name}}</a></span></td>
+                        href="{{spouse.url}}" target="_blank">{{spouse.name}}</a></span></td>
             </tr>
             </tbody>
         </table>
