@@ -10,7 +10,7 @@
 angular.module( 'recordseekApp' )
     .controller(
     'ASourceCtrl',
-    ['$rootScope', '$location', '$scope', '$window', function( $rootScope, $location, $scope, $window ) {
+    ['$rootScope', '$location', '$scope', '$window', '$cookie', function( $rootScope, $location, $scope, $window, $cookie ) {
         $rootScope.service="Ancestry";
 
         $scope.goNext = function() {
