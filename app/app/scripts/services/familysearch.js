@@ -25,11 +25,11 @@ angular.module( 'recordseekApp' )
 
         this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
         this.environment = 'production';
-        //this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
-        this.redirect_uri = document.location.origin;
-        if ( document.location.origin != 'http://localhost:9000' ) {
-            this.redirect_uri += '/';
-        }
+        this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
+        //this.redirect_uri = document.location.origin;
+        //if ( document.location.origin != 'http://localhost:9000' ) {
+        //    this.redirect_uri += '/';
+        //}
 
         //*/
 
