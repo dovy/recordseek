@@ -1,0 +1,46 @@
+<h3>Attach a Source
+    <a class="btn btn-info pull-right btn-sm ng-hide" ng-click="goUpload()">Upload Memory</a>
+</h3>
+<div class="row container-fluid">
+    <form ng-submit="goNext()">
+        <div class="form-group ng-hide input-group-sm" ng-show="debug || !data.url" ng-hide="">
+            <label>Source
+                <small>(URL)</small>
+            </label>
+            <input type="text" class="form-control" ng-model="data.url" placeholder="Enter a URL" value="{{data.url}}"
+                   required>
+        </div>
+        <div class="form-group input-group-sm">
+            <label>Source Title </label>
+            <input type="text" class="form-control" ng-model="data.title" placeholder="Enter a title for this source"
+                   value="{{data.title}}" required>
+        </div>
+        <div class="form-group input-group-sm">
+            <label>Where the Record Is Found
+                <small>(Citation)</small>
+            </label>
+            <textarea class="form-control" ng-model="data.citation" rows="3" required>{{data.citation}}</textarea>
+        </div>
+        <div class="form-group input-group-sm" show-errors>
+            <label>Describe the Record
+                <small>(Notes)</small>
+            </label>
+            <textarea class="form-control" ng-model="data.notes" rows="3">{{data.notes}}</textarea>
+        </div>
+        <div class="form-group input-group-sm ng-hide hide" ng-show="debug">
+            <label>Source Box
+                <small>(Folder)</small>
+            </label>
+            <input type="text" class="form-control" ng-model="data.box" placeholder="RecordSeek" value="{{data.box}}"
+                   readonly>
+        </div>
+        <div class="text-right">
+            <a ng-click="goBack()" type="submit" class="btn btn-default pull-left"><i
+                    class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Go Back
+            </a>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary">Next &nbsp;&nbsp;<i
+                    class="glyphicon glyphicon-arrow-right"></i></button>
+        </div>
+    </form>
+</div>
