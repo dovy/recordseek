@@ -35,6 +35,8 @@ angular
             return;
         }
 
+        //console.log(document.location.origin+'/');
+
         $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
 
         if ( $location.$$search && $location.$$search.url ) {

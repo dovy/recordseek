@@ -77,83 +77,117 @@ angular.module( 'recordseekApp' )
             if ( $scope.context ) {
                 searchData.context = $scope.context;
             }
-            searchData.start = $scope.currentPage * 15 - 14;
+
+            $scope.min = ($scope.currentPage * 15) - 14;
+            $scope.max = $scope.currentPage * 15;
+
+            if ( $scope.min < 1 ) {
+                $scope.min = 1;
+            }
+            if ( $scope.bigTotalItems && $scope.max > $scope.bigTotalItems ) {
+                $scope.max = $scope.bigTotalItems;
+            }
+
+            $scope.maxSize = 5;
+
+
+            // Used to parse relationships
+            function getRelativeData( persons ) {
+                var data = [];
+                for ( var i = 0, len = persons.length; i < len; i++ ) {
+                    if ( persons[i].living ) {
+                        continue;
+                    }
+                    data.push(
+                        {
+                            'pid': persons[i].id,
+                            'url': persons[i].$getPersistentIdentifier(),
+                            'name': persons[i].$getDisplayName(),
+                            'gender': persons[i].$getDisplayGender(),
+                            'data': persons[i]
+                        }
+                    );
+                }
+                return data;
+            }
+
+            function getPrimaryPerson( primaryPerson ) {
+                return {
+                    'pid': primaryPerson.id,
+                    'confidence': primaryPerson.confidence,
+                    'name': primaryPerson.$getDisplayName(),
+                    'birthDate': primaryPerson.$getBirthDate(),
+                    'gender': primaryPerson.$getDisplayGender(),
+                    'url': primaryPerson.$getPersistentIdentifier(),
+                    'birthPlace': primaryPerson.$getBirthPlace(),
+                    'deathDate': primaryPerson.$getDeathDate(),
+                    'deathPlace': primaryPerson.$getDeathPlace(),
+                };
+            }
 
             fsAPI.getAccessToken().then(
                 function() {
-                    $scope.min = ($scope.currentPage * 15) - 14;
-                    $scope.max = $scope.currentPage * 15;
 
-                    if ( $scope.min < 1 ) {
-                        $scope.min = 1;
-                    }
-                    if ( $scope.bigTotalItems && $scope.max > $scope.bigTotalItems ) {
-                        $scope.max = $scope.bigTotalItems;
-                    }
-
-                    fsAPI.getPersonSearch(
-                        searchData
-                    ).then(
-                        function( response ) {
-                            var results = response.getSearchResults();
-
-                            $scope.maxSize = 5;
-                            $scope.bigTotalItems = response.getResultsCount();
-                            $scope.index = response.getIndex();
-
-                            if ( $scope.max > $scope.bigTotalItems ) {
-                                $scope.max = $scope.bigTotalItems;
+                    if ( searchData.pid && searchData.pid != "" ) {
+                        fsAPI.getPersonWithRelationships(
+                            searchData.pid, {
+                                persons: true
                             }
+                        ).then(
+                            function( response ) {
+                                $scope.searchResults = [];
+                                var primaryPerson = response.getPrimaryPerson();
+                                if ( primaryPerson ) {
+                                    $scope.bigTotalItems = $scope.max = 1;
+                                    $scope.index = 0;
+                                    var data = getPrimaryPerson( primaryPerson );
+                                    data.confidence = "500";
+                                    data.father = getRelativeData( response.getFathers() );
+                                    data.mother = getRelativeData( response.getMothers() );
+                                    data.spouse = getRelativeData( response.getSpouses() );
+                                    data.children = getRelativeData( response.getChildren() );
+                                    $scope.searchResults.push(
+                                        data
+                                    );
 
-                            //$scope.context = response.getContext();
+                                }
+                            }
+                        )
+                    } else {
+                        fsAPI.getPersonSearch(
+                            searchData
+                        ).then(
+                            function( response ) {
+                                var results = response.getSearchResults();
+                                $scope.bigTotalItems = response.getResultsCount();
+                                $scope.index = response.getIndex();
 
-                            function getRelativeData( persons ) {
-                                var data = [];
-                                for ( var i = 0, len = persons.length; i < len; i++ ) {
-                                    if (persons[i].living) {
-                                        continue;
-                                    }
-                                    data.push(
-                                        {
-                                            'pid': persons[i].id,
-                                            'url': persons[i].$getPersistentIdentifier(),
-                                            'name': persons[i].$getDisplayName(),
-                                            'gender': persons[i].$getDisplayGender(),
-                                            'data': persons[i]
-                                        }
+                                if ( $scope.max > $scope.bigTotalItems ) {
+                                    $scope.max = $scope.bigTotalItems;
+                                }
+
+                                //$scope.context = response.getContext();
+
+                                $scope.searchResults = [];
+
+                                for ( var i = 0, len = results.length; i < len; i++ ) {
+                                    var result = results[i];
+                                    var primaryPerson = result.$getPrimaryPerson();
+                                    var data = getPrimaryPerson( primaryPerson );
+                                    data.father = getRelativeData( result.$getFathers() );
+                                    data.mother = getRelativeData( result.$getMothers() );
+                                    data.spouse = getRelativeData( result.$getSpouses() );
+                                    data.children = getRelativeData( result.$getChildren() );
+                                    $scope.searchResults.push(
+                                        data
                                     );
                                 }
-                                return data;
+                                //console.log($scope.searchResults);
                             }
+                        );
+                    }
 
-                            console.log(results);
 
-                            $scope.searchResults = [];
-
-                            for ( var i = 0, len = results.length; i < len; i++ ) {
-                                var result = results[i];
-                                var primaryPerson = result.$getPrimaryPerson();
-                                $scope.searchResults.push(
-                                    {
-                                        'pid': result.id,
-                                        'confidence': result.confidence,
-                                        'name': primaryPerson.$getDisplayName(),
-                                        'birthDate': primaryPerson.$getBirthDate(),
-                                        'gender': primaryPerson.$getDisplayGender(),
-                                        'url': primaryPerson.$getPersistentIdentifier(),
-                                        'birthPlace': primaryPerson.$getBirthPlace(),
-                                        'deathDate': primaryPerson.$getDeathDate(),
-                                        'deathPlace': primaryPerson.$getDeathPlace(),
-                                        'father': getRelativeData( result.$getFathers() ),
-                                        'mother': getRelativeData( result.$getMothers() ),
-                                        'spouse': getRelativeData( result.$getSpouses() ),
-                                        'children': getRelativeData( result.$getChildren() )
-                                    }
-                                );
-                            }
-                            console.log($scope.searchResults);
-                        }
-                    );
                 }
             );
         }
