@@ -12,24 +12,19 @@ angular.module( 'recordseekApp' )
     'fsAPI', ['_', function( fsCurrentUserCache, fsAgentCache ) {
         /* jshint camelcase:false */
 
-        // Local, new key and sandbox only!
-        /*
-         this.client_id = 'a0T3000000ByxnUEAR';
-         this.environment = 'sandbox';
-         this.redirect_uri = 'http://localhost:9000/';
-         */
+        this.environment = 'production'; // production, sandbox, staging/beta
 
-        // Production
-        //*
+        if ( this.environment == 'sandbox' ) {
+            this.client_id = 'a0T3000000ByxnUEAR';
+        } else {
+            this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
+        }
 
-
-        this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
-        this.environment = 'production';
         this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
-        //this.redirect_uri = document.location.origin;
-        //if ( document.location.origin != 'http://localhost:9000' ) {
-        //    this.redirect_uri += '/';
-        //}
+        this.redirect_uri = document.location.origin;
+        if ( document.location.origin != 'http://localhost:9000' ) {
+            this.redirect_uri = '/share/';
+        }
 
         //*/
 
@@ -54,7 +49,12 @@ angular.module( 'recordseekApp' )
         this.removeEmptyProperties = function( obj ) {
             return _.omit(
                 obj, function( value ) {
-                    return _.isEmpty( value ) && value !== 0;
+                    console.log(value);
+                    if (value != "" && value !== 0) {
+                        return value;
+                    }
+
+                    //return _.isEmpty( value ) && value !== 0;
                 }
             );
         };

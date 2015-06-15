@@ -14,6 +14,7 @@ angular.module( 'recordseekApp' )
     ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', 'fsCurrentUserCache', 'fsUtils', function( $cookie, $rootScope, $location, $scope, fsAPI, fsCurrentUserCache, fsUtils ) {
         $rootScope.service = "FamilySearch";
         fsAPI.getAccessToken();
+
         $scope.goNext = function() {
             $location.path( '/fs-search' );
         };
@@ -26,7 +27,7 @@ angular.module( 'recordseekApp' )
         };
         $scope.createNow = function() {
             $location.path( '/fs-create' );
-        }
+        };
 
         //if ( !$rootScope.auth.familysearch ) {
         //

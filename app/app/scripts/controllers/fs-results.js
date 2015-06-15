@@ -35,10 +35,20 @@ angular.module( 'recordseekApp' )
 
         $scope.getResults = function() {
 
-            var searchData = $rootScope.data.search;
+            var searchData = angular.copy( $rootScope.data.search );
+            searchData.eventDate = "";
             if ( searchData.eventType ) {
+                if ( searchData.eventDateFrom && searchData.eventDateFrom != "" ) {
+                    searchData.eventDate += searchData.eventDateFrom;
+                    if ( searchData.eventDateTo && searchData.eventDateTo != "" && searchData.eventDateFrom != searchData.eventDateTo ) {
+                        searchData.eventDate += '-' + searchData.eventDateTo;
+                    }
+                } else if ( searchData.eventDateTo && searchData.eventDateTo != "" ) {
+                    searchData.eventDate = searchData.eventDateTo;
+                }
+
                 searchData[searchData.eventType + 'Place'] = searchData.eventPlace;
-                searchData[searchData.eventType + 'Date'] = searchData.eventDate;
+                searchData[searchData.eventType + 'Date'] = String( searchData.eventDate );
             }
 
 
@@ -56,6 +66,8 @@ angular.module( 'recordseekApp' )
             // Clean keys that don't go to FS
             delete searchData.eventType;
             delete searchData.eventDate;
+            delete searchData.eventDateFrom;
+            delete searchData.eventDateTo;
             delete searchData.eventPlace;
             delete searchData.advanced;
             delete searchData.givenNameExact;
@@ -67,6 +79,7 @@ angular.module( 'recordseekApp' )
             delete searchData.motherGivenNameExact;
             delete searchData.motherSurnameExact;
             delete searchData.eventPlaceExact;
+
 
             searchData = fsUtils.removeEmptyProperties( searchData );
 
@@ -114,7 +127,6 @@ angular.module( 'recordseekApp' )
             function getPrimaryPerson( primaryPerson ) {
                 return {
                     'pid': primaryPerson.id,
-                    'confidence': primaryPerson.confidence,
                     'name': primaryPerson.$getDisplayName(),
                     'birthDate': primaryPerson.$getBirthDate(),
                     'gender': primaryPerson.$getDisplayGender(),
@@ -141,7 +153,7 @@ angular.module( 'recordseekApp' )
                                     $scope.bigTotalItems = $scope.max = 1;
                                     $scope.index = 0;
                                     var data = getPrimaryPerson( primaryPerson );
-                                    data.confidence = "500";
+                                    data.confidence = 5;
                                     data.father = getRelativeData( response.getFathers() );
                                     data.mother = getRelativeData( response.getMothers() );
                                     data.spouse = getRelativeData( response.getSpouses() );
@@ -149,7 +161,6 @@ angular.module( 'recordseekApp' )
                                     $scope.searchResults.push(
                                         data
                                     );
-
                                 }
                             }
                         )
@@ -174,6 +185,7 @@ angular.module( 'recordseekApp' )
                                     var result = results[i];
                                     var primaryPerson = result.$getPrimaryPerson();
                                     var data = getPrimaryPerson( primaryPerson );
+                                    data.confidence = results[i].confidence;
                                     data.father = getRelativeData( result.$getFathers() );
                                     data.mother = getRelativeData( result.$getMothers() );
                                     data.spouse = getRelativeData( result.$getSpouses() );

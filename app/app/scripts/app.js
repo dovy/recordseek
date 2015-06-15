@@ -29,6 +29,15 @@ angular
         $rootScope.service = "";
         $rootScope.expires = 15; // Mins until the cookie is expired
 
+        window.liveSettings = {
+            api_key: "11643e1c6ccd4371bfb889827b19fde3",
+            picker: "#languagePicker",
+            detectlang: true,
+            dynamic: true,
+            autocollect: true,
+            staging: true
+        };
+
         if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) == -1 ) {
             var $url = $location.$$absUrl.replace( '?_', '#/?_' );
             $window.location.href = $url;
@@ -52,6 +61,10 @@ angular
             //obj.box = [{"RecordSeek.com"}];
 
             $rootScope.data = obj;
+
+            if ( !$rootScope.data.sourceFormat ) {
+                $rootScope.data.sourceFormat = 'MLA';
+            }
 
             var $dateVal = '/Date(' + $rootScope.data._ + ')/';
             var $date = new Date( parseFloat( $dateVal.substr( 6 ) ) );
@@ -101,6 +114,7 @@ angular
             }
 
 
+
             $location.url( $location.path() );
         } else {
 
@@ -143,6 +157,8 @@ angular
                 gender: '',
                 eventType: '',
                 eventDate: '',
+                eventDateFrom: '',
+                eventDateTo: '',
                 eventPlace: '',
                 eventPlaceExact: '',
                 spouseGivenName: '',
