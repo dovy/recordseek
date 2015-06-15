@@ -23,7 +23,7 @@ angular.module( 'recordseekApp' )
         this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
         this.redirect_uri = document.location.origin;
         if ( document.location.origin != 'http://localhost:9000' ) {
-            this.redirect_uri = '/share/';
+            this.redirect_uri += '/share/';
         }
 
         //*/
