@@ -18,7 +18,7 @@
 </head>
 <body ng-app="recordseekApp">
 <!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" ng-click="actionTaken('Upgrade')">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
 <div class="wrap">
@@ -66,10 +66,10 @@
                         <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-question-sign"></i>
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a ng-href="#/about">About</a></li>
-                            <li><a href="http://dovy.io/categories/index.html#recordseek" target="_blank">Blog</a></li>
-                            <li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TWXLZKGQZJFZY" target="_blank">Donate</a></li>
-                            <li><a ng-href="#/support">Support</a></li>
+                            <li><a ng-href="#/about" ng-click="actionTaken('About')">About</a></li>
+                            <li><a href="http://dovy.io/categories/index.html#recordseek" target="_blank"  ng-click="actionTaken('Blog')">Blog</a></li>
+                            <li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TWXLZKGQZJFZY" target="_blank"  ng-click="actionTaken('Donate')">Donate</a></li>
+                            <li><a ng-href="#/support" ng-click="actionTaken('Support')">Support</a></li>
                         </ul>
                     </li>
 
@@ -87,8 +87,8 @@
 <div class="footer">
     <div class="container-fluid outer-container">
         <p class="text-center">Made with <span class="glyphicon glyphicon-heart"></span> by <a href="http://dovy.io"
-                                                                                               target="_blank">Dovy
-            Paukstys</a> <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TWXLZKGQZJFZY" target="_blank" style="margin-left:40px;">Donate to the Project</a></p>
+                                                                                               target="_blank" ng-click="actionTaken('Dovy')">Dovy
+            Paukstys</a> <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TWXLZKGQZJFZY" target="_blank" style="margin-left:40px;"  ng-click="actionTaken('Donate')">Donate to the Project</a></p>
     </div>
 </div>
 

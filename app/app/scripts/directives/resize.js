@@ -9,12 +9,12 @@
 angular.module( 'recordseekApp' )
     .directive(
     'resize', function( $window ) {
-        return function( scope, element ) {
+        return function( scope ) {
             var w = angular.element( $window );
             scope.$watch(
                 function() {
                     return {'h': w.height(), 'w': w.width()};
-                }, function( newValue, oldValue ) {
+                }, function( newValue ) {
                     scope.windowHeight = newValue.h;
                     scope.windowWidth = newValue.w;
 
@@ -33,6 +33,6 @@ angular.module( 'recordseekApp' )
                     scope.$apply();
                 }
             );
-        }
+        };
     }
 );

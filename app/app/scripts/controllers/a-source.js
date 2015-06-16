@@ -11,7 +11,8 @@ angular.module( 'recordseekApp' )
     .controller(
     'ASourceCtrl',
     ['$rootScope', '$location', '$scope', '$window', '$cookies', function( $rootScope, $location, $scope, $window, $cookie ) {
-        $rootScope.service="Ancestry";
+        /* global ga */
+        $rootScope.service = 'Ancestry';
 
         $scope.goNext = function() {
             $cookie.remove( 'recordseek' );
@@ -28,11 +29,12 @@ angular.module( 'recordseekApp' )
             if ( $rootScope.data.citation ) {
                 $url += '&details=' + encodeURIComponent( $rootScope.data.citation );
             }
+            ga( 'send', 'event', {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
             $window.location.href = $url;
         };
 
         $scope.goBack = function() {
-            $rootScope.service = "";
+            $rootScope.service = '';
             $location.path( '/' );
         };
     }]

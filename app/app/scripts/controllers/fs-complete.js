@@ -10,7 +10,7 @@
 angular.module( 'recordseekApp' )
     .controller(
     'FsCompleteCtrl', ['fsAPI', 'fsUtils', '$rootScope', '$scope', '$location', function( fsAPI, fsUtils, $rootScope, $scope, $location ) {
-        $rootScope.service = "FamilySearch";
+        $rootScope.service = 'FamilySearch';
         $scope.goSearch = function() {
             $location.path( '/fs-search' );
         };

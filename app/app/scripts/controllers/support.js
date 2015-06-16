@@ -10,6 +10,6 @@
 angular.module( 'recordseekApp' )
     .controller(
     'SupportCtrl', function( $rootScope ) {
-        $rootScope.service = "";
+        $rootScope.service = '';
     }
 );

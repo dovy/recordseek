@@ -11,8 +11,8 @@ angular.module( 'recordseekApp' )
     .controller(
     'FsCreateCtrl',
     ['fsAPI', 'fsUtils', '$rootScope', '$scope', '$location', function( fsAPI, fsUtils, $rootScope, $scope, $location ) {
-
-        $rootScope.service = "FamilySearch";
+        /* global ga */
+        $rootScope.service = 'FamilySearch';
         fsAPI.getAccessToken();
 
 
@@ -57,7 +57,7 @@ angular.module( 'recordseekApp' )
             delete $rootScope.data.complete;
 
 
-            $scope.status = "Attaching Source to " + $rootScope.data.attach.name;
+            $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
 
             var sourceRef = new fsAPI.SourceRef(
                 {
@@ -69,10 +69,13 @@ angular.module( 'recordseekApp' )
             return sourceRef.$save( $rootScope.data.attach.justification.trim() ).then(
                 function( sourceRefId ) {
                     sourceRef.id = sourceRefId;
+                    ga(
+                        'send', 'event',
+                        {eventCategory: 'FamilySearch', eventAction: 'Source Attached', eventLabel: sourceRefId}
+                    );
                     $rootScope.data.complete = $rootScope.data.attach;
                     $rootScope.data.complete.sourceRef = sourceRef;
                     delete $rootScope.data.attach;
-
                     $location.path( '/fs-complete' );
                 }
             );
@@ -80,7 +83,7 @@ angular.module( 'recordseekApp' )
         }
 
         if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
-            $scope.status = "Generating Source";
+            $scope.status = 'Generating Source';
             var sourceDescription = new fsAPI.SourceDescription(
                 fsUtils.removeEmptyProperties(
                     {
@@ -91,13 +94,22 @@ angular.module( 'recordseekApp' )
                     }
                 )
             );
+
             sourceDescription.$save( null, true ).then(
                 function() {
                     $rootScope.data.sourceDescription = sourceDescription;
+                    ga(
+                        'send', 'event', {
+                            eventCategory: 'FamilySearch',
+                            eventAction: 'Source Created',
+                            eventLabel: $rootScope.data.sourceDescription.id
+                        }
+                    );
                     attachSource();
                 }
             );
         } else {
+            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Source Attached to Another'} );
             // Already a source description
             attachSource();
         }

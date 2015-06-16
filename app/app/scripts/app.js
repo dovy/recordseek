@@ -23,22 +23,23 @@ angular
 )
     .run(
     ['$rootScope', '$location', '$cookies', '$window', function( $rootScope, $location, $cookie, $window ) {
-
+        /* global ga, _ */
+        /* jshint camelcase: true */
         // For debugging purposes obviously
         $rootScope.debug = false;
-        $rootScope.service = "";
+        $rootScope.service = '';
         $rootScope.expires = 15; // Mins until the cookie is expired
-
         window.liveSettings = {
-            api_key: "11643e1c6ccd4371bfb889827b19fde3",
-            picker: "#languagePicker",
+            api_key: '11643e1c6ccd4371bfb889827b19fde3',
+            picker: '#languagePicker',
             detectlang: true,
             dynamic: true,
             autocollect: true,
             staging: true
         };
 
-        if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) == -1 ) {
+
+        if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) === -1 ) {
             var $url = $location.$$absUrl.replace( '?_', '#/?_' );
             $window.location.href = $url;
             return;
@@ -73,7 +74,7 @@ angular
             var month = months[$date.getMonth()];
             var date = $date.getDate();
             $rootScope.data.time = date + ' ' + month + '. ' + year;
-            if ( $rootScope.data.url && $rootScope.data.url !== "" ) {
+            if ( $rootScope.data.url && $rootScope.data.url !== '' ) {
                 if ( $rootScope.data.url.indexOf( 'ancestry' ) > -1 ) {
                     $rootScope.data.url = $rootScope.data.url.replace(
                         'ancestryinstitution.com', 'ancestry.com'
@@ -92,11 +93,12 @@ angular
                 var $domain = $dSplit[1];
                 $dSplit = $domain.split( '/' );
                 $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
+                ga( 'send', 'event', {eventCategory: 'Domain', eventAction: $rootScope.data.domain} );
 
             }
 
 
-            if ( $rootScope.data.notes && $rootScope.data.notes.trim() != "" ) {
+            if ( $rootScope.data.notes && $rootScope.data.notes.trim() !== '' ) {
                 $rootScope.data.notes += '\n\n';
             } else {
                 $rootScope.data.notes = '';
@@ -114,7 +116,6 @@ angular
             }
 
 
-
             $location.url( $location.path() );
         } else {
 
@@ -124,9 +125,9 @@ angular
         }
 
         $rootScope.$on(
-            '$routeChangeSuccess', function( route, next, current ) {
+            '$routeChangeSuccess', function() {
                 if ( $rootScope.data ) {
-                    if ( $location.$$path !== "/about" && $location.$$path !== "/support" && $location.$$path !== "/expired" && $rootScope.data ) {
+                    if ( $location.$$path !== '/about' && $location.$$path !== '/support' && $location.$$path !== '/expired' && $rootScope.data ) {
                         var date = new Date(),
                             $exp = new Date( date );
                         $exp.setMinutes( date.getMinutes() + $rootScope.expires );
@@ -144,10 +145,10 @@ angular
         }
 
         $rootScope.auth = {};
-
+        var advanced = '';
         $rootScope.resetSearch = function() {
             if ( $rootScope.data.search && $rootScope.data.search.advanced ) {
-                var advanced = $rootScope.data.search.advanced;
+                advanced = $rootScope.data.search.advanced;
             }
             $rootScope.data.search = {
                 givenName: '',
@@ -175,7 +176,7 @@ angular
                 fatherSurnameExact: '',
                 pid: ''
             };
-            if ( advanced ) {
+            if ( advanced !== '' ) {
                 $rootScope.data.search.advanced = advanced;
             }
         };
@@ -185,8 +186,16 @@ angular
             $rootScope.data.search.advanced = false;
         }
         $rootScope.isEmpty = function( obj ) {
-            for ( var i in obj ) if ( obj.hasOwnProperty( i ) ) return false;
+            for ( var i in obj ) {
+                if ( obj.hasOwnProperty( i ) ) {
+                    return false;
+                }
+            }
             return true;
+        };
+
+        $rootScope.actionTaken = function( action ) {
+            ga( 'send', 'event', {eventCategory: 'Action', eventAction: action} );
         };
     }]
 )

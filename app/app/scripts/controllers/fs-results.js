@@ -10,15 +10,17 @@
 angular.module( 'recordseekApp' )
     .controller(
     'FsResultsCtrl',
-    ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', '$window', function( $rootScope, $location, $scope, fsAPI, fsUtils, $window ) {
-
-        $rootScope.service = "FamilySearch";
+    ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
+        /* global ga */
+        $rootScope.service = 'FamilySearch';
         fsAPI.getAccessToken();
 
         $scope.goBack = function() {
+            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Search', eventLabel: 'Refine'} );
             $location.path( '/fs-search' );
         };
         $scope.goNext = function( $pid, $name, $url ) {
+            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Selected', eventLabel: $pid} );
             $rootScope.data.attach = {
                 pid: $pid,
                 name: $name,
@@ -35,34 +37,45 @@ angular.module( 'recordseekApp' )
 
         $scope.getResults = function() {
 
+
             var searchData = angular.copy( $rootScope.data.search );
-            searchData.eventDate = "";
+            searchData.eventDate = '';
             if ( searchData.eventType ) {
-                if ( searchData.eventDateFrom && searchData.eventDateFrom != "" ) {
+                if ( searchData.eventDateFrom && searchData.eventDateFrom !== '' ) {
                     searchData.eventDate += searchData.eventDateFrom;
-                    if ( searchData.eventDateTo && searchData.eventDateTo != "" && searchData.eventDateFrom != searchData.eventDateTo ) {
+                    if ( searchData.eventDateTo && searchData.eventDateTo !== '' && searchData.eventDateFrom !== searchData.eventDateTo ) {
                         searchData.eventDate += '-' + searchData.eventDateTo;
                     }
-                } else if ( searchData.eventDateTo && searchData.eventDateTo != "" ) {
+                } else if ( searchData.eventDateTo && searchData.eventDateTo !== '' ) {
                     searchData.eventDate = searchData.eventDateTo;
                 }
 
                 searchData[searchData.eventType + 'Place'] = searchData.eventPlace;
-                searchData[searchData.eventType + 'Date'] = String( searchData.eventDate );
+                searchData[searchData.eventType + 'Date'] = String( searchData.eventDate ) + '~';
             }
-
 
             if ( searchData.advanced === true ) {
-                searchData.givenName += searchData.givenNameExact;
-                searchData.surname += searchData.surnameExact;
-                searchData.spouseGivenName += searchData.spouseGivenNameExact;
-                searchData.spouseSurname += searchData.spouseSurnameExact;
-                searchData.fatherGivenName += searchData.fatherGivenNameExact;
-                searchData.fatherSurname += searchData.fatherSurnameExact;
-                searchData.motherGivenName += searchData.motherGivenNameExact;
-                searchData.motherSurname += searchData.motherSurnameExact;
-                searchData.eventPlace += searchData.eventPlaceExact;
+                searchData.givenName += (searchData.givenNameExact !== '1' && searchData.givenName !== '' ) ? '~' : '';
+                searchData.surname += (searchData.surnameExact !== '1' && searchData.surname !== '' ) ? '~' : '';
+                searchData.spouseGivenName += (searchData.spouseGivenNameExact !== '1' && searchData.spouseGivenName !== '' ) ? '~' : '';
+                searchData.spouseSurname += (searchData.spouseSurnameExact !== '1' && searchData.spouseSurname !== '' ) ? '~' : '';
+                searchData.fatherGivenName += (searchData.fatherGivenNameExact !== '1' && searchData.fatherGivenName !== '' ) ? '~' : '';
+                searchData.fatherSurname += (searchData.fatherSurnameExact !== '1' && searchData.fatherSurname !== '' ) ? '~' : '';
+                searchData.motherGivenName += (searchData.motherGivenNameExact !== '1' && searchData.motherGivenName !== '' ) ? '~' : '';
+                searchData.motherSurname += (searchData.motherSurnameExact !== '1' && searchData.motherSurname !== '' ) ? '~' : '';
+                searchData.eventPlace += (searchData.eventPlaceExact !== '1' && searchData.eventPlace !== '' ) ? '~' : '';
+            } else {
+                searchData.givenName = (searchData.givenName !== '') ? searchData.givenName + '~' : '';
+                searchData.surname = (searchData.surname !== '') ? searchData.surname + '~' : '';
+                searchData.spouseGivenName = (searchData.spouseGivenName !== '') ? searchData.spouseGivenName + '~' : '';
+                searchData.spouseSurname = (searchData.spouseSurname !== '') ? searchData.spouseSurname + '~' : '';
+                searchData.fatherGivenName = (searchData.fatherGivenName !== '') ? searchData.fatherGivenName + '~' : '';
+                searchData.fatherSurname = (searchData.fatherSurname !== '') ? searchData.fatherSurname + '~' : '';
+                searchData.motherGivenName = (searchData.motherGivenName !== '') ? searchData.motherGivenName + '~' : '';
+                searchData.motherSurname = (searchData.motherSurname !== '') ? searchData.motherSurname + '~' : '';
+                searchData.eventPlace = (searchData.eventPlace !== '') ? searchData.eventPlace + '~' : '';
             }
+
             // Clean keys that don't go to FS
             delete searchData.eventType;
             delete searchData.eventDate;
@@ -83,7 +96,8 @@ angular.module( 'recordseekApp' )
 
             searchData = fsUtils.removeEmptyProperties( searchData );
 
-            if ( Object.keys( searchData ).length == 0 ) {
+
+            if ( Object.keys( searchData ).length === 0 ) {
                 $location.path( '/fs-search' );
             }
 
@@ -140,7 +154,7 @@ angular.module( 'recordseekApp' )
             fsAPI.getAccessToken().then(
                 function() {
 
-                    if ( searchData.pid && searchData.pid != "" ) {
+                    if ( searchData.pid && searchData.pid !== '' ) {
                         fsAPI.getPersonWithRelationships(
                             searchData.pid, {
                                 persons: true
@@ -163,7 +177,7 @@ angular.module( 'recordseekApp' )
                                     );
                                 }
                             }
-                        )
+                        );
                     } else {
                         fsAPI.getPersonSearch(
                             searchData
@@ -194,6 +208,15 @@ angular.module( 'recordseekApp' )
                                         data
                                     );
                                 }
+                                ga(
+                                    'send', 'event', {
+                                        eventCategory: 'FamilySearch',
+                                        eventAction: 'Search',
+                                        eventLabel: 'Results',
+                                        eventValue: results.length
+                                    }
+                                );
+
                                 //console.log($scope.searchResults);
                             }
                         );
@@ -202,7 +225,7 @@ angular.module( 'recordseekApp' )
 
                 }
             );
-        }
+        };
 
         $scope.currentPage = 1;
         $scope.getResults();

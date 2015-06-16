@@ -9,27 +9,28 @@
  */
 angular.module( 'recordseekApp' )
     .provider(
-    'fsAPI', ['_', function( fsCurrentUserCache, fsAgentCache ) {
+    'fsAPI', ['_', function() {
         /* jshint camelcase:false */
+        /* global _ */
 
         this.environment = 'production'; // production, sandbox, staging/beta
 
-        if ( this.environment == 'sandbox' ) {
+        if ( this.environment === 'sandbox' ) {
             this.client_id = 'a0T3000000ByxnUEAR';
         } else {
             this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
         }
 
-        this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
+        //this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
         this.redirect_uri = document.location.origin;
-        if ( document.location.origin != 'http://localhost:9000' ) {
+        if ( document.location.origin !== 'http://localhost:9000' ) {
             this.redirect_uri += '/share/';
         }
 
         //*/
 
 
-        this.authToken = "";
+        this.authToken = '';
 
         this.setClientId = function( appKey ) {
             this.client_id = appKey;
@@ -49,12 +50,7 @@ angular.module( 'recordseekApp' )
         this.removeEmptyProperties = function( obj ) {
             return _.omit(
                 obj, function( value ) {
-                    console.log(value);
-                    if (value != "" && value !== 0) {
-                        return value;
-                    }
-
-                    //return _.isEmpty( value ) && value !== 0;
+                    return _.isEmpty( value ) && value !== 0;
                 }
             );
         };
@@ -91,130 +87,8 @@ angular.module( 'recordseekApp' )
 
 
 angular.module( 'recordseekApp' )
-    .directive(
-    'fsReAuthenticate', function( $rootScope, fsReAuthenticateModal ) {
-        return {
-            template: '<div></div>',
-            link: function( scope ) {
-                var unbind = $rootScope.$on(
-                    'sessionExpired', function() {
-                        fsReAuthenticateModal.open();
-                    }
-                );
-
-                scope.$on( '$destroy', unbind );
-            }
-        };
-    }
-);
-
-
-angular.module( 'recordseekApp' )
-    .directive(
-    'fsReAuthenticate', function( $rootScope, fsReAuthenticateModal ) {
-        return {
-            template: '<div></div>',
-            link: function( scope ) {
-                var unbind = $rootScope.$on(
-                    'sessionExpired', function() {
-                        fsReAuthenticateModal.open();
-                    }
-                );
-
-                scope.$on( '$destroy', unbind );
-            }
-        };
-    }
-);
-angular.module( 'recordseekApp' )
     .factory(
-    'fsReAuthenticateModal', function( $modal, $rootScope, fsApi ) {
-        return {
-            open: function() {
-                return $modal.open(
-                    {
-                        templateUrl: 'views/fsReAuthenticateModal.html',
-                        size: 'sm',
-                        controller: function( $scope ) {
-                            $scope.signin = function() {
-                                $scope.$close();
-                                fsApi.getAccessToken().then(
-                                    function() {
-                                        $rootScope.$emit( 'newSession' );
-                                    }
-                                );
-                            };
-                        }
-                    }
-                ).result;
-            }
-        };
-    }
-);
-
-
-angular.module( 'recordseekApp' )
-    .factory(
-    'fsSourceUtils', function( fsAPI, fsUtils ) {
-        return {
-            attachSource: function( description, context ) {
-
-                var sourceRef = new fsAPI.SourceRef(
-                    {
-                        $personId: context.person ? context.person.id : '',
-                        $coupleId: context.couple ? context.couple.id : '',
-                        $childAndParentsId: context.parents ? context.parents.id : '',
-                        sourceDescription: description.id
-                    }
-                );
-                return sourceRef.$save( context.justification ).then(
-                    function( sourceRefId ) {
-                        sourceRef.id = sourceRefId;
-                        // we can't refresh sourceRefs unfortunately, so attempt to approximate new attribution
-                        fsUtils.approximateAttribution( sourceRef );
-                        return sourceRef;
-                    }
-                );
-            },
-
-            detachSource: function( context ) {
-                return context.sourceRef.$delete();
-            },
-
-            createSource: function( saveAndAttach, descriptionToCopy ) {
-
-                var sourceDescription = new fsAPI.SourceDescription(
-                    fsUtils.removeEmptyProperties(
-                        {
-                            about: form.url,
-                            citation: form.citation,
-                            title: form.title,
-                            text: form.notes
-                        }
-                    )
-                );
-                return sourceDescription.$save( null, true ).then(
-                    function() {
-                        return {
-                            description: sourceDescription,
-                            attach: form.attach
-                        };
-                    }
-                );
-            },
-
-            deleteSource: function( description ) {
-                description.$delete();
-            }
-
-        };
-    }
-);
-
-
-angular.module( 'recordseekApp' )
-    .factory(
-    'fsUtils', function( _, $q, fsAPI, fsCurrentUserCache ) {
+    'fsUtils', function( _, $q, fsAPI, fsCurrentUserCache, fsAgentCache ) {
 
         return {
             mixinStateFunctions: function( scope, item ) {
@@ -334,10 +208,10 @@ angular.module( 'recordseekApp' )
 
             // pass in a name, fact, or gender
             getItemTag: function( item ) {
-                if ( item instanceof fsApi.Name ) {
+                if ( item instanceof fsAPI.Name ) {
                     return 'http://gedcomx.org/Name';
                 }
-                else if ( item instanceof fsApi.Fact ) {
+                else if ( item instanceof fsAPI.Fact ) {
                     return item.type;
                 }
                 else { // the only other possibility
@@ -459,7 +333,7 @@ angular.module( 'recordseekApp' )
                                     promises.push(
                                         $q.all(
                                             [
-                                                fsApi.getPerson( sourceRef.$personId ),
+                                                fsAPI.getPerson( sourceRef.$personId ),
                                                 getAgent( sourceRef )
                                             ]
                                         ).then(
@@ -482,7 +356,7 @@ angular.module( 'recordseekApp' )
                                     promises.push(
                                         $q.all(
                                             [
-                                                fsApi.getCouple( sourceRef.$coupleId, {persons: true} ),
+                                                fsAPI.getCouple( sourceRef.$coupleId, {persons: true} ),
                                                 getAgent( sourceRef )
                                             ]
                                         ).then(

@@ -10,21 +10,20 @@
 angular.module( 'recordseekApp' )
     .controller(
     'FsAttachCtrl',
-    ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', '$window', function( $rootScope, $location, $scope, fsAPI, fsUtils, $window ) {
+    ['$rootScope', '$location', '$scope', 'fsAPI', function( $rootScope, $location, $scope, fsAPI ) {
 
-        $rootScope.service = "FamilySearch";
+        $rootScope.service = 'FamilySearch';
         fsAPI.getAccessToken();
 
-
-        if (!$rootScope.data.attach) {
-            if (!$rootScope.data.search) {
+        if ( !$rootScope.data.attach ) {
+            if ( !$rootScope.data.search ) {
                 $location.path( '/fs-search' );
             } else {
                 $location.path( '/fs-results' );
             }
         }
-        if (!$rootScope.data.attach.justification) {
-            $rootScope.data.attach.justification = "";
+        if ( !$rootScope.data.attach.justification ) {
+            $rootScope.data.attach.justification = '';
         }
 
         $scope.goBack = function() {

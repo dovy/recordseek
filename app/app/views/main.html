@@ -1,5 +1,5 @@
 <div class="alert alert-info text-center" role="alert">Welcome to the new RecordSeek. We have a <em>bunch</em> of
-    new goodies for you! &nbsp;&nbsp;&nbsp;&nbsp;<a href="http://dovy.io/recordseek/recordseek-redesigned-from-the-ground-up/" class="btn btn-primary btn-sm" target="_blank">Learn
+    new goodies for you! &nbsp;&nbsp;&nbsp;&nbsp;<a href="http://dovy.io/recordseek/recordseek-redesigned-from-the-ground-up/" class="btn btn-primary btn-sm" ng-click="actionTaken('Blog')" target="_blank">Learn
         More</a></div>
 
 <div class="jumbotron">
@@ -11,12 +11,12 @@
 </div>
 <div class="container-fluid serviceSelect">
     <div class="row">
-        <div class="col-sm-6 col-xs-12"><a ng-href="#/fs-source"><img src="images/familysearch.png"
+        <div class="col-sm-6 col-xs-12"><a ng-href="#/fs-source" ng-click="actionTaken('FamilySearch')"><img src="images/familysearch.png"
                                                                       class="img-responsive img-thumbnail" popover-placement="bottom"
                                                                       popover="FamilySearch.org"
                                                                       popover-trigger="mouseenter"></a>
         </div>
-        <div class="col-sm-6 col-xs-12"><a ng-href="#/a-source"><img src="images/ancestry.png"
+        <div class="col-sm-6 col-xs-12"><a ng-href="#/a-source" ng-click="actionTaken('Ancestry')" ><img src="images/ancestry.png"
                                                                      class="img-responsive img-thumbnail" popover-placement="bottom"
                                                                      popover="Ancestry.com"
                                                                      popover-trigger="mouseenter"></a>

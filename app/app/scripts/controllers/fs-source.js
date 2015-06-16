@@ -11,21 +11,28 @@ angular.module( 'recordseekApp' )
     .controller(
     'FsSourceCtrl',
 
-    ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', 'fsCurrentUserCache', 'fsUtils', function( $cookie, $rootScope, $location, $scope, fsAPI, fsCurrentUserCache, fsUtils ) {
-        $rootScope.service = "FamilySearch";
+    ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', function( $cookie, $rootScope, $location, $scope, fsAPI ) {
+        /* global ga */
+        $rootScope.service = 'FamilySearch';
         fsAPI.getAccessToken();
+        $scope.origSource = $rootScope.data.citation;
 
         $scope.goNext = function() {
             $location.path( '/fs-search' );
+            if ($scope.origSource !== $rootScope.data.citation) {
+                ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Citation', eventLabel: 'Modified'} );
+            }
         };
+
         $scope.goBack = function() {
-            $rootScope.service = "";
+            $rootScope.service = '';
             $location.path( '/' );
         };
         $scope.goUpload = function() {
             $location.path( '/fs-upload' );
         };
         $scope.createNow = function() {
+            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
             $location.path( '/fs-create' );
         };
 
