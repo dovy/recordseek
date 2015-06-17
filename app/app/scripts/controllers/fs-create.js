@@ -65,10 +65,14 @@ angular.module( 'recordseekApp' )
                     sourceDescription: $rootScope.data.sourceDescription.id
                 }
             );
+            // Source tags
+            //sourceRef.$addTag('Birth');
 
             return sourceRef.$save( $rootScope.data.attach.justification.trim() ).then(
                 function( sourceRefId ) {
                     sourceRef.id = sourceRefId;
+                    //sourceRef.$setTags(['birth', 'death']);
+                    //sourceRef.$save();
                     ga(
                         'send', 'event',
                         {eventCategory: 'FamilySearch', eventAction: 'Source Attached', eventLabel: sourceRefId}

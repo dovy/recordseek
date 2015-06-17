@@ -13,7 +13,11 @@ angular.module( 'recordseekApp' )
         /* jshint camelcase:false */
         /* global _ */
 
-        this.environment = 'production'; // production, sandbox, staging/beta
+        this.environment = 'sandbox'; // production, sandbox, staging/beta
+
+        if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
+            this.environment = 'production';
+        }
 
         if ( this.environment === 'sandbox' ) {
             this.client_id = 'a0T3000000ByxnUEAR';
@@ -26,9 +30,6 @@ angular.module( 'recordseekApp' )
         if ( document.location.origin !== 'http://localhost:9000' ) {
             this.redirect_uri += '/share/';
         }
-
-        //*/
-
 
         this.authToken = '';
 
@@ -64,13 +65,13 @@ angular.module( 'recordseekApp' )
                         redirect_uri: this.redirect_uri,
                         http_function: $http,
                         deferred_function: $q.defer,
-                        timeout_function: $timeout,
                         save_access_token: true,
-                        auto_expire: true,
-                        auto_signin: false,
-                        expire_callback: function() {
-                            $rootScope.$emit( 'sessionExpired' );
-                        }
+                        auto_expire: true
+                        //timeout_function: $timeout,
+                        //auto_signin: true,
+                        //expire_callback: function() {
+                        //
+                        //}
                     }
                 );
             }
@@ -86,25 +87,29 @@ angular.module( 'recordseekApp' )
 );
 
 angular.module( 'recordseekApp' )
-.factory('fsAgentCache', function($q, fsAPI) {
-    var agentMap = {};
+    .factory(
+    'fsAgentCache', function( $q, fsAPI ) {
+        var agentMap = {};
 
-    return {
-        getAgent: function(urlOrId) {
-            var key = urlOrId.substr(urlOrId.indexOf('?')+1); // remove access token from url
-            if (!!agentMap[key]) {
-                return $q.when(agentMap[key]);
+        return {
+            getAgent: function( urlOrId ) {
+                var key = urlOrId.substr( urlOrId.indexOf( '?' ) + 1 ); // remove access token from url
+                if ( !!agentMap[key] ) {
+                    return $q.when( agentMap[key] );
+                }
+                else {
+                    return fsAPI.getAgent( urlOrId ).then(
+                        function( response ) {
+                            var agent = response.getAgent();
+                            agentMap[key] = agent;
+                            return agent;
+                        }
+                    );
+                }
             }
-            else {
-                return fsAPI.getAgent(urlOrId).then(function(response) {
-                    var agent = response.getAgent();
-                    agentMap[key] = agent;
-                    return agent;
-                });
-            }
-        }
-    };
-});
+        };
+    }
+);
 
 angular.module( 'recordseekApp' )
     .factory(

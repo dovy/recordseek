@@ -93,7 +93,10 @@ angular
                 var $domain = $dSplit[1];
                 $dSplit = $domain.split( '/' );
                 $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
-                ga( 'send', 'event', {eventCategory: 'Domain', eventAction: $rootScope.data.domain} );
+                ga(
+                    'send', 'event',
+                    {eventCategory: 'Domain', eventAction: $rootScope.data.domain.toLowerCase().replace( 'www.', '' )}
+                );
 
             }
 
@@ -114,18 +117,15 @@ angular
             if ( !$rootScope.data.notes ) {
                 $rootScope.data.notes = '';
             }
-
-            //$location.url( $location.path() );
         } else {
-
-            if ( !$rootScope.data ) {
+            if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) && !$rootScope.data ) {
                 $rootScope.data = angular.fromJson( $cookie.get( 'recordseek' ) );
             }
         }
 
         $rootScope.$on(
             '$routeChangeSuccess', function() {
-                if ( $rootScope.data ) {
+                if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) && $rootScope.data ) {
                     if ( $location.$$path !== '/about' && $location.$$path !== '/support' && $location.$$path !== '/expired' && $rootScope.data ) {
                         var date = new Date(),
                             $exp = new Date( date );
@@ -139,6 +139,7 @@ angular
                 }
             }
         );
+
         if ( !$rootScope.data ) {
             $rootScope.data = {};
         }
