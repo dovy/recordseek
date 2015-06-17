@@ -31,23 +31,6 @@ angular.module( 'recordseekApp' )
             this.redirect_uri += '/share/';
         }
 
-        this.authToken = '';
-
-        this.setClientId = function( appKey ) {
-            this.client_id = appKey;
-            return this;
-        };
-
-        this.setEnvironmentName = function( environmentName ) {
-            this.environment = environmentName;
-            return this;
-        };
-
-        this.setRedirectUri = function( authCallback ) {
-            this.redirect_uri = authCallback;
-            return this;
-        };
-
         this.removeEmptyProperties = function( obj ) {
             return _.omit(
                 obj, function( value ) {
@@ -66,12 +49,12 @@ angular.module( 'recordseekApp' )
                         http_function: $http,
                         deferred_function: $q.defer,
                         save_access_token: true,
-                        auto_expire: true
-                        //timeout_function: $timeout,
-                        //auto_signin: true,
-                        //expire_callback: function() {
-                        //
-                        //}
+                        auto_expire: true,
+                        timeout_function: $timeout,
+                        auto_signin: true,
+                        expire_callback: function() {
+
+                        }
                     }
                 );
             }

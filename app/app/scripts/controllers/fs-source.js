@@ -14,7 +14,12 @@ angular.module( 'recordseekApp' )
     ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', function( $cookie, $rootScope, $location, $scope, fsAPI ) {
         /* global ga */
         $rootScope.service = 'FamilySearch';
-        fsAPI.getAccessToken();
+        fsAPI.getAccessToken().then(function (response) {
+            fsAPI.getCurrentUser().then(function (response) {
+                var user = response.getUser();
+                console.log(user);
+            });
+        });
         $scope.origSource = $rootScope.data.citation;
 
         $scope.goNext = function() {

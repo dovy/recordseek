@@ -125,17 +125,20 @@ angular
 
         $rootScope.$on(
             '$routeChangeSuccess', function() {
-                if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) && $rootScope.data ) {
-                    if ( $location.$$path !== '/about' && $location.$$path !== '/support' && $location.$$path !== '/expired' && $rootScope.data ) {
-                        var date = new Date(),
-                            $exp = new Date( date );
-                        $exp.setMinutes( date.getMinutes() + $rootScope.expires );
-                        $cookie.put(
-                            'recordseek', angular.toJson( $rootScope.data ), {
-                                expires: $exp
-                            }
-                        );
+                if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) ) {
+                    if ( $rootScope.data ) {
+                        if ( $location.$$path !== '/about' && $location.$$path !== '/support' && $location.$$path !== '/expired' && $rootScope.data ) {
+                            var date = new Date(),
+                                $exp = new Date( date );
+                            $exp.setMinutes( date.getMinutes() + $rootScope.expires );
+                            $cookie.put(
+                                'recordseek', angular.toJson( $rootScope.data ), {
+                                    expires: $exp
+                                }
+                            );
+                        }
                     }
+
                 }
             }
         );
