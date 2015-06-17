@@ -85,6 +85,26 @@ angular.module( 'recordseekApp' )
     }]
 );
 
+angular.module( 'recordseekApp' )
+.factory('fsAgentCache', function($q, fsAPI) {
+    var agentMap = {};
+
+    return {
+        getAgent: function(urlOrId) {
+            var key = urlOrId.substr(urlOrId.indexOf('?')+1); // remove access token from url
+            if (!!agentMap[key]) {
+                return $q.when(agentMap[key]);
+            }
+            else {
+                return fsAPI.getAgent(urlOrId).then(function(response) {
+                    var agent = response.getAgent();
+                    agentMap[key] = agent;
+                    return agent;
+                });
+            }
+        }
+    };
+});
 
 angular.module( 'recordseekApp' )
     .factory(

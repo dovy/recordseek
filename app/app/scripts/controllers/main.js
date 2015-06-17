@@ -13,3 +13,12 @@ angular.module( 'recordseekApp' )
         $rootScope.service = '';
     }
 );
+
+// at the bottom of your controller
+var init = function () {
+    var width = 800;
+    var height = 675;
+    window.resizeTo(width, height);
+    window.moveTo(((screen.width - width)), ((screen.height - height) / 2));
+};
+init();

@@ -114,7 +114,7 @@ angular
             if ( !$rootScope.data.notes ) {
                 $rootScope.data.notes = '';
             }
-            
+
             //$location.url( $location.path() );
         } else {
 
