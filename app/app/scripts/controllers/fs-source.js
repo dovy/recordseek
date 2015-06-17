@@ -16,8 +16,8 @@ angular.module( 'recordseekApp' )
         $rootScope.service = 'FamilySearch';
         fsAPI.getAccessToken().then(function (response) {
             fsAPI.getCurrentUser().then(function (response) {
-                var user = response.getUser();
-                console.log(user);
+                //var user = response.getUser();
+                //console.log(user);
             });
         });
         $scope.origSource = $rootScope.data.citation;

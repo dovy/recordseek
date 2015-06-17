@@ -13,7 +13,41 @@ angular.module( 'recordseekApp' )
     ['fsAPI', 'fsUtils', '$rootScope', '$scope', '$location', function( fsAPI, fsUtils, $rootScope, $scope, $location ) {
         /* global ga */
         $rootScope.service = 'FamilySearch';
-        fsAPI.getAccessToken();
+        fsAPI.getAccessToken().then(function (response) {
+            fsAPI.getCurrentUser().then(function (response) {
+                if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
+                    $scope.status = 'Generating Source';
+                    var sourceDescription = new fsAPI.SourceDescription(
+                        fsUtils.removeEmptyProperties(
+                            {
+                                about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
+                                citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
+                                title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
+                                text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
+                            }
+                        )
+                    );
+
+                    sourceDescription.$save( null, true ).then(
+                        function() {
+                            $rootScope.data.sourceDescription = sourceDescription;
+                            ga(
+                                'send', 'event', {
+                                    eventCategory: 'FamilySearch',
+                                    eventAction: 'Source Created',
+                                    eventLabel: $rootScope.data.sourceDescription.id
+                                }
+                            );
+                            attachSource();
+                        }
+                    );
+                } else {
+                    ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Source Attached to Another'} );
+                    // Already a source description
+                    attachSource();
+                }
+            });
+        });
 
 
         //
@@ -86,36 +120,6 @@ angular.module( 'recordseekApp' )
 
         }
 
-        if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
-            $scope.status = 'Generating Source';
-            var sourceDescription = new fsAPI.SourceDescription(
-                fsUtils.removeEmptyProperties(
-                    {
-                        about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
-                        citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
-                        title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
-                        text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
-                    }
-                )
-            );
 
-            sourceDescription.$save( null, true ).then(
-                function() {
-                    $rootScope.data.sourceDescription = sourceDescription;
-                    ga(
-                        'send', 'event', {
-                            eventCategory: 'FamilySearch',
-                            eventAction: 'Source Created',
-                            eventLabel: $rootScope.data.sourceDescription.id
-                        }
-                    );
-                    attachSource();
-                }
-            );
-        } else {
-            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Source Attached to Another'} );
-            // Already a source description
-            attachSource();
-        }
     }]
 );

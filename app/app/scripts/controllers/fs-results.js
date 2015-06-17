@@ -13,7 +13,6 @@ angular.module( 'recordseekApp' )
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
         /* global ga */
         $rootScope.service = 'FamilySearch';
-        fsAPI.getAccessToken();
 
         $scope.goBack = function() {
             ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Search', eventLabel: 'Refine'} );
@@ -228,7 +227,12 @@ angular.module( 'recordseekApp' )
         };
 
         $scope.currentPage = 1;
-        $scope.getResults();
+        fsAPI.getAccessToken().then(
+            function( response ) {
+                $scope.getResults();
+            }
+        );
+
 
     }]
 );

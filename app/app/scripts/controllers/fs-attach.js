@@ -13,7 +13,12 @@ angular.module( 'recordseekApp' )
     ['$rootScope', '$location', '$scope', 'fsAPI', function( $rootScope, $location, $scope, fsAPI ) {
 
         $rootScope.service = 'FamilySearch';
-        fsAPI.getAccessToken();
+        fsAPI.getAccessToken().then(function (response) {
+            fsAPI.getCurrentUser().then(function (response) {
+                //var user = response.getUser();
+                //console.log(user);
+            });
+        });
 
         if ( !$rootScope.data.attach ) {
             if ( !$rootScope.data.search ) {
