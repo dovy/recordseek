@@ -28,11 +28,11 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="11.612904" vertical-offset="1224" max-vertical-offset="3672">
-              <caret line="36" column="164" selection-start-line="36" selection-start-column="164" selection-end-line="36" selection-end-column="173" />
+            <state vertical-scroll-proportion="-9.225806" vertical-offset="1922" max-vertical-offset="3672">
+              <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="34" />
               <folding>
-                <marker date="1434832881000" expanded="true" signature="574:761" placeholder="..." />
-                <marker date="1434832881000" expanded="true" signature="701:729" placeholder="..." />
+                <marker date="1434838118000" expanded="true" signature="574:761" placeholder="..." />
+                <marker date="1434838118000" expanded="true" signature="701:729" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -41,8 +41,8 @@
       <file leaf-file-name="fs-search.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7133758" vertical-offset="456" max-vertical-offset="6960">
-              <caret line="33" column="53" selection-start-line="33" selection-start-column="53" selection-end-line="33" selection-end-column="53" />
+            <state vertical-scroll-proportion="0.38853502" vertical-offset="2529" max-vertical-offset="6960">
+              <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -128,7 +128,6 @@
         <option value="$PROJECT_DIR$/app/views/support.html" />
         <option value="$PROJECT_DIR$/app/views/about.html" />
         <option value="$PROJECT_DIR$/app/scripts/app.js" />
-        <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/views/a-source.html" />
         <option value="$PROJECT_DIR$/app/views/fs-source.html" />
         <option value="$PROJECT_DIR$/app/styles/main.scss" />
@@ -136,6 +135,7 @@
         <option value="$PROJECT_DIR$/dist/views/main.html" />
         <option value="$PROJECT_DIR$/app/views/fs-attach.html" />
         <option value="$PROJECT_DIR$/app/views/fs-results.html" />
+        <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/views/fs-search.html" />
       </list>
     </option>
@@ -774,17 +774,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="11.612904" vertical-offset="1224" max-vertical-offset="3672">
-          <caret line="36" column="164" selection-start-line="36" selection-start-column="164" selection-end-line="36" selection-end-column="173" />
-          <folding>
-            <marker date="1434832881000" expanded="true" signature="574:761" placeholder="..." />
-            <marker date="1434832881000" expanded="true" signature="701:729" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/main.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.6774193" vertical-offset="0" max-vertical-offset="754">
@@ -817,10 +806,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.225806" vertical-offset="1922" max-vertical-offset="3672">
+          <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="34" />
+          <folding>
+            <marker date="1434838118000" expanded="true" signature="574:761" placeholder="..." />
+            <marker date="1434838118000" expanded="true" signature="701:729" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7133758" vertical-offset="456" max-vertical-offset="6960">
-          <caret line="33" column="53" selection-start-line="33" selection-start-column="53" selection-end-line="33" selection-end-column="53" />
+        <state vertical-scroll-proportion="0.38853502" vertical-offset="2529" max-vertical-offset="6960">
+          <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
           <folding />
         </state>
       </provider>
