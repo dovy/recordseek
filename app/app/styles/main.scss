@@ -191,6 +191,13 @@ body {
             width: 100%;
         }
     }
+    body {
+        padding-top: 75px;
+    }
+    .outer-container {
+        margin-left: 0;
+        margin-right:0;
+    }
 }
 
 .personSearch {
@@ -387,6 +394,51 @@ a {
     }
     .pagination {
         margin: 0;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .results {
+        .header-fixed > tbody > tr > td,
+        .header-fixed > thead > tr > th {
+            &.select {
+                width: 9%;
+                min-width: 60px;
+            }
+            &.person {
+                width: 28%;
+                min-width: 60px;
+            }
+            &.events {
+                width: 35%;
+            }
+            &.parents {
+                width: 21%;
+            }
+            &.spouse {
+                display: none;
+            }
+        }
+    }
+}
+@media screen and (max-width: 420px) {
+    .results {
+
+        .header-fixed > tbody > tr > td,
+        .header-fixed > thead > tr > th {
+            &.select, &.person, &.events {
+                width: auto;
+            }
+            &.person {
+                min-width: 30%;
+            }
+            &.parents, &.spouse {
+                display: none;
+            }
+        }
+        .header-fixed > thead {
+            display: none;
+        }
     }
 }
 
