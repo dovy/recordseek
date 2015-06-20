@@ -41,6 +41,11 @@ angular
 
         $rootScope.debug = (document.location.origin !== 'http://localhost:9000') ? false : true;
 
+        if (!$rootScope.debug) {
+            ga( 'create', 'UA-16096334-10' );
+            ga( 'send', 'pageview' );
+        }
+
         $rootScope.service = '';
         $rootScope.log = function( $log ) {
             if ( $rootScope.debug ) {
@@ -52,6 +57,18 @@ angular
                 ga( 'send', 'event', event );
             } else {
                 $rootScope.log( event );
+            }
+        };
+
+        $rootScope.actionTaken = function( $event ) {
+            var $el = $event.currentTarget.attributes;
+            if ($el['data-tracking']) {
+                $rootScope.track({eventCategory: 'App', eventAction: $el['data-tracking'].value});
+            }
+            if ($el['target'] &&$el['target'].value === "_blank") {
+                $window.open($el['data-href'].value);
+            } else {
+                $location.path( $el['data-href'].value );
             }
         };
 
