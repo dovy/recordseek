@@ -11,15 +11,16 @@ angular.module( 'recordseekApp' )
     .controller(
     'FsResultsCtrl',
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
-        /* global ga */
         $rootScope.service = 'FamilySearch';
 
         $scope.goBack = function() {
-            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Search', eventLabel: 'Refine'} );
+            $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Search', eventLabel: 'Refine'} );
+
             $location.path( '/fs-search' );
         };
         $scope.goNext = function( $pid, $name, $url ) {
-            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Selected', eventLabel: $pid} );
+            $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Selected', eventLabel: $pid} );
+
             $rootScope.data.attach = {
                 pid: $pid,
                 name: $name,
@@ -137,101 +138,88 @@ angular.module( 'recordseekApp' )
                 return data;
             }
 
-            function getPrimaryPerson( primaryPerson ) {
-                return {
-                    'pid': primaryPerson.id,
-                    'name': primaryPerson.$getDisplayName(),
-                    'birthDate': primaryPerson.$getBirthDate(),
-                    'gender': primaryPerson.$getDisplayGender(),
-                    'url': primaryPerson.$getPersistentIdentifier(),
-                    'birthPlace': primaryPerson.$getBirthPlace(),
-                    'deathDate': primaryPerson.$getDeathDate(),
-                    'deathPlace': primaryPerson.$getDeathPlace(),
-                };
+            $scope.bigTotalItems = 0;
+            $scope.index = 0;
+            $scope.max = 0;
+
+            if ( searchData.pid && searchData.pid !== '' ) {
+                fsAPI.getPersonWithRelationships(
+                    searchData.pid, {
+                        persons: true
+                    }
+                ).then(
+                    function( response ) {
+                        $scope.searchResults = [];
+
+                        var primaryPerson = response.getPrimaryPerson();
+                        if ( primaryPerson ) {
+                            $scope.bigTotalItems = $scope.max = 1;
+                            var data = fsUtils.getPrimaryPerson( primaryPerson );
+                            data.confidence = 5;
+                            data.father = getRelativeData( response.getFathers() );
+                            data.mother = getRelativeData( response.getMothers() );
+                            data.spouse = getRelativeData( response.getSpouses() );
+                            data.children = getRelativeData( response.getChildren() );
+                            $scope.searchResults.push(
+                                data
+                            );
+                        }
+                    }
+                );
+            } else {
+
+                fsAPI.getPersonSearch(
+                    searchData
+                ).then(
+                    function( response ) {
+                        $scope.searchResults = [];
+                        var results = response.getSearchResults();
+                        $scope.bigTotalItems = response.getResultsCount();
+                        $scope.index = response.getIndex();
+
+                        if ( $scope.max > $scope.bigTotalItems ) {
+                            $scope.max = $scope.bigTotalItems;
+                        }
+
+                        //$scope.context = response.getContext();
+
+                        $rootScope.log( 'Record length: ' + results.length );
+
+                        for ( var i = 0, len = results.length; i < len; i++ ) {
+                            var result = results[i];
+                            //$rootScope.log( result );
+                            var primaryPerson = result.$getPrimaryPerson();
+                            //$rootScope.log( primaryPerson );
+                            var data = fsUtils.getPrimaryPerson( primaryPerson );
+                            data.confidence = results[i].confidence;
+                            data.father = getRelativeData( result.$getFathers() );
+                            data.mother = getRelativeData( result.$getMothers() );
+                            data.spouse = getRelativeData( result.$getSpouses() );
+                            data.children = getRelativeData( result.$getChildren() );
+                            $scope.searchResults.push(
+                                data
+                            );
+                        }
+                        $rootScope.log( $scope.searchResults );
+
+                        $rootScope.track(
+                            {
+                                eventCategory: 'FamilySearch',
+                                eventAction: 'Search',
+                                eventLabel: 'Results',
+                                eventValue: results.length
+                            }
+                        );
+
+                    }
+                );
             }
 
-            fsAPI.getAccessToken().then(
-                function() {
-
-                    if ( searchData.pid && searchData.pid !== '' ) {
-                        fsAPI.getPersonWithRelationships(
-                            searchData.pid, {
-                                persons: true
-                            }
-                        ).then(
-                            function( response ) {
-                                $scope.searchResults = [];
-                                var primaryPerson = response.getPrimaryPerson();
-                                if ( primaryPerson ) {
-                                    $scope.bigTotalItems = $scope.max = 1;
-                                    $scope.index = 0;
-                                    var data = getPrimaryPerson( primaryPerson );
-                                    data.confidence = 5;
-                                    data.father = getRelativeData( response.getFathers() );
-                                    data.mother = getRelativeData( response.getMothers() );
-                                    data.spouse = getRelativeData( response.getSpouses() );
-                                    data.children = getRelativeData( response.getChildren() );
-                                    $scope.searchResults.push(
-                                        data
-                                    );
-                                }
-                            }
-                        );
-                    } else {
-                        fsAPI.getPersonSearch(
-                            searchData
-                        ).then(
-                            function( response ) {
-                                var results = response.getSearchResults();
-                                $scope.bigTotalItems = response.getResultsCount();
-                                $scope.index = response.getIndex();
-
-                                if ( $scope.max > $scope.bigTotalItems ) {
-                                    $scope.max = $scope.bigTotalItems;
-                                }
-
-                                //$scope.context = response.getContext();
-
-                                $scope.searchResults = [];
-
-                                for ( var i = 0, len = results.length; i < len; i++ ) {
-                                    var result = results[i];
-                                    var primaryPerson = result.$getPrimaryPerson();
-                                    var data = getPrimaryPerson( primaryPerson );
-                                    data.confidence = results[i].confidence;
-                                    data.father = getRelativeData( result.$getFathers() );
-                                    data.mother = getRelativeData( result.$getMothers() );
-                                    data.spouse = getRelativeData( result.$getSpouses() );
-                                    data.children = getRelativeData( result.$getChildren() );
-                                    $scope.searchResults.push(
-                                        data
-                                    );
-                                }
-                                ga(
-                                    'send', 'event', {
-                                        eventCategory: 'FamilySearch',
-                                        eventAction: 'Search',
-                                        eventLabel: 'Results',
-                                        eventValue: results.length
-                                    }
-                                );
-
-                                //console.log($scope.searchResults);
-                            }
-                        );
-                    }
-
-
-                }
-            );
         };
 
         $scope.currentPage = 1;
-        fsAPI.getAccessToken().then(
-            function( response ) {
-                $scope.getResults();
-            }
-        );
+
+        $scope.getResults();
 
 
     }]

@@ -13,12 +13,11 @@ angular.module( 'recordseekApp' )
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
         $rootScope.service = 'FamilySearch';
 
-        fsAPI.getAccessToken().then(function (response) {
-            fsAPI.getCurrentUser().then(function (response) {
-                //var user = response.getUser();
-                //console.log(user);
-            });
-        });
+        fsAPI.getCurrentUser().then(
+            function( response ) {
+                $rootScope.fsUser = response.getUser();
+            }
+        );
 
         if ( $rootScope.data.search.advanced ) {
             $scope.advancedButtonText = 'Basic';
@@ -26,24 +25,7 @@ angular.module( 'recordseekApp' )
             $scope.advancedButtonText = 'Advanced';
         }
 
-
-        $scope.getLocation = function() {
-            return fsAPI.getPlaceSearch( $rootScope.data.search.eventPlace, {'count': '10'} ).then(
-                function( response ) {
-                    var places = response.getPlaces();
-                    var data = [];
-                    angular.forEach(
-                        places, function( item ) {
-                            if ( data.length < 9 ) {
-                                this.push( item.$getNormalizedPlace() );
-                            }
-                        }, data
-                    );
-                    return data;
-                }
-            );
-        };
-
+        $scope.getLocation = fsUtils.getLocation;
 
         $scope.removeEmpty = fsUtils.removeEmptyProperties;
 

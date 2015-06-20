@@ -12,20 +12,19 @@ angular.module( 'recordseekApp' )
     'FsSourceCtrl',
 
     ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', function( $cookie, $rootScope, $location, $scope, fsAPI ) {
-        /* global ga */
         $rootScope.service = 'FamilySearch';
-        fsAPI.getAccessToken().then(function (response) {
-            fsAPI.getCurrentUser().then(function (response) {
-                //var user = response.getUser();
-                //console.log(user);
-            });
-        });
+        fsAPI.getCurrentUser().then(
+            function( response ) {
+                $rootScope.fsUser = response.getUser();
+            }
+        );
+
         $scope.origSource = $rootScope.data.citation;
 
         $scope.goNext = function() {
             $location.path( '/fs-search' );
-            if ($scope.origSource !== $rootScope.data.citation) {
-                ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Citation', eventLabel: 'Modified'} );
+            if ( $scope.origSource !== $rootScope.data.citation ) {
+                $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Citation', eventLabel: 'Modified'} );
             }
         };
 
@@ -37,7 +36,7 @@ angular.module( 'recordseekApp' )
             $location.path( '/fs-upload' );
         };
         $scope.createNow = function() {
-            ga( 'send', 'event', {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
+            $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
             $location.path( '/fs-create' );
         };
 

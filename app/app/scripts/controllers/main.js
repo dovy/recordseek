@@ -15,10 +15,10 @@ angular.module( 'recordseekApp' )
 );
 
 // at the bottom of your controller
-var init = function () {
+var init = function() {
     var width = 800;
     var height = 675;
-    window.resizeTo(width, height);
-    window.moveTo(((screen.width - width)), ((screen.height - height) / 2));
+    window.resizeTo( width, height );
+    window.moveTo( ((screen.width - width)), ((screen.height - height) / 2) );
 };
-init();
+//init();

@@ -11,11 +11,12 @@ angular.module( 'recordseekApp' )
     .controller(
     'ASourceCtrl',
     ['$rootScope', '$location', '$scope', '$window', '$cookies', function( $rootScope, $location, $scope, $window, $cookie ) {
-        /* global ga */
         $rootScope.service = 'Ancestry';
 
         $scope.goNext = function() {
-            $cookie.remove( 'recordseek' );
+            if ( $rootScope.debug ) {
+                $cookie.remove( 'recordseek' );
+            }
             var $url = 'http://trees.ancestry.com/savetoancestry?o_sch=Web+Property';
             if ( $rootScope.data.url ) {
                 $url += '&url=' + encodeURIComponent( $rootScope.data.url );
@@ -29,7 +30,8 @@ angular.module( 'recordseekApp' )
             if ( $rootScope.data.citation ) {
                 $url += '&details=' + encodeURIComponent( $rootScope.data.citation );
             }
-            ga( 'send', 'event', {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
+            $rootScope.track( {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
+
             $window.location.href = $url;
         };
 

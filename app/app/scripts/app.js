@@ -1,5 +1,14 @@
 'use strict';
 
+var RecordSeek = RecordSeek || {};
+RecordSeek.helpers = {
+    isNotString: function( str ) {
+        return (typeof str !== 'string');
+    }
+
+};
+
+
 /**
  * @ngdoc overview
  * @name recordseekApp
@@ -22,12 +31,30 @@ angular
     ]
 )
     .run(
-    ['$rootScope', '$location', '$cookies', '$window', function( $rootScope, $location, $cookie, $window ) {
+    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', function( $rootScope, $location, $cookie, $window, fsAPI ) {
         /* global ga, _ */
         /* jshint camelcase: true */
         // For debugging purposes obviously
-        $rootScope.debug = false;
+
+        $rootScope.helpers = RecordSeek.helpers;
+        $rootScope.attachMsg = 'This source was created for free with http://RecordSeek.com';
+
+        $rootScope.debug = (document.location.origin !== 'http://localhost:9000') ? false : true;
+
         $rootScope.service = '';
+        $rootScope.log = function( $log ) {
+            if ( $rootScope.debug ) {
+                console.log( $log );
+            }
+        };
+        $rootScope.track = function( event ) {
+            if ( !$rootScope.debug ) {
+                ga( 'send', 'event', event );
+            } else {
+                $rootScope.log( event );
+            }
+        };
+
         $rootScope.expires = 15; // Mins until the cookie is expired
         window.liveSettings = {
             api_key: '11643e1c6ccd4371bfb889827b19fde3',
@@ -38,19 +65,20 @@ angular
             staging: true
         };
 
+        var params = fsAPI.helpers.decodeQueryString( document.URL );
 
         if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) === -1 ) {
-            var $url = $location.$$absUrl.replace( '?_', '#/?_' );
-            $window.location.href = $url;
-            return;
+            //var $url = $location.$$absUrl.replace( '?_', '#/?_' );
+            //$window.location.href = $url;
+            //return;
         }
 
         //console.log(document.location.origin+'/');
 
         $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
 
-        if ( $location.$$search && $location.$$search.url ) {
-            var obj = $location.$$search;
+        if ( params ) {
+            var obj = params;
 
             for ( var prop in obj ) {
                 var value = obj[prop], type = typeof value;
@@ -93,29 +121,28 @@ angular
                 var $domain = $dSplit[1];
                 $dSplit = $domain.split( '/' );
                 $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
-                ga(
-                    'send', 'event',
-                    {eventCategory: 'Domain', eventAction: $rootScope.data.domain.toLowerCase().replace( 'www.', '' )}
+                $rootScope.track(
+                    {
+                        eventCategory: 'Domain',
+                        eventAction: $rootScope.data.domain.toLowerCase().replace( 'www.', '' )
+                    }
                 );
 
-            }
 
+            }
 
             if ( $rootScope.data.notes && $rootScope.data.notes.trim() !== '' ) {
                 $rootScope.data.notes += '\n\n';
             } else {
                 $rootScope.data.notes = '';
             }
-            $rootScope.data.notes += 'This source was created for free with http://RecordSeek.com.';
+            $rootScope.data.notes += $rootScope.attachMsg;
 
             if ( !$rootScope.data.title ) {
                 $rootScope.data.title = '';
             }
             if ( !$rootScope.data.citation ) {
                 $rootScope.data.citation = '';
-            }
-            if ( !$rootScope.data.notes ) {
-                $rootScope.data.notes = '';
             }
         } else {
             if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) && !$rootScope.data ) {
@@ -188,18 +215,8 @@ angular
             $rootScope.resetSearch();
             $rootScope.data.search.advanced = false;
         }
-        $rootScope.isEmpty = function( obj ) {
-            for ( var i in obj ) {
-                if ( obj.hasOwnProperty( i ) ) {
-                    return false;
-                }
-            }
-            return true;
-        };
 
-        $rootScope.actionTaken = function( action ) {
-            ga( 'send', 'event', {eventCategory: 'Action', eventAction: action} );
-        };
+
     }]
 )
     .constant( '_', _ )
@@ -219,6 +236,12 @@ angular
 
                 templateUrl: 'views/about.html',
                 controller: 'AboutCtrl'
+            }
+        )
+            .when(
+            '/loading', {
+                templateUrl: 'views/loading.html',
+                controller: 'LoadingCtrl'
             }
         )
             .when(
