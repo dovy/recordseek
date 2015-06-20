@@ -28,8 +28,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.225806" vertical-offset="1922" max-vertical-offset="3672">
-              <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="34" />
+            <state vertical-scroll-proportion="-10.0" vertical-offset="2306" max-vertical-offset="3672">
+              <caret line="109" column="62" selection-start-line="109" selection-start-column="62" selection-end-line="109" selection-end-column="62" />
               <folding>
                 <marker date="1434838118000" expanded="true" signature="574:761" placeholder="..." />
                 <marker date="1434838118000" expanded="true" signature="701:729" placeholder="..." />
@@ -38,10 +38,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fs-search.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="fs-create.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/scripts/controllers/fs-create.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.62298024" vertical-offset="1525" max-vertical-offset="2448">
+              <caret line="78" column="56" selection-start-line="78" selection-start-column="56" selection-end-line="78" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fs-search.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38853502" vertical-offset="2529" max-vertical-offset="6960">
+            <state vertical-scroll-proportion="-2.127907" vertical-offset="2529" max-vertical-offset="6960">
               <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
               <folding />
             </state>
@@ -122,7 +132,6 @@
         <option value="$PROJECT_DIR$/app/scripts/controllers/fs-results.js" />
         <option value="$PROJECT_DIR$/dist/index.html" />
         <option value="$PROJECT_DIR$/app/scripts/services/familysearch.js" />
-        <option value="$PROJECT_DIR$/app/scripts/controllers/fs-create.js" />
         <option value="$PROJECT_DIR$/../../../../Projects/extensions/browser-extensions/recordseek/src/config.json" />
         <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/app/views/support.html" />
@@ -137,6 +146,7 @@
         <option value="$PROJECT_DIR$/app/views/fs-results.html" />
         <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/views/fs-search.html" />
+        <option value="$PROJECT_DIR$/app/scripts/controllers/fs-create.js" />
       </list>
     </option>
   </component>
@@ -686,14 +696,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/fs-create.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="336" max-vertical-offset="2448">
-          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/controllers/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="139" max-vertical-offset="696">
@@ -806,10 +808,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.127907" vertical-offset="2529" max-vertical-offset="6960">
+          <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.225806" vertical-offset="1922" max-vertical-offset="3672">
-          <caret line="92" column="25" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="34" />
+        <state vertical-scroll-proportion="-10.0" vertical-offset="2306" max-vertical-offset="3672">
+          <caret line="109" column="62" selection-start-line="109" selection-start-column="62" selection-end-line="109" selection-end-column="62" />
           <folding>
             <marker date="1434838118000" expanded="true" signature="574:761" placeholder="..." />
             <marker date="1434838118000" expanded="true" signature="701:729" placeholder="..." />
@@ -817,10 +827,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/fs-create.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38853502" vertical-offset="2529" max-vertical-offset="6960">
-          <caret line="113" column="35" selection-start-line="113" selection-start-column="35" selection-end-line="113" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.62298024" vertical-offset="1525" max-vertical-offset="2448">
+          <caret line="78" column="56" selection-start-line="78" selection-start-column="56" selection-end-line="78" selection-end-column="56" />
           <folding />
         </state>
       </provider>

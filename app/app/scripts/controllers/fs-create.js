@@ -81,7 +81,7 @@ angular.module( 'recordseekApp' )
                         {
                             eventCategory: 'FamilySearch',
                             eventAction: 'Source Created',
-                            eventLabel: $rootScope.data.sourceDescription.id
+                            eventLabel: sourceDescriptionId
                         }
                     );
                     attachSource();
