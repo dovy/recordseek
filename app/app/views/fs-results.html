@@ -9,7 +9,7 @@
                 <th class="person">Person</th>
                 <th class="events">Events</th>
                 <th class="parents">Parents</th>
-                <th class="spouse hidden-xs">Spouse(s)</th>
+                <th class="spouse">Spouse(s)</th>
             </tr>
 
             </thead>
@@ -75,7 +75,7 @@
                         class="glyphicon glyphicon-stop {{mother.gender}}"></i><a
                         href="{{mother.url}}" target="_blank">{{mother.name}}</a></span>
                 </td>
-                <td class="spouse hidden-xs"><span ng-repeat="spouse in result.spouse"><i
+                <td class="spouse"><span ng-repeat="spouse in result.spouse"><i
                         class="glyphicon glyphicon-stop {{spouse.gender}}"></i><a
                         href="{{spouse.url}}" target="_blank">{{spouse.name}}</a></span></td>
             </tr>

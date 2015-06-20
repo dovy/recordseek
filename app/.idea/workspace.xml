@@ -38,41 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fs-complete.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/fs-complete.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="648">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="a-source.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/a-source.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.0" vertical-offset="506" max-vertical-offset="1032">
-              <caret line="34" column="70" selection-start-line="34" selection-start-column="70" selection-end-line="34" selection-end-column="70" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fs-source.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/fs-source.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.0" vertical-offset="818" max-vertical-offset="1416">
-              <caret line="47" column="43" selection-start-line="47" selection-start-column="43" selection-end-line="47" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fs-search.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="fs-search.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-110.70968" vertical-offset="0" max-vertical-offset="6936">
-              <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.611465" vertical-offset="120" max-vertical-offset="6936">
+              <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -91,8 +61,18 @@
       <file leaf-file-name="fs-results.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/views/fs-results.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.193548" vertical-offset="432" max-vertical-offset="2352">
-              <caret line="26" column="92" selection-start-line="26" selection-start-column="92" selection-end-line="26" selection-end-column="92" />
+            <state vertical-scroll-proportion="-6.225806" vertical-offset="71" max-vertical-offset="2352">
+              <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fs-attach.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/fs-attach.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.935484" vertical-offset="0" max-vertical-offset="624">
+              <caret line="18" column="82" selection-start-line="18" selection-start-column="82" selection-end-line="18" selection-end-column="82" />
               <folding />
             </state>
           </provider>
@@ -108,24 +88,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/index.html">
+      <file leaf-file-name="fs-create.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/fs-create.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.3225806" vertical-offset="0" max-vertical-offset="336">
-              <caret line="3" column="4313" selection-start-line="3" selection-start-column="4311" selection-end-line="3" selection-end-column="4313" />
-              <folding>
-                <marker date="1434837402000" expanded="true" signature="373:560" placeholder="..." />
-                <marker date="1434837402000" expanded="true" signature="500:528" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/dist/views/main.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="499">
-              <caret line="0" column="316" selection-start-line="0" selection-start-column="316" selection-end-line="0" selection-end-column="316" />
+            <state vertical-scroll-proportion="-5.419355" vertical-offset="0" max-vertical-offset="360">
+              <caret line="7" column="39" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -164,11 +131,12 @@
         <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/views/a-source.html" />
         <option value="$PROJECT_DIR$/app/views/fs-source.html" />
-        <option value="$PROJECT_DIR$/app/views/fs-search.html" />
         <option value="$PROJECT_DIR$/app/styles/main.scss" />
-        <option value="$PROJECT_DIR$/app/views/fs-results.html" />
         <option value="$PROJECT_DIR$/app/views/main.html" />
         <option value="$PROJECT_DIR$/dist/views/main.html" />
+        <option value="$PROJECT_DIR$/app/views/fs-attach.html" />
+        <option value="$PROJECT_DIR$/app/views/fs-results.html" />
+        <option value="$PROJECT_DIR$/app/views/fs-search.html" />
       </list>
     </option>
   </component>
@@ -242,24 +210,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -485,25 +435,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/scripts/services/familysearch.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10752">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2379" max-vertical-offset="3696">
-          <caret line="109" column="10" selection-start-line="109" selection-start-column="10" selection-end-line="109" selection-end-column="10" />
-          <folding>
-            <marker date="1434832881000" expanded="true" signature="574:761" placeholder="..." />
-            <marker date="1434832881000" expanded="true" signature="701:729" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bower_components/familysearch-javascript-sdk-orig/src/classes/agent.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2256">
@@ -811,14 +742,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/fs-create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.419355" vertical-offset="0" max-vertical-offset="360">
-          <caret line="7" column="39" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/fs-complete.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="648">
@@ -843,26 +766,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-110.70968" vertical-offset="0" max-vertical-offset="6936">
-          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/styles/main.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.946429" vertical-offset="10059" max-vertical-offset="11064">
           <caret line="433" column="13" selection-start-line="433" selection-start-column="13" selection-end-line="433" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/fs-results.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.193548" vertical-offset="432" max-vertical-offset="2352">
-          <caret line="26" column="92" selection-start-line="26" selection-start-column="92" selection-end-line="26" selection-end-column="92" />
           <folding />
         </state>
       </provider>
@@ -886,21 +793,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/index.html">
+    <entry file="file://$PROJECT_DIR$/app/views/fs-create.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3225806" vertical-offset="0" max-vertical-offset="336">
-          <caret line="3" column="4313" selection-start-line="3" selection-start-column="4311" selection-end-line="3" selection-end-column="4313" />
-          <folding>
-            <marker date="1434837402000" expanded="true" signature="373:560" placeholder="..." />
-            <marker date="1434837402000" expanded="true" signature="500:528" placeholder="..." />
-          </folding>
+        <state vertical-scroll-proportion="-5.419355" vertical-offset="0" max-vertical-offset="360">
+          <caret line="7" column="39" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/views/main.html">
+    <entry file="file://$PROJECT_DIR$/app/views/fs-attach.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="499">
-          <caret line="0" column="316" selection-start-line="0" selection-start-column="316" selection-end-line="0" selection-end-column="316" />
+        <state vertical-scroll-proportion="-13.935484" vertical-offset="0" max-vertical-offset="624">
+          <caret line="18" column="82" selection-start-line="18" selection-start-column="82" selection-end-line="18" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/fs-results.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.225806" vertical-offset="71" max-vertical-offset="2352">
+          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/fs-search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.611465" vertical-offset="120" max-vertical-offset="6936">
+          <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
           <folding />
         </state>
       </provider>
