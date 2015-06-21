@@ -49,7 +49,7 @@ angular
 
         $rootScope.debug = (document.location.origin !== 'http://localhost:9000') ? false : true;
 
-        if (!$rootScope.debug) {
+        if ( !$rootScope.debug ) {
             ga( 'create', 'UA-16096334-10' );
             ga( 'send', 'pageview' );
         }
@@ -70,11 +70,11 @@ angular
 
         $rootScope.actionTaken = function( $event ) {
             var $el = $event.currentTarget.attributes;
-            if ($el['data-tracking']) {
-                $rootScope.track({eventCategory: 'App', eventAction: $el['data-tracking'].value});
+            if ( $el['data-tracking'] ) {
+                $rootScope.track( {eventCategory: 'App', eventAction: $el['data-tracking'].value} );
             }
-            if ($el['target'] &&$el['target'].value === "_blank") {
-                $window.open($el['data-href'].value);
+            if ( $el['target'] && $el['target'].value === "_blank" ) {
+                $window.open( $el['data-href'].value );
             } else {
                 $location.path( $el['data-href'].value );
             }
@@ -134,6 +134,27 @@ angular
                     ).replace( 'ancestrylibrary.com', 'ancestry.com' ).replace(
                         'ancestrylibrary.proquest.com', 'ancestry.com'
                     );
+                }
+                // Clean up the Ancestry search URLs
+                if ( $rootScope.data.url.indexOf( 'search.ancestry.com' ) > -1 ) {
+                    var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
+                    var newURL = {};
+                    if ( urlData.h ) {
+                        newURL.h = urlData.h;
+                    }
+                    if ( urlData.db ) {
+                        newURL.db = urlData.db;
+                    }
+                    if ( urlData.indiv ) {
+                        newURL.indiv = urlData.indiv;
+                    }
+                    $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
+                        fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
+                    );
+                }
+                // Clean up the ancestry interactive URLs
+                if ( $rootScope.data.url.indexOf( 'interactive.ancestry.com' ) > -1 ) {
+                    $rootScope.data.url = fsAPI.helpers.removeQueryString( $rootScope.data.url );
                 }
                 if ( $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
                     var $split = $rootScope.data.url.split( '/' );
