@@ -1,3 +1,4 @@
+<span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
 <h3>Search for an existing person</h3>
 <div class="row container-fluid">
     <form class="personSearch" ng-init="isDisabled = false" ng-submit="goNext()">
@@ -31,7 +32,7 @@
             <div class="col-sm-3 col-xs-6">
                 <div class="form-group input-group-sm">
                     <label class="hidden-xs">Last Names (Surname)</label>
-                    <label class="visible-cs">Surname</label>
+                    <label class="visible-xs">Surname</label>
 
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" ng-disabled="data.search.pid"

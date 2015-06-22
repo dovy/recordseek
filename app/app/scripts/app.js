@@ -60,6 +60,13 @@ angular
                 console.log( $log );
             }
         };
+        $rootScope.logout = function() {
+            if ($rootScope.service === "FamilySearch") {
+                fsAPI.helpers.eraseAccessToken(true);
+                $location.path( '/' );
+            }
+        };
+
         $rootScope.track = function( event ) {
             if ( !$rootScope.debug ) {
                 ga( 'send', 'event', event );

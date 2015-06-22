@@ -15,7 +15,7 @@ angular.module( 'recordseekApp' )
 
         fsAPI.getCurrentUser().then(
             function( response ) {
-                $rootScope.fsUser = response.getUser();
+                $rootScope.user = response.getUser();
             }
         );
 

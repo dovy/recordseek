@@ -11,11 +11,16 @@ angular.module( 'recordseekApp' )
     .controller(
     'FsSourceCtrl',
 
-    ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', function( $cookie, $rootScope, $location, $scope, fsAPI ) {
+    ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', function( $cookie, $rootScope, $location, $scope, fsAPI, fsUtils ) {
         $rootScope.service = 'FamilySearch';
+        $scope.fsLogout = function() {
+            fsAPI.helpers.eraseAccessToken(true);
+            $location.path( '/' );
+        }
         fsAPI.getCurrentUser().then(
             function( response ) {
-                $rootScope.fsUser = response.getUser();
+                $scope.user = response.getUser();
+                console.log($scope.user);
             }
         );
 

@@ -21,10 +21,17 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 }
 
 .browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+    a {
+        color: #fff;
+        border-bottom: 1px dashed;
+        font-weight: bold;
+        &:hover {
+            text-decoration: none;
+            border-bottom: 1px solid #6B150D;
+        }
+
+    }
+    margin-top: -10px;
 }
 
 html {
@@ -454,4 +461,8 @@ a {
             border: 1px solid #aaa;
         }
     }
+}
+
+.hello-user {
+    margin-top: -25px;
 }
