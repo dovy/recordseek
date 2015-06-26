@@ -38,6 +38,10 @@ angular.module( 'recordseekApp' )
             this.redirect_uri += '/share/';
         }
 
+        this.getEnvironment = function() {
+            return this.environment;
+        }
+
         this.$get = function( $window, $http, $q, $timeout, $rootScope, $injector, $location ) {
             if ( this.client_id && this.environment && this.redirect_uri ) {
                 /* globals FamilySearch */

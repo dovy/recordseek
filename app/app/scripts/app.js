@@ -59,6 +59,7 @@ angular
         $rootScope.helpers = RecordSeek.helpers;
         $rootScope.attachMsg = 'This source was created for free with http://RecordSeek.com';
 
+        alert(fsAPI.getEnvironment);
         $rootScope.debug = (document.location.origin !== 'http://localhost:9000') ? false : true;
 
         if ( !$rootScope.debug ) {
