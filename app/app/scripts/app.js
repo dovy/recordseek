@@ -39,7 +39,7 @@ angular
     ]
 )
     .run(
-    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$http', function( $rootScope, $location, $cookie, $window, fsAPI, $http ) {
+    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$http', '$log', function( $rootScope, $location, $cookie, $window, fsAPI, $http, $log ) {
         /* global ga, _ */
         /* jshint camelcase: true */
         // For debugging purposes obviously
@@ -71,9 +71,9 @@ angular
 
         $rootScope.service = '';
 
-        $rootScope.log = function( $log ) {
+        $rootScope.log = function( $message ) {
             if ( $rootScope.debug ) {
-                console.log( $log );
+                $log.debug( $log );
             }
         };
         $rootScope.logout = function() {
