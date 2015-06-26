@@ -39,7 +39,7 @@ angular
     ]
 )
     .run(
-    function( $rootScope, $location, $cookie, $window, fsAPI, $httpProvider ) {
+    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$httpProvider', function( $rootScope, $location, $cookie, $window, fsAPI, $httpProvider ) {
         /* global ga, _ */
         /* jshint camelcase: true */
         // For debugging purposes obviously
@@ -291,7 +291,7 @@ angular
         }
 
 
-    }
+    }]
 )
     .constant( '_', _ )
     .config(
