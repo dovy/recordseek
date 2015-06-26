@@ -9,15 +9,19 @@
  */
 angular.module( 'recordseekApp' )
     .provider(
-    'fsAPI', ['_', function() {
+    'fsAPI', ['_', function( _ ) {
         /* jshint camelcase:false */
-        /* global _ */
 
         this.environment = 'sandbox'; // production, sandbox, staging
-alert(document.location.origin);
-        if ( document.location.origin !== 'http://localhost:9000' ) {
+
+        if ( document.location.origin === 'http://recordseek.com' ) {
             this.environment = 'production';
+        } else if ( document.location.origin !== 'http://localhost:9000' ) {
+            this.environment = 'sandbox';
+        } else {
+            this.environment = 'beta';
         }
+
         if ( document.location.origin === 'http://recordseeknew.dev' || document.location.origin === 'https://recordseeknew.dev' ) {
             //this.environment = 'production';
         }
@@ -28,16 +32,13 @@ alert(document.location.origin);
             this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
         }
 
-        //this.redirect_uri = document.location.protocol + '//recordseek.com/share/';
         this.redirect_uri = document.location.origin;
 
         if ( document.location.origin !== 'http://localhost:9000' ) {
             this.redirect_uri += '/share/';
         }
 
-
         this.$get = function( $window, $http, $q, $timeout, $rootScope, $injector, $location ) {
-
             if ( this.client_id && this.environment && this.redirect_uri ) {
                 /* globals FamilySearch */
                 this.FamilySearch = new FamilySearch(
@@ -65,32 +66,6 @@ alert(document.location.origin);
                         }
                     }
                 );
-
-                //$rootScope.loading = function() {
-                //
-                //    var modalInstance = $modal.open(
-                //        {
-                //            animation: $scope.animationsEnabled,
-                //            templateUrl: 'myModalContent.html',
-                //            controller: 'ModalInstanceCtrl',
-                //            size: 'sm',
-                //            resolve: {
-                //                items: function() {
-                //                    return $scope.items;
-                //                }
-                //            }
-                //        }
-                //    );
-                //
-                //    modalInstance.result.then(
-                //        function( selectedItem ) {
-                //            $scope.selected = selectedItem;
-                //        }, function() {
-                //            $log.info( 'Modal dismissed at: ' + new Date() );
-                //        }
-                //    );
-                //};
-
                 this.urlParams = this.FamilySearch.helpers.decodeQueryString( document.URL );
                 // Check if we have a code and do what we should accordingly
                 if ( this.urlParams.code && this.urlParams.state ) {
@@ -105,10 +80,7 @@ alert(document.location.origin);
                     );
                 }
             }
-
-
             return this.FamilySearch;
         };
-
     }]
 );
