@@ -423,11 +423,6 @@ module.exports = function( grunt ) {
                     cwd: '<%= yeoman.app %>/styles',
                     dest: '.tmp/styles/',
                     src: '{,*/}*.css',
-                    options: {
-                        process: function (content, srcpath) {
-                            return content.replace("../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/","fonts/");
-                        },
-                    },
                 }
             },
 
