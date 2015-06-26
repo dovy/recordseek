@@ -264,6 +264,18 @@ module.exports = function( grunt ) {
                 }
             },
 
+            // replace the font file path
+            replace: {
+                dist: {
+                    src: ['<%= yeoman.dist %>/styles//*.css'],
+                    overwrite: true,                 // overwrite matched source files
+                    replacements: [{
+                        from: '../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/',
+                        to: 'fonts/'
+                    }]
+                }
+            },
+
             // Performs rewrites based on filerev and the useminPrepare configuration
             usemin: {
                 html: ['<%= yeoman.dist %>/{,*/}*.html'],
@@ -391,7 +403,6 @@ module.exports = function( grunt ) {
                                 '*.html',
                                 'views/{,*/}*.html',
                                 'images/{,*/}*.{webp}',
-                                'styles/fonts/{,*/}*.*'
                             ]
                         }, {
                             expand: true,
@@ -411,7 +422,12 @@ module.exports = function( grunt ) {
                     expand: true,
                     cwd: '<%= yeoman.app %>/styles',
                     dest: '.tmp/styles/',
-                    src: '{,*/}*.css'
+                    src: '{,*/}*.css',
+                    options: {
+                        process: function (content, srcpath) {
+                            return content.replace("../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/","fonts/");
+                        },
+                    },
                 }
             },
 
@@ -493,7 +509,8 @@ module.exports = function( grunt ) {
             'uglify',
             'filerev',
             'usemin',
-            'htmlmin'
+            'htmlmin',
+            'replace:dist'
         ]
     );
 
