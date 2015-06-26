@@ -481,7 +481,7 @@ angular.module( 'recordseekApp' )
         //    }
         //    $rootScope.toCreate.push( $data );
         //}
-        
+
         $scope.goBack = function() {
             $location.path( '/fs-addperson' );
         };
@@ -502,6 +502,5 @@ angular.module( 'recordseekApp' )
         //            value: 'Dovy'
         //        }
         //    ];
-
     }]
 );
