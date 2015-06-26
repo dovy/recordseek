@@ -39,13 +39,13 @@ angular
     ]
 )
     .run(
-    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$httpProvider', function( $rootScope, $location, $cookie, $window, fsAPI, $httpProvider ) {
+    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$http', function( $rootScope, $location, $cookie, $window, fsAPI, $http ) {
         /* global ga, _ */
         /* jshint camelcase: true */
         // For debugging purposes obviously
 
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+        $http.defaults.useXDomain = true;
+        delete $http.defaults.headers.common['X-Requested-With'];
 
         // window.location.origin is not supported by IE11
         if ( !window.location.origin ) {
