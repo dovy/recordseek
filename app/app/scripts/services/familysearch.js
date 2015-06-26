@@ -38,14 +38,15 @@ angular.module( 'recordseekApp' )
             this.redirect_uri += '/share/';
         }
 
-        this.getEnvironment = function() {
-            return this.environment;
-        }
+
 
         this.$get = function( $window, $http, $q, $timeout, $rootScope, $injector, $location ) {
             if ( this.client_id && this.environment && this.redirect_uri ) {
+                this.getEnvironment = function() {
+                    return this.environment;
+                }
                 /* globals FamilySearch */
-                this.FamilySearch = new FamilySearch(
+                this.client = new FamilySearch(
                     {
                         client_id: this.client_id,
                         environment: this.environment,
@@ -70,21 +71,21 @@ angular.module( 'recordseekApp' )
                         }
                     }
                 );
-                this.urlParams = this.FamilySearch.helpers.decodeQueryString( document.URL );
+                this.urlParams = this.client.helpers.decodeQueryString( document.URL );
                 // Check if we have a code and do what we should accordingly
                 if ( this.urlParams.code && this.urlParams.state ) {
                     $rootScope.status = 'Authenticating, please wait.';
                     $location.path( '/loading' );
                     var redirect = this.urlParams.state.split( '#' );
                     redirect = redirect[0] += '#/fs-source';
-                    this.FamilySearch.getAccessToken( this.urlParams.code ).then(
+                    this.client.getAccessToken( this.urlParams.code ).then(
                         function() {
                             window.location = redirect;
                         }
                     );
                 }
             }
-            return this.FamilySearch;
+            return this.client;
         };
     }]
 );
