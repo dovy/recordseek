@@ -45,6 +45,10 @@ angular.module( 'recordseekApp' )
                 this.getEnvironment = function() {
                     return this.environment;
                 }
+
+                $http.defaults.useXDomain = true;
+                delete $http.defaults.headers.common['X-Requested-With'];
+
                 /* globals FamilySearch */
                 this.client = new FamilySearch(
                     {
