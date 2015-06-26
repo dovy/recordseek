@@ -481,8 +481,7 @@ angular.module( 'recordseekApp' )
         //    }
         //    $rootScope.toCreate.push( $data );
         //}
-
-
+        
         $scope.goBack = function() {
             $location.path( '/fs-addperson' );
         };
