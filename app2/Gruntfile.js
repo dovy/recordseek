@@ -1,4 +1,4 @@
-// Generated on 2015-06-01 using generator-angular 0.11.1
+// Generated on 2015-06-26 using generator-angular 0.11.1
 'use strict';
 
 // # Globbing
@@ -273,19 +273,6 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/images',
           '<%= yeoman.dist %>/styles'
         ]
-      }
-    },
-
-    cssmin: {
-      options: {
-        rebase: false
-      },
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/styles/main.css': [
-            '.tmp/styles/{,*/}*.css'
-          ]
-        }
       }
     },
 
