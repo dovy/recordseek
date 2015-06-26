@@ -115,7 +115,7 @@ angular.module( 'recordseekApp' )
 
 angular.module( 'recordseekApp' )
     .factory(
-    'fsUtils', function( _, $q, fsAPI, $rootScope ) {
+    'fsUtils', function( _, $q, fsAPI, $rootScope, $http ) {
         return {
             removeEmptyProperties: function( obj ) {
                 return _.omit(
@@ -136,8 +136,8 @@ angular.module( 'recordseekApp' )
                     'deathPlace': primaryPerson.$getDeathPlace(),
                 };
             },
-            getLocation: function() {
-                return fsAPI.getPlaceSearch( $rootScope.data.search.eventPlace, {'count': '10'} ).then(
+            getLocation: function( $loc ) {
+                return fsAPI.getPlaceSearch( $loc, {'count': '10'} ).then(
                     function( response ) {
                         var places = response.getPlaces();
                         var data = [];
@@ -151,6 +151,36 @@ angular.module( 'recordseekApp' )
                         return data;
                     }
                 );
+            },
+            getDate: function( $val ) {
+                return fsAPI.getDate( $val ).then(
+                    function( response ) {
+                        var $date = response.getDate();
+                        if ( $date.normalized ) {
+                            var $formal = $date.$getFormalDate();
+                            return [ { 'normalized': $date.normalized, 'formal': $formal } ];
+                        }
+                    }
+                );
+            },
+            // Used to parse relationships
+            getRelativeData: function( persons ) {
+                var data = [];
+                for ( var i = 0, len = persons.length; i < len; i++ ) {
+                    if ( persons[i].living ) {
+                        continue;
+                    }
+                    data.push(
+                        {
+                            'pid': persons[i].id,
+                            'url': persons[i].$getPersistentIdentifier(),
+                            'name': persons[i].$getDisplayName(),
+                            'gender': persons[i].$getDisplayGender(),
+                            'data': persons[i]
+                        }
+                    );
+                }
+                return data;
             }
         };
     }

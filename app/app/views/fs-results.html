@@ -1,5 +1,4 @@
 <span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
-<a ng-click="goBack()" class="btn btn-primary btn-xs pull-right">Modify Search</a>
 <h3>Select a Person to Attach this Source</h3>
 <div class="row container-fluid" resize>
     <form class="results">
@@ -14,7 +13,7 @@
             </tr>
 
             </thead>
-            <tbody style="max-height: {{windowHeight - 278}}px;">
+            <tbody style="max-height: {{windowHeight - 333}}px;">
             <tr class="active rowNotice" class="ng-hide" ng-show="bigTotalItems">
                 <td colspan="5"><span class="pull-right">{{min}}-{{max}} of {{bigTotalItems}} results</span>
                 </th>
@@ -26,7 +25,8 @@
                 <td colspan="5">No Results Found</td>
             </tr>
             <tr ng-repeat="result in searchResults" class="ng-hide" ng-show="searchResults">
-                <td class="select vert-align"><a class="btn btn-xs btn-default" ng-click="goNext(result.pid, result.name, result.url)">Select</a><br/><span
+                <td class="select vert-align">
+                    <a class="btn btn-xs btn-default" ng-click="goNext(result.pid, result.name, result.url)">Select</a><br/><span
                         class="confidence"
                         popover-placement="right"
                         popover="How well this matches your search."
@@ -39,24 +39,23 @@
                 </td>
                 <td class="person"><i
                         class="glyphicon glyphicon-stop {{result.gender}}"></i><a href="{{result.url}}" popover-placement="right"
-                                      popover="View on FamilySearch"
-                                      popover-trigger="mouseenter" target="_blank">{{result.name}}</a><br/>
+                        popover="View on FamilySearch"
+                        popover-trigger="mouseenter" target="_blank">{{result.name}}</a><br/>
                     <small>{{result.pid}}</small>
                 </td>
                 <td class="events">
                     <div class="birth ng-hide" ng-show="result.birthDate || result.birthPlace"><span class="eLabel"
-                                                                                                     popover-placement="top"
-                                                                                                     popover="Birth"
-                                                                                                     popover-trigger="mouseenter">b.</span>
-                        {{result.birthDate}} <i
-                                class="glyphicon glyphicon-map-marker ng-hide"
-                                ng-show="result.birthPlace && result.birthDate" popover-trigger="mouseenter"
-                                popover-placement="top"
-                                popover="{{result.birthPlace}}"></i> <span class="ng-hide"
-                                                                           ng-show="result.birthPlace && !result.birthDate"
-                                                                           popover-trigger="mouseenter"
-                                                                           popover-placement="top"
-                                                                           popover="{{result.birthPlace}}">{{result.birthPlace}}</span>
+                            popover-placement="top"
+                            popover="Birth"
+                            popover-trigger="mouseenter">b.</span> {{result.birthDate}} <i
+                            class="glyphicon glyphicon-map-marker ng-hide"
+                            ng-show="result.birthPlace && result.birthDate" popover-trigger="mouseenter"
+                            popover-placement="top"
+                            popover="{{result.birthPlace}}"></i> <span class="ng-hide"
+                            ng-show="result.birthPlace && !result.birthDate"
+                            popover-trigger="mouseenter"
+                            popover-placement="top"
+                            popover="{{result.birthPlace}}">{{result.birthPlace}}</span>
                     </div>
                     <div class="death ng-hide" ng-show="result.deathDate || result.deathPlace"><span
                             popover-placement="bottom" popover="Death"
@@ -65,8 +64,8 @@
                             ng-show="result.deathPlace && result.deathDate" popover-trigger="mouseenter"
                             popover-placement="bottom" popover="{{result.deathPlace}}"></i>
                         <span class="ng-hide" ng-show="result.deathPlace && !result.deathDate"
-                              popover-trigger="mouseenter"
-                              popover-placement="bottom" popover="{{result.deathPlace}}">{{result.deathPlace}}</span>
+                                popover-trigger="mouseenter"
+                                popover-placement="bottom" popover="{{result.deathPlace}}">{{result.deathPlace}}</span>
                     </div>
                 </td>
                 <td class="parents"><span ng-repeat="father in result.father"><i
@@ -84,11 +83,19 @@
         </table>
 
         <center>
-            <pagination total-items="bigTotalItems" ng-model="currentPage"
-                        max-size="maxSize" class="pagination-sm" items-per-page="15" boundary-links="true"
-                        rotate="false"
-                        num-pages="numPages" ng-change="pageChanged()" class="ng-hide"
-                        ng-show="bigTotalItems"></pagination>
+            <pagination total-items="bigTotalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" items-per-page="15" boundary-links="true" rotate="false" num-pages="numPages" ng-change="pageChanged()"></pagination>
         </center>
+        <div class="row container-fluid text-center result-action">
+            <div class="btn-toolbar">
+                <div class="btn-group pull-left">
+                    <a ng-click="goBack()" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Modify Search</a>
+                </div>
+                <div class="btn-group pull-right">
+                    <span class="btn-text text-muted hidden-xs">No luck?</span>
+                    <a ng-click="addPerson()" class="btn btn-success">Add a New Person<span class="hidden-xs">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon glyphicon-hand-right"></i></span></a>
+                </div>
+            </div>
+        </div>
     </form>
+
 </div>

@@ -44,6 +44,18 @@ angular
         /* jshint camelcase: true */
         // For debugging purposes obviously
 
+        // window.location.origin is not supported by IE11
+        if ( !window.location.origin ) {
+            window.location.origin = window.location.protocol + "//"
+            + window.location.hostname
+            + (window.location.port ? ':' + window.location.port : '');
+        }
+        if ( !document.location.origin ) {
+            document.location.origin = window.location.origin;
+        }
+        //var referrer = window.location.href.substring(window.location.origin.length, window.location.href.length);
+
+
         $rootScope.helpers = RecordSeek.helpers;
         $rootScope.attachMsg = 'This source was created for free with http://RecordSeek.com';
 
@@ -55,14 +67,15 @@ angular
         }
 
         $rootScope.service = '';
+
         $rootScope.log = function( $log ) {
             if ( $rootScope.debug ) {
                 console.log( $log );
             }
         };
         $rootScope.logout = function() {
-            if ($rootScope.service === "FamilySearch") {
-                fsAPI.helpers.eraseAccessToken(true);
+            if ( $rootScope.service === "FamilySearch" ) {
+                fsAPI.helpers.eraseAccessToken( true );
                 $location.path( '/' );
             }
         };
@@ -227,7 +240,12 @@ angular
             $rootScope.data = {};
         }
 
+        if ( !$rootScope.data.addPerson ) {
+            $rootScope.data.addPerson = {};
+        }
+
         $rootScope.auth = {};
+
         var advanced = '';
         $rootScope.resetSearch = function() {
             if ( $rootScope.data.search && $rootScope.data.search.advanced ) {
@@ -322,7 +340,7 @@ angular
             }
         )
             .when(
-            '/fs-addPerson', {
+            '/fs-addperson', {
                 templateUrl: 'views/fs-addperson.html',
                 controller: 'FsAddpersonCtrl'
             }
@@ -331,6 +349,12 @@ angular
             '/fs-attach', {
                 templateUrl: 'views/fs-attach.html',
                 controller: 'FsAttachCtrl'
+            }
+        )
+            .when(
+            '/fs-addattach', {
+                templateUrl: 'views/fs-addattach.html',
+                controller: 'FsAddAttachCtrl'
             }
         )
             .when(

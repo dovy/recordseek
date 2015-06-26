@@ -95,7 +95,7 @@
                             <input type="text" class="form-control"
                                     ng-disabled="data.search.pid || !data.search.eventType"
                                     ng-model="data.search.eventPlace"
-                                    typeahead="address for address in getLocation($viewValue)"
+                                    typeahead-wait-ms="450" typeahead="address for address in getLocation($viewValue)"
                                     class="form-control">
 
 
@@ -162,15 +162,13 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-
                     <div class="form-group">
                         <label>Event Place </label>
-
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control"
                                     ng-disabled="data.search.pid || !data.search.eventType"
                                     ng-model="data.search.eventPlace"
-                                    typeahead="address for address in getLocation($viewValue)"
+                                    typeahead-wait-ms="450" typeahead="address for address in getLocation($viewValue)"
                                     class="form-control">
 
 

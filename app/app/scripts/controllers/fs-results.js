@@ -12,12 +12,33 @@ angular.module( 'recordseekApp' )
     'FsResultsCtrl',
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
         $rootScope.service = 'FamilySearch';
+        fsAPI.getCurrentUser().then(
+            function( response ) {
+                $rootScope.user = response.getUser();
+            }
+        );
+
+        $scope.bigTotalItems = 0;
+        $scope.index = 1;
+        $scope.currentPage = 2;
+        $scope.maxSize = 0;
+        $scope.numPages = 1;
 
         $scope.goBack = function() {
             $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Search', eventLabel: 'Refine'} );
 
             $location.path( '/fs-search' );
         };
+
+        $scope.addPerson = function() {
+
+            if (angular.equals({}, $rootScope.data.search)) {
+                $location.path( '/fs-addperson' );
+            } else {
+                $location.path( '/fs-addattach' );
+            }
+        };
+
         $scope.goNext = function( $pid, $name, $url ) {
             $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Selected', eventLabel: $pid} );
 
@@ -96,8 +117,7 @@ angular.module( 'recordseekApp' )
 
             searchData = fsUtils.removeEmptyProperties( searchData );
 
-
-            if ( Object.keys( searchData ).length === 0 ) {
+            if ( Object.keys( searchData ).length === 0 && !$rootScope.debug ) {
                 $location.path( '/fs-search' );
             }
 
@@ -118,25 +138,8 @@ angular.module( 'recordseekApp' )
             $scope.maxSize = 5;
 
 
-            // Used to parse relationships
-            function getRelativeData( persons ) {
-                var data = [];
-                for ( var i = 0, len = persons.length; i < len; i++ ) {
-                    if ( persons[i].living ) {
-                        continue;
-                    }
-                    data.push(
-                        {
-                            'pid': persons[i].id,
-                            'url': persons[i].$getPersistentIdentifier(),
-                            'name': persons[i].$getDisplayName(),
-                            'gender': persons[i].$getDisplayGender(),
-                            'data': persons[i]
-                        }
-                    );
-                }
-                return data;
-            }
+
+
 
             $scope.bigTotalItems = 0;
             $scope.index = 0;
@@ -156,10 +159,10 @@ angular.module( 'recordseekApp' )
                             $scope.bigTotalItems = $scope.max = 1;
                             var data = fsUtils.getPrimaryPerson( primaryPerson );
                             data.confidence = 5;
-                            data.father = getRelativeData( response.getFathers() );
-                            data.mother = getRelativeData( response.getMothers() );
-                            data.spouse = getRelativeData( response.getSpouses() );
-                            data.children = getRelativeData( response.getChildren() );
+                            data.father = fsUtils.getRelativeData( response.getFathers() );
+                            data.mother = fsUtils.getRelativeData( response.getMothers() );
+                            data.spouse = fsUtils.getRelativeData( response.getSpouses() );
+                            data.children = fsUtils.getRelativeData( response.getChildren() );
                             $scope.searchResults.push(
                                 data
                             );
@@ -192,10 +195,10 @@ angular.module( 'recordseekApp' )
                             //$rootScope.log( primaryPerson );
                             var data = fsUtils.getPrimaryPerson( primaryPerson );
                             data.confidence = results[i].confidence;
-                            data.father = getRelativeData( result.$getFathers() );
-                            data.mother = getRelativeData( result.$getMothers() );
-                            data.spouse = getRelativeData( result.$getSpouses() );
-                            data.children = getRelativeData( result.$getChildren() );
+                            data.father = fsUtils.getRelativeData( result.$getFathers() );
+                            data.mother = fsUtils.getRelativeData( result.$getMothers() );
+                            data.spouse = fsUtils.getRelativeData( result.$getSpouses() );
+                            data.children = fsUtils.getRelativeData( result.$getChildren() );
                             $scope.searchResults.push(
                                 data
                             );

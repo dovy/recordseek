@@ -3,10 +3,9 @@
                         popover="View on FamilySearch"
                         popover-trigger="mouseenter" >{{data.attach.name}}</a><br /><small>Source: "{{data.title}}"</small></h3>
 
-
 <form ng-submit="goNext()">
-    <div class="form-group input-group-sm" show-errors>
-        <label>Reason to Attach Source this source to this person
+    <div class="form-group" show-errors>
+        <label>Reason to Attach this Source to this Person
             <small>(Optional)</small>
         </label>
         <textarea class="form-control" ng-model="data.attach.justification" rows="5">{{data.attach.justification}}</textarea>

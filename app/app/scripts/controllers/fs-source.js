@@ -14,15 +14,20 @@ angular.module( 'recordseekApp' )
     ['$cookies', '$rootScope', '$location', '$scope', 'fsAPI', function( $cookie, $rootScope, $location, $scope, fsAPI, fsUtils ) {
         $rootScope.service = 'FamilySearch';
         $scope.fsLogout = function() {
-            fsAPI.helpers.eraseAccessToken(true);
+            fsAPI.helpers.eraseAccessToken( true );
             $location.path( '/' );
         }
         fsAPI.getCurrentUser().then(
             function( response ) {
                 $scope.user = response.getUser();
-                console.log($scope.user);
+                $rootScope.log( $scope.user );
             }
         );
+
+        // We're starting over. No new person yet!
+        if ( $rootScope.data.search.newPerson ) {
+            delete $rootScope.data.search.newPerson;
+        }
 
         $scope.origSource = $rootScope.data.citation;
 
@@ -30,6 +35,34 @@ angular.module( 'recordseekApp' )
             $location.path( '/fs-search' );
             if ( $scope.origSource !== $rootScope.data.citation ) {
                 $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Citation', eventLabel: 'Modified'} );
+            }
+            // TODO Remove after debug
+            if ( $rootScope.data.mooseroots && !$rootScope.data.search.surname ) {
+                // TODO Remove after debug
+                $rootScope.data.search = {
+                    birthDate: "June 3 1982",
+                    eventType: 'birth',
+                    eventPlace: 'Wasilla, Matanuska-Susitna, Alaska, United States',
+                    eventDateFrom: '1982',
+                    birthPlace: "Wasilla, Matanuska-Susitna, Alaska, United States",
+                    deathDate: "June 10, 2090",
+                    //deathPlace: "Provo, Utah, Utah, United States",
+                    fatherGivenName: "Father Given",
+                    fatherSurname: "Father Surname",
+                    gender: "Male",
+                    givenName1: "Ryan",
+                    givenName: "Ryan",
+                    langTemplate: "Standard",
+                    motherGivenName: "Mother Given",
+                    motherSurname: "Mother Surname",
+                    spouseGivenName: "Spouse Given",
+                    spouseSurname: "Spouse Surname",
+                    status: "Deceased",
+                    suffix1: "Suffix",
+                    surname1: "Smith",
+                    surname: "Smith",
+                    title1: "Title"
+                };
             }
         };
 

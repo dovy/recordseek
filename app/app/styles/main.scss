@@ -1,5 +1,6 @@
 @import "_variables.scss";
 @import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
+
 // $icon-font-path
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
@@ -13,9 +14,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
         left: inherit;
     }
 }
+
 .navbar i {
     margin-right: 5px;
 }
+
 .navbar .navbar-collapse {
     text-align: center;
 }
@@ -204,7 +207,7 @@ body {
     }
     .outer-container {
         margin-left: 0;
-        margin-right:0;
+        margin-right: 0;
     }
 }
 
@@ -250,16 +253,32 @@ body {
         transition-delay: 0s !important;
     }
 }
+
 a {
     cursor: pointer;
 }
+
+.btn-text {
+    padding: 10px 15px;
+    position: relative;
+    display: inline-block;
+    float: left;
+}
+
+.btn-text.btn-xs {
+    padding: 3px 10px 3px 0;
+}
+
 .results {
+    .row.result-action {
+        margin-top: 10px;
+    }
     .confidence {
         font-size: 10px;
     }
     tr.loading td {
         width: 100%;
-        line-height: 340px !important;
+        line-height: 295px !important;
         text-align: center;
         background: #fff !important;
     }
@@ -320,7 +339,7 @@ a {
                 color: #E2427C;
             }
             &.Unknown {
-                color:#666;
+                color: #666;
             }
         }
         &.select {
@@ -429,6 +448,7 @@ a {
         }
     }
 }
+
 @media screen and (max-width: 420px) {
     .results {
 
@@ -465,4 +485,49 @@ a {
 
 .hello-user {
     margin-top: -25px;
+}
+
+@media screen and (max-width: 767px) {
+    .hello-user {
+        margin-top: 0;
+    }
+}
+
+.addPerson {
+    // Typeahead dropdown
+    .dropdown-menu {
+        right: 14px;
+        //left: -92% !important;
+        padding: 0;
+    }
+    .dropdown-menu > li > a {
+        white-space: normal;
+        padding: 3px 12px;
+    }
+    .ng-hide-add-active, .ng-hide-remove-active {
+        -webkit-transition: none !important;
+        transition: none !important;
+        -webkit-transition-delay: 0ms !important;
+        transition-delay: 0ms !important;
+    }
+}
+
+.bs-callout-info {
+
+}
+.bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    background: #f9f9f9;
+    border-left: 5px solid #eee;
+    hr {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    &.bs-callout-info {
+        border-left-color: $brand-success;
+        h4 {
+            color: $brand-success;
+        }
+    }
 }
