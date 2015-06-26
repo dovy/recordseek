@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Service: rsData', function () {
+describe('Service: fsUtils', function () {
 
   // load the service's module
   beforeEach(module('recordseekApp'));
 
   // instantiate service
-  var rsData;
-  beforeEach(inject(function (_rsData_) {
-    rsData = _rsData_;
+  var fsUtils;
+  beforeEach(inject(function (_fsUtils_) {
+    fsUtils = _fsUtils_;
   }));
 
   it('should do something', function () {
-    expect(!!rsData).toBe(true);
+    expect(!!fsUtils).toBe(true);
   });
 
 });

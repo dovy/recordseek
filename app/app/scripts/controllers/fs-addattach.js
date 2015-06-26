@@ -10,9 +10,9 @@
 angular.module( 'recordseekApp' )
     .controller(
     'FsAddAttachCtrl',
-    ['$rootScope', '$location', '$scope', 'fsAPI', function( $rootScope, $location, $scope, fsAPI ) {
+    ['$rootScope', '$location', '$scope', 'fsAPI', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
 
-        $rootScope.service = 'FamilySearch';
+        $rootScope.service = 'FamilySearch';;
         fsAPI.getCurrentUser().then(
             function( response ) {
                 $rootScope.fsUser = response.getUser();
