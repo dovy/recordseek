@@ -271,7 +271,7 @@ module.exports = function( grunt ) {
                     overwrite: true,                 // overwrite matched source files
                     replacements: [{
                         from: '../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/',
-                        to: 'fonts/'
+                        to: '../fonts/'
                     }]
                 }
             },
@@ -415,7 +415,7 @@ module.exports = function( grunt ) {
                             cwd: '.',
                             flatten: true,
                             src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                            dest: '<%= yeoman.dist %>/styles/fonts/'
+                            dest: '<%= yeoman.dist %>/fonts/'
                         }]
                 },
                 styles: {
