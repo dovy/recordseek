@@ -73,7 +73,7 @@ angular
 
         $rootScope.log = function( $message ) {
             if ( $rootScope.debug ) {
-                $log.debug( $log );
+                $log.debug( $message );
             }
         };
         $rootScope.logout = function() {
@@ -215,7 +215,7 @@ angular
             }
         } else {
             if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) && !$rootScope.data ) {
-                $rootScope.data = angular.fromJson( $cookie.get( 'recordseek' ) );
+                //$rootScope.data = angular.fromJson( $cookie.get( 'recordseek' ) );
             }
         }
 
@@ -224,14 +224,14 @@ angular
                 if ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) ) {
                     if ( $rootScope.data ) {
                         if ( $location.$$path !== '/about' && $location.$$path !== '/support' && $location.$$path !== '/expired' && $rootScope.data ) {
-                            var date = new Date(),
-                                $exp = new Date( date );
-                            $exp.setMinutes( date.getMinutes() + $rootScope.expires );
-                            $cookie.put(
-                                'recordseek', angular.toJson( $rootScope.data ), {
-                                    expires: $exp
-                                }
-                            );
+                            //var date = new Date(),
+                            //    $exp = new Date( date );
+                            //$exp.setMinutes( date.getMinutes() + $rootScope.expires );
+                            //$cookie.put(
+                            //    'recordseek', angular.toJson( $rootScope.data ), {
+                            //        expires: $exp
+                            //    }
+                            //);
                         }
                     }
 

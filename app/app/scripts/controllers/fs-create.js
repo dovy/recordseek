@@ -29,12 +29,15 @@ angular.module( 'recordseekApp' )
             delete $rootScope.data.complete;
 
             $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
-
+            var tags = [];
+            angular.forEach($rootScope.data.tags, function(value, key) {
+                this.push('http://gedcomx.org/'+key);
+            }, tags);
             fsAPI.createSourceRef(
                 {
                     $personId: $rootScope.data.attach.pid,
                     $sourceDescription: $rootScope.data.sourceDescription,
-                    //$tags: ['http://gedcomx.org/Name', 'http://gedcomx.org/Birth']
+                    $tags: tags
                 }
             ).$save( $rootScope.data.attach.justification ).then(
                 function( sourceRefId ) {

@@ -17,7 +17,7 @@ angular.module( 'recordseekApp' )
             $rootScope.fsUser = response.getUser();
         });
 
-        if ( !$rootScope.data.attach ) {
+        if ( !$rootScope.data.attach && !$rootScope.debug ) {
             if ( !$rootScope.data.search ) {
                 $location.path( '/fs-search' );
             } else {

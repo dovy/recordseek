@@ -17,7 +17,7 @@
 </head>
 <body ng-app="recordseekApp">
 
-<!--[if lt IE 9]>
+<!--[if lt IE 10]>
 <p class="browsehappy alert alert-danger text-center">You are using an <strong>outdated</strong> browser. Please
     <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -124,6 +124,7 @@
         <span bind-html-unsafe="match.model.normalized | typeaheadHighlight:query">{{match.model.normalized}}</span>
     </a>
 </script>
+
 
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

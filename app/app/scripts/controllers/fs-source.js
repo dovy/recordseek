@@ -24,6 +24,14 @@ angular.module( 'recordseekApp' )
             }
         );
 
+        $scope.tagCount = function() {
+            if ($scope.data.tags) {
+                $scope.tagCount =  Object.keys($scope.data.tags).length;
+            }
+        }
+
+        $scope.tagTemplate = "tagTemplate.html";
+
         // We're starting over. No new person yet!
         if ( $rootScope.data.search.newPerson ) {
             delete $rootScope.data.search.newPerson;

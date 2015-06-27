@@ -1,7 +1,9 @@
 <span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
 <h3 xmlns="http://www.w3.org/1999/html">Attach a Source
-    <a class="btn btn-info pull-right btn-sm ng-hide" ng-click="goUpload()">Upload Memory</a>
+    <br /><a class="btn btn-success pull-right btn-sm sourceTags" popover-template="tagTemplate" popover-placement="left"><i class="glyphicon glyphicon-tags"></i> Tag this Source to Events <span class="badge">{{tagCount}}</span></a>
+    <!--<a class="btn btn-info pull-right btn-sm ng-hide" ng-click="goUpload()">Upload Memory</a>-->
 </h3>
+
 <div class="row container-fluid">
     <form ng-submit="goNext()">
         <div class="form-group input-group-sm">
@@ -52,3 +54,50 @@
         </div>
     </form>
 </div>
+
+
+
+<script type="text/ng-template" id="tagTemplate.html">
+    <div><strong>Select the events this source should be attached to.</strong></div>
+
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-change="alert('yo')" ng-model="data.tags.Name">
+                Name
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-change="tagCount()" ng-model="data.tags.Gender">
+                Gender
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-change="tagCount()" ng-model="data.tags.Birth">
+                Birth
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-change="tagCount()" ng-model="data.tags.Christening">
+                Christening
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-change="tagCount()" ng-model="data.tags.Death">
+                Death
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-change="tagCount()" ng-model="data.tags.Burial">
+                Burial
+            </label>
+        </div>
+    </div>
+</script>

@@ -16,7 +16,7 @@ angular.module( 'recordseekApp' )
 
         if ( document.location.origin === 'http://recordseek.com' ) {
             this.environment = 'production';
-        } else if ( document.location.origin !== 'http://localhost:9000' ) {
+        } else if ( document.location.origin === 'http://localhost:9000' ) {
             this.environment = 'sandbox';
         } else {
             this.environment = 'beta';
