@@ -24,10 +24,17 @@ angular.module( 'recordseekApp' )
             }
         );
 
-        $scope.tagCount = function() {
-            if ($scope.data.tags) {
-                $scope.tagCount =  Object.keys($scope.data.tags).length;
+        $scope.tagCounting = function() {
+            var count = 0;
+            angular.forEach($scope.data.tags, function(value, key) {
+                if (value === true) {
+                    count++;
+                }
+            }, count);
+            if (count === 0) {
+                count = '';
             }
+            $scope.tagCount = count;
         }
 
         $scope.tagTemplate = "tagTemplate.html";
