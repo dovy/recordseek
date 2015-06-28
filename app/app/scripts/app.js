@@ -135,6 +135,19 @@ angular
                 }
             }
 
+            var skip = [
+                'title', 'citation', 'notes', '_'
+            ];
+            console.log(obj);
+            var personData = [];
+            angular.forEach(obj, function(value, key) {
+console.log(value+'-'+key);
+                if (skip.indexOf(key) !== -1) {
+                    this.push({key:value});
+                }
+            }, personData);
+        console.log(personData);
+
             //obj.box = [{"RecordSeek.com"}];
 
             $rootScope.data = obj;

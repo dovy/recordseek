@@ -30,9 +30,13 @@ angular.module( 'recordseekApp' )
 
             $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
             var tags = [];
-            angular.forEach($rootScope.data.tags, function(value, key) {
-                this.push('http://gedcomx.org/'+key);
-            }, tags);
+            angular.forEach(
+                $rootScope.data.tags, function( value, key ) {
+                    if ( value === true ) {
+                        this.push( 'http://gedcomx.org/' + key );
+                    }
+                }, tags
+            );
             fsAPI.createSourceRef(
                 {
                     $personId: $rootScope.data.attach.pid,

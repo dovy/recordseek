@@ -24,6 +24,8 @@ angular.module( 'recordseekApp' )
             }
         );
 
+
+
         $scope.tagCounting = function() {
             var count = 0;
             angular.forEach($scope.data.tags, function(value, key) {
@@ -36,6 +38,7 @@ angular.module( 'recordseekApp' )
             }
             $scope.tagCount = count;
         }
+        $scope.tagCounting();
 
         $scope.tagTemplate = "tagTemplate.html";
 
