@@ -50,8 +50,8 @@ angular
         // window.location.origin is not supported by IE11
         if ( !window.location.origin ) {
             window.location.origin = window.location.protocol + "//"
-            + window.location.hostname
-            + (window.location.port ? ':' + window.location.port : '');
+                + window.location.hostname
+                + (window.location.port ? ':' + window.location.port : '');
         }
         if ( !document.location.origin ) {
             document.location.origin = window.location.origin;
@@ -127,28 +127,29 @@ angular
 
         if ( params ) {
             var obj = params;
+            var personData = [];
+            var skip = [
+                'title', 'citation', 'notes', '_'
+            ];
 
             for ( var prop in obj ) {
                 var value = obj[prop], type = typeof value;
                 if ( value !== null && (type === 'string') && obj.hasOwnProperty( prop ) ) {
-                    obj[prop] = obj[prop].trim();
+                    if ( prop.indexOf( '.' ) !== -1 ) {
+                        var index = prop.split( '.' );
+                        obj[index[0]] = (obj[index[0]]) ? obj[index[0]] : [];
+                        obj[index[0]][index[1]] = obj[prop].trim();
+                    } else {
+                        obj[prop] = obj[prop].trim();
+                    }
+                    if ( skip.indexOf( prop ) !== -1 ) {
+                        personData[prop] = obj[prop];
+                    }
                 }
             }
-
-            var skip = [
-                'title', 'citation', 'notes', '_'
-            ];
-            console.log(obj);
-            var personData = [];
-            angular.forEach(obj, function(value, key) {
-console.log(value+'-'+key);
-                if (skip.indexOf(key) !== -1) {
-                    this.push({key:value});
-                }
-            }, personData);
-        console.log(personData);
-
-            //obj.box = [{"RecordSeek.com"}];
+            if ( !angular.equals( {}, personData ) ) {
+                $rootScope.personData = personData;
+            }
 
             $rootScope.data = obj;
 
@@ -209,8 +210,9 @@ console.log(value+'-'+key);
                         eventAction: $rootScope.data.domain.toLowerCase().replace( 'www.', '' )
                     }
                 );
-
-
+            }
+            if ( $rootScope.data.notes ) {
+                $rootScope.data.notes = $rootScope.data.notes.trim().replace( '#/fs-source', '' );
             }
 
             if ( $rootScope.data.notes && $rootScope.data.notes.trim() !== '' ) {
@@ -218,8 +220,9 @@ console.log(value+'-'+key);
             } else {
                 $rootScope.data.notes = '';
             }
-            $rootScope.data.notes += $rootScope.attachMsg;
-
+            if ( $rootScope.data.notes.indexOf( $rootScope.attachMsg ) === -1 ) {
+                $rootScope.data.notes += $rootScope.attachMsg;
+            }
             if ( !$rootScope.data.title ) {
                 $rootScope.data.title = '';
             }
@@ -291,7 +294,8 @@ console.log(value+'-'+key);
                 fatherGivenNameExact: '',
                 fatherSurname: '',
                 fatherSurnameExact: '',
-                pid: ''
+                pid: '',
+                status: '',
             };
             if ( advanced !== '' ) {
                 $rootScope.data.search.advanced = advanced;

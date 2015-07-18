@@ -61,11 +61,27 @@ angular.module( 'recordseekApp' )
                         auto_expire: true,
                         timeout_function: $timeout,
                         expire_callback: function( FS ) {
+
                             var urlParams = FS.helpers.decodeQueryString( document.URL );
                             // Don't redirect if we already have a code!
                             if ( !urlParams || ( urlParams && !urlParams.code && !urlParams.state ) ) {
+                                var url = FS.helpers.removeQueryString( document.URL );
+                                var data = {
+                                    'url': $rootScope.data.url,
+                                    'title': $rootScope.data.title,
+                                    'citation': $rootScope.data.citation,
+                                    'notes': $rootScope.data.notes,
+                                };
+                                if ($rootScope.data.sourceDescription && $rootScope.data.sourceDescription.id != '') {
+                                    data.sourceDescription = {
+                                        id: $rootScope.data.sourceDescription.id
+                                    }
+                                }
+
+                                url = FS.helpers.appendQueryParameters(url, data);
+
                                 FS.getOAuth2AuthorizeURL(
-                                    window.location.href
+                                    url
                                 ).then(
                                     function( url ) {
                                         window.location = url;
