@@ -14,13 +14,15 @@ angular.module( 'recordseekApp' )
 
         this.environment = 'sandbox'; // production, sandbox, staging
 
-        if ( document.location.origin === 'http://recordseek.com' ) {
+        if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
             this.environment = 'production';
         } else if ( document.location.origin === 'http://localhost:9000' ) {
             this.environment = 'sandbox';
         } else {
             this.environment = 'beta';
         }
+
+        this.environment = 'production';
 
         if ( document.location.origin === 'http://recordseeknew.dev' || document.location.origin === 'https://recordseeknew.dev' ) {
             //this.environment = 'production';
