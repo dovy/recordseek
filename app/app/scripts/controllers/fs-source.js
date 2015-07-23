@@ -26,6 +26,8 @@ angular.module( 'recordseekApp' )
 
 
 
+
+
         $scope.tagCounting = function() {
             var count = 0;
             angular.forEach($scope.data.tags, function(value, key) {
@@ -53,34 +55,6 @@ angular.module( 'recordseekApp' )
             if ( $scope.origSource !== $rootScope.data.citation ) {
                 $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Citation', eventLabel: 'Modified'} );
             }
-            // TODO Remove after debug
-            if ( $rootScope.data.mooseroots && !$rootScope.data.search.surname ) {
-                // TODO Remove after debug
-                $rootScope.data.search = {
-                    birthDate: "June 3 1982",
-                    eventType: 'birth',
-                    eventPlace: 'Wasilla, Matanuska-Susitna, Alaska, United States',
-                    eventDateFrom: '1982',
-                    birthPlace: "Wasilla, Matanuska-Susitna, Alaska, United States",
-                    deathDate: "June 10, 2090",
-                    //deathPlace: "Provo, Utah, Utah, United States",
-                    fatherGivenName: "Father Given",
-                    fatherSurname: "Father Surname",
-                    gender: "Male",
-                    givenName1: "Ryan",
-                    givenName: "Ryan",
-                    langTemplate: "Standard",
-                    motherGivenName: "Mother Given",
-                    motherSurname: "Mother Surname",
-                    spouseGivenName: "Spouse Given",
-                    spouseSurname: "Spouse Surname",
-                    status: "Deceased",
-                    suffix1: "Suffix",
-                    surname1: "Smith",
-                    surname: "Smith",
-                    title1: "Title"
-                };
-            }
         };
 
         $scope.goBack = function() {
@@ -94,6 +68,12 @@ angular.module( 'recordseekApp' )
             $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
             $location.path( '/fs-create' );
         };
+
+        if ( !angular.equals( {}, $rootScope.personData ) && !$rootScope.skipSource ) {
+            $rootScope.skipSource = 1;
+            $scope.goNext();
+        }
+
 
         //if ( !$rootScope.auth.familysearch ) {
         //

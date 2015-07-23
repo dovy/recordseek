@@ -31,17 +31,15 @@ angular.module( 'recordseekApp' )
                 };
             },
             getLocation: function( $loc ) {
-                return fsAPI.getPlaceSearch( $loc, {'count': '10'} ).then(
+                return fsAPI.getPlacesSearch( { name: $loc, count: 10 } ).then(
                     function( response ) {
-                        var places = response.getPlaces();
                         var data = [];
-                        angular.forEach(
-                            places, function( item ) {
-                                if ( data.length < 9 ) {
-                                    this.push( item.$getNormalizedPlace() );
-                                }
-                            }, data
-                        );
+                        var results = response.getSearchResults();
+
+                        for(var i = 0; i < results.length; i++){
+                            var place = results[i].$getPlace();
+                            data.push(place.$getFullName());
+                        }
                         return data;
                     }
                 );
@@ -53,14 +51,12 @@ angular.module( 'recordseekApp' )
                         var $date = response.getDate();
                         //console.log($date);
                         if ( $date.normalized ) {
-                            if ($date.normalized.indexOf("/") != -1) {
-                                $date.normalized = $date.normalized.split('/');
+                            if ( $date.normalized.indexOf( "/" ) != -1 ) {
+                                $date.normalized = $date.normalized.split( '/' );
                                 return $date.normalized;
                             } else {
-                                return [ $date.normalized ];
+                                return [$date.normalized];
                             }
-
-                            //return [{'normalized': $date.normalized, 'formal': $formal}];
                         }
                     }
                 );
@@ -93,6 +89,118 @@ angular.module( 'recordseekApp' )
             },
             setService: function() {
                 return 'FamilySearch';
+            },
+
+            langTemplates: function() {
+                var $templates = [
+                    'Standard',
+                    'Spanish',
+                    'Portuguese',
+                    'Cyrillic',
+                    'Chinese',
+                    'Japanese',
+                    'Khmer',
+                    'Korean',
+                    'Mongolian',
+                    'Thai',
+                    'Vietnamese'
+                ];
+                return $templates;
+            },
+            langTemplatesExpanded: function() {
+                var $templates = this.langTemplates();
+                if ( $template == "Cyrillic" ) {
+                    $scope.title1 = "Cyrillic";
+                    $scope.title2 = "Roman";
+                } else if ( $template == "Chinese" ) {
+                    $scope.title1 = "Hanzi";
+                    $scope.title2 = "Roman";
+                } else if ( $template == "Japanese" ) {
+                    $scope.title1 = "Kanji";
+                    $scope.title2 = "Kana";
+                    $scope.title3 = "Roman";
+                } else if ( $template == "Khmer" ) {
+                    $scope.title1 = "Khmer";
+                    $scope.title2 = "Roman";
+                } else if ( $template == "Korean" ) {
+                    $scope.title1 = "Hangul";
+                    $scope.title2 = "Hanja";
+                    $scope.title3 = "Roman";
+                } else if ( $template == "Mongolian" ) {
+                    $scope.title1 = "Mongolian";
+                    $scope.title2 = "Roman";
+                } else if ( $template == "Thai" ) {
+                    $scope.title1 = "Thai";
+                    $scope.title2 = "Roman";
+                } else if ( $template == "Vietnamese" ) {
+                    $scope.title1 = "Vietnamese";
+                    $scope.title2 = "Roman";
+                }
+                return $templates;
+            },
+            cleanSearch: function( $search ) {
+                if ( $search.givenName && !$search.givenName1 ) {
+                    $search.givenName1 = $search.givenName;
+                }
+                if ( $search.surname && !$search.surname1 ) {
+                    $search.surname1 = $search.surname;
+                }
+                if ( $search.eventType == "birth" && ( !$search.birthDate && !$search.birthPlace ) ) {
+                    if ( !$search.birthPlace ) {
+                        $search.birthPlace = $search.eventPlace;
+                    }
+                    if ( !$search.birthDate && ( $search.eventDateFrom || $search.eventDateTo ) ) {
+                        if ( $search.eventDateFrom && $search.eventDateTo ) {
+                            if ( $search.eventDateFrom == $search.eventDateTo ) {
+                                $search.birthDate = $search.eventDateFrom;
+                            } else {
+                                $search.birthDate = $search.eventDateFrom + '-' + $search.eventDateTo;
+                            }
+                        } else {
+                            if ( $search.eventDateFrom ) {
+                                $search.birthDate = $search.eventDateFrom;
+                            } else if ( $search.eventDateTo ) {
+                                $search.birthDate = $search.eventDateTo;
+                            }
+                        }
+                    }
+                }
+                if ( $search.eventType == "death" && ( !$search.deathDate && !$search.deathPlace ) ) {
+                    if ( !$search.deathPlace ) {
+                        $search.deathPlace = $search.eventPlace;
+                    }
+                    if ( !$search.deathDate && ($search.eventDateFrom || $search.eventDateTo) ) {
+                        if ( $search.eventDateFrom && $search.eventDateTo ) {
+                            if ( $search.eventDateFrom == $search.eventDateTo ) {
+                                $search.deathDate = $search.eventDateFrom;
+                            } else {
+                                $search.deathDate = $search.eventDateFrom + '-' + $search.eventDateTo;
+                            }
+                        } else {
+                            if ( $search.eventDateFrom ) {
+                                $search.deathDate = $search.eventDateFrom;
+                            } else if ( $search.eventDateTo ) {
+                                $search.deathDate = $search.eventDateTo;
+                            }
+                        }
+                    }
+                    if ( $search.deathPlace || $search.deathDate ) {
+                        $search.status = "Deceased";
+                    }
+                }
+
+                if ( $search.eventType == "burial" && ( $search.eventPlace || $search.eventDateFrom || $search.eventDateTo ) ) {
+                    $search.status = "Deceased";
+                }
+
+                if ( !$search.langTemplate ) {
+                    $search.langTemplate = "Standard";
+                }
+
+                if ( !$search.gender ) {
+                    $search.gender = 'Unknown';
+                }
+                return $search;
             }
         };
     }

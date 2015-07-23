@@ -26,10 +26,10 @@ angular.module( 'recordseekApp' )
 
         $scope.addPerson = function() {
 
-            if ( $rootScope.personData ) {
-                $location.path( '/fs-addperson' );
-            } else {
+            if ( !angular.equals( {}, $rootScope.personData ) ) {
                 $location.path( '/fs-addattach' );
+            } else {
+                $location.path( '/fs-addperson' );
             }
         };
 

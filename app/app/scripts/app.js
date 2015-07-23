@@ -113,7 +113,9 @@ angular
             staging: true
         };
 
-        var params = fsAPI.helpers.decodeQueryString( document.URL );
+        var split = document.URL.split('#/');
+
+        var params = fsAPI.helpers.decodeQueryString( split[0] );
 
         if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) === -1 ) {
             //var $url = $location.$$absUrl.replace( '?_', '#/?_' );
@@ -123,13 +125,15 @@ angular
 
         //console.log(document.location.origin+'/');
 
+
+
         $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
 
         if ( params ) {
             var obj = params;
-            var personData = [];
+            var personData = {};
             var skip = [
-                'title', 'citation', 'notes', '_'
+                'h1', '_'
             ];
 
             for ( var prop in obj ) {
@@ -142,12 +146,15 @@ angular
                     } else {
                         obj[prop] = obj[prop].trim();
                     }
-                    if ( skip.indexOf( prop ) !== -1 ) {
+                    if ( skip.indexOf( prop ) === -1 && obj[prop] != "" ) {
                         personData[prop] = obj[prop];
                     }
+
                 }
             }
+
             if ( !angular.equals( {}, personData ) ) {
+                $rootScope.log(personData);
                 $rootScope.personData = personData;
             }
 
@@ -305,9 +312,15 @@ angular
         if ( !$rootScope.data.search ) {
             $rootScope.resetSearch();
             $rootScope.data.search.advanced = false;
+            if ( !angular.equals( {}, $rootScope.personData ) ) {
+                for ( var prop in $rootScope.personData ) {
+                    $rootScope.personData[prop];
+                    if ( $rootScope.data.search.hasOwnProperty(prop) !== -1 ) {
+                        $rootScope.data.search[prop] = $rootScope.personData[prop];
+                    }
+                }
+            }
         }
-
-
     }]
 )
     .constant( '_', _ )

@@ -10,9 +10,10 @@
 angular.module( 'recordseekApp' )
     .controller(
     'FsAddAttachCtrl',
-    ['$rootScope', '$location', '$scope', 'fsAPI', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
+    ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
 
-        $rootScope.service = 'FamilySearch';;
+        $rootScope.service = 'FamilySearch';
+        ;
         fsAPI.getCurrentUser().then(
             function( response ) {
                 $rootScope.fsUser = response.getUser();
@@ -21,27 +22,39 @@ angular.module( 'recordseekApp' )
 
         $rootScope.log( $rootScope.data.search );
 
+        $rootScope.data.search = fsUtils.cleanSearch( $rootScope.data.search );
+
         $rootScope.toCreate = [];
         var $data = "";
+        var maybeMakePerson = {};
+
+
+
 
         if ( $rootScope.data.search.langTemplate ) {
+            maybeMakePerson.names = {};
             if ( $rootScope.data.search.langTemplate == "Cyrillic" ) {
+                maybeMakePerson.names.cyrillic = {};
                 $data = {
                     title: 'Name',
                     sub: 'Cyrillic',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    maybeMakePerson.names.cyrillic.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.cyrillic.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.cyrillic.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.suffix1 ) {
                     $data.value += $rootScope.data.search.suffix1;
+                    maybeMakePerson.names.cyrillic.$suffix = $rootScope.data.search.suffix1;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -51,14 +64,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
-                if ( $rootScope.data.search.title2 ) {
-                    $data.value += $rootScope.data.search.title2 + ' ';
+                maybeMakePerson.names.roman = {};
+                if ( $rootScope.data.search.prefix2 ) {
+                    $data.value += $rootScope.data.search.prefix2 + ' ';
+                    maybeMakePerson.names.roman.$prefix = $rootScope.data.search.prefix2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName2;
                 }
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $rootScope.data.search.suffix2 ) {
                     $data.value += $rootScope.data.search.suffix2;
@@ -73,14 +90,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Hanzi',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                maybeMakePerson.names.hanzi = {};
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    maybeMakePerson.names.hanzi.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.hanzi.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.hanzi.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.suffix1 ) {
                     $data.value += $rootScope.data.search.suffix1;
@@ -93,14 +114,19 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
-                if ( $rootScope.data.search.title2 ) {
-                    $data.value += $rootScope.data.search.title2 + ' ';
+
+                maybeMakePerson.names.roman = {};
+                if ( $rootScope.data.search.prefix2 ) {
+                    $data.value += $rootScope.data.search.prefix2 + ' ';
+                    $rootScope.newPerson.names.roman.$prefix = $rootScope.data.search.prefix2;
                 }
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.suffix2 ) {
                     $data.value += $rootScope.data.search.suffix2;
@@ -115,12 +141,15 @@ angular.module( 'recordseekApp' )
                     sub: 'Kanji',
                     value: ''
                 };
+                maybeMakePerson.names.kanji = {};
 
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.kanji.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.kanji.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.suffix1 ) {
                     $data.value += $rootScope.data.search.suffix1;
@@ -133,11 +162,14 @@ angular.module( 'recordseekApp' )
                     sub: 'Kana',
                     value: ''
                 };
+                maybeMakePerson.names.kana = {};
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.kana.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.kana.$givenName = $rootScope.data.search.givenName2;
                 }
                 if ( $rootScope.data.search.suffix2 ) {
                     $data.value += $rootScope.data.search.suffix2;
@@ -150,11 +182,14 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
+                maybeMakePerson.names.roman = {};
                 if ( $rootScope.data.search.surname3 ) {
                     $data.value += $rootScope.data.search.surname3 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname3;
                 }
                 if ( $rootScope.data.search.givenName3 ) {
                     $data.value += $rootScope.data.search.givenName3 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName3;
                 }
                 if ( $rootScope.data.search.suffix3 ) {
                     $data.value += $rootScope.data.search.suffix3;
@@ -168,14 +203,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Khmer',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                maybeMakePerson.names.khmer = {};
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    $rootScope.newPerson.names.khmer.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.khmer.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.khmer.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.suffix1 ) {
                     $data.value += $rootScope.data.search.suffix1;
@@ -188,14 +227,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
-                if ( $rootScope.data.search.title2 ) {
-                    $data.value += $rootScope.data.search.title2 + ' ';
+                maybeMakePerson.names.roman = {};
+                if ( $rootScope.data.search.prefix2 ) {
+                    maybeMakePerson.names.roman.$prefix = $rootScope.data.search.prefix2;
+                    $data.value += $rootScope.data.search.prefix2 + ' ';
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName2;
                 }
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $rootScope.data.search.suffix2 ) {
                     $data.value += $rootScope.data.search.suffix2;
@@ -209,12 +252,14 @@ angular.module( 'recordseekApp' )
                     sub: 'Hangul',
                     value: ''
                 };
-
+                maybeMakePerson.names.hangul = {};
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.hangul.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.hangul.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.suffix1 ) {
                     $data.value += $rootScope.data.search.suffix1;
@@ -227,11 +272,14 @@ angular.module( 'recordseekApp' )
                     sub: 'Hanja',
                     value: ''
                 };
+                maybeMakePerson.names.hanja = {};
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.hanji.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.hanja.$givenName = $rootScope.data.search.givenName2;
                 }
                 if ( $rootScope.data.search.suffix2 ) {
                     $data.value += $rootScope.data.search.suffix2;
@@ -244,11 +292,14 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
+                maybeMakePerson.names.roman = {};
                 if ( $rootScope.data.search.surname3 ) {
                     $data.value += $rootScope.data.search.surname3 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname3;
                 }
                 if ( $rootScope.data.search.givenName3 ) {
                     $data.value += $rootScope.data.search.givenName3 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName3;
                 }
                 if ( $rootScope.data.search.suffix3 ) {
                     $data.value += $rootScope.data.search.suffix3;
@@ -262,14 +313,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Mongolian',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                maybeMakePerson.names.mongolian = {};
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    maybeMakePerson.names.mongolian.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.mongolian.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.mongolian.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -279,14 +334,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
-                if ( $rootScope.data.search.title2 ) {
-                    $data.value += $rootScope.data.search.title2 + ' ';
+                maybeMakePerson.names.roman = {};
+                if ( $rootScope.data.search.prefix2 ) {
+                    $data.value += $rootScope.data.search.prefix2 + ' ';
+                    maybeMakePerson.names.roman.$prefix = $rootScope.data.search.prefix2;
                 }
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName2;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -297,14 +356,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Thai',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                maybeMakePerson.names.thai = {};
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    maybeMakePerson.names.thai.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.thai.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.thai.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -314,14 +377,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
-                if ( $rootScope.data.search.title2 ) {
-                    $data.value += $rootScope.data.search.title2 + ' ';
+                maybeMakePerson.names.roman = {};
+                if ( $rootScope.data.search.prefix2 ) {
+                    $data.value += $rootScope.data.search.prefix2 + ' ';
+                    maybeMakePerson.names.roman.$prefix = $rootScope.data.search.prefix2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName2;
                 }
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -334,14 +401,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Vietnamese',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                maybeMakePerson.names.vietnamese = {};
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    maybeMakePerson.names.vietnamese.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.vietnamese.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.vietnamese.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -351,14 +422,18 @@ angular.module( 'recordseekApp' )
                     sub: 'Roman',
                     value: ''
                 };
-                if ( $rootScope.data.search.title2 ) {
-                    $data.value += $rootScope.data.search.title2 + ' ';
+                maybeMakePerson.names.roman = {};
+                if ( $rootScope.data.search.prefix2 ) {
+                    $data.value += $rootScope.data.search.prefix2 + ' ';
+                    maybeMakePerson.names.roman.$prefix = $rootScope.data.search.prefix2;
                 }
                 if ( $rootScope.data.search.givenName2 ) {
                     $data.value += $rootScope.data.search.givenName2 + ' ';
+                    maybeMakePerson.names.roman.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.surname2 ) {
                     $data.value += $rootScope.data.search.surname2 + ' ';
+                    maybeMakePerson.names.roman.$surname = $rootScope.data.search.surname2;
                 }
                 if ( $data.value !== '' ) {
                     $rootScope.toCreate.push( $data );
@@ -369,14 +444,18 @@ angular.module( 'recordseekApp' )
                     title: 'Name',
                     value: ''
                 };
-                if ( $rootScope.data.search.title1 ) {
-                    $data.value += $rootScope.data.search.title1 + ' ';
+                maybeMakePerson.names.standard = {};
+                if ( $rootScope.data.search.prefix1 ) {
+                    $data.value += $rootScope.data.search.prefix1 + ' ';
+                    maybeMakePerson.names.standard.$prefix = $rootScope.data.search.prefix1;
                 }
                 if ( $rootScope.data.search.givenName1 ) {
                     $data.value += $rootScope.data.search.givenName1 + ' ';
+                    maybeMakePerson.names.standard.$givenName = $rootScope.data.search.givenName1;
                 }
                 if ( $rootScope.data.search.surname1 ) {
                     $data.value += $rootScope.data.search.surname1 + ' ';
+                    maybeMakePerson.names.standard.$surname = $rootScope.data.search.surname1;
                 }
                 if ( $rootScope.data.search.suffix1 ) {
                     $data.value += $rootScope.data.search.suffix1;
@@ -393,18 +472,24 @@ angular.module( 'recordseekApp' )
                     value: $rootScope.data.search.gender
                 }
             );
+            maybeMakePerson.gender = 'http://gedcomx.org/'+$rootScope.data.search.gender;
         }
-
+        maybeMakePerson.events = {};
         if ( $rootScope.data.search.birthDate || $rootScope.data.search.birthPlace ) {
             $data = {
                 title: 'Birth',
                 value: ''
             };
+            maybeMakePerson.events.birth = {
+                type: 'http://gedcomx.org/Birth',
+            };
             if ( $rootScope.data.search.birthDate ) {
-                if ($rootScope.data.search.birthDate.normalized) {
+                if ( $rootScope.data.search.birthDate.normalized ) {
                     $data.value += $rootScope.data.search.birthDate.normalized;
+                    maybeMakePerson.events.birth.$date = $rootScope.data.search.birthDate.normalized;
                 } else {
                     $data.value += $rootScope.data.search.birthDate;
+                    maybeMakePerson.events.birth.$date = $rootScope.data.search.birthDate;
                 }
             }
             if ( $rootScope.data.search.birthPlace ) {
@@ -412,6 +497,7 @@ angular.module( 'recordseekApp' )
                     $data.value += '<br />';
                 }
                 $data.value += $rootScope.data.search.birthPlace;
+                maybeMakePerson.events.birth.$place = $rootScope.data.search.birthPlace;
             }
             $rootScope.toCreate.push( $data );
         }
@@ -420,11 +506,16 @@ angular.module( 'recordseekApp' )
                 title: 'Death',
                 value: ''
             };
+            maybeMakePerson.events.death = {
+                type: 'http://gedcomx.org/Death',
+            };
             if ( $rootScope.data.search.deathDate ) {
-                if ($rootScope.data.search.deathDate.normalized) {
+                if ( $rootScope.data.search.deathDate.normalized ) {
                     $data.value += $rootScope.data.search.deathDate.normalized;
+                    maybeMakePerson.events.death.$date = $rootScope.data.search.deathDate.normalized;
                 } else {
                     $data.value += $rootScope.data.search.deathDate;
+                    maybeMakePerson.events.death.$date = $rootScope.data.search.deathDate;
                 }
             }
             if ( $rootScope.data.search.deathPlace ) {
@@ -432,6 +523,7 @@ angular.module( 'recordseekApp' )
                     $data.value += '<br />';
                 }
                 $data.value += $rootScope.data.search.deathPlace;
+                maybeMakePerson.events.death.$place = $rootScope.data.search.deathPlace;
             }
             $rootScope.toCreate.push( $data );
         } else if ( $rootScope.data.search.status ) {
@@ -486,21 +578,11 @@ angular.module( 'recordseekApp' )
             $location.path( '/fs-addperson' );
         };
         $scope.goNext = function() {
-            $location.path( '/fs-complete' );
+            if ( !angular.equals( {}, maybeMakePerson ) ) {
+                $rootScope.toCreate = maybeMakePerson;
+            }
+            $location.path( '/fs-create' );
         };
 
-        //$rootScope.toCreate =
-        //    [
-        //        {
-        //            title: 'Name',
-        //            sub: 'Kanji',
-        //            value: 'Dovydas'
-        //        },
-        //        {
-        //            title: 'Name',
-        //            sub: 'Roman',
-        //            value: 'Dovy'
-        //        }
-        //    ];
     }]
 );

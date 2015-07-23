@@ -1,5 +1,6 @@
 <span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
-<h3>Select a Person to Attach this Source</h3>
+<h3>Are any of these people the <strong>{{data.search.givenName}} {{data.search.surname}}</strong> you’re looking for?</h3>
+<h5 class="hide">If yes, click <mark class="info">select</mark>. If not, <a ng-click="addPerson()">add a new person</a></h5>
 <div class="row container-fluid" resize>
     <form class="results">
         <table class="table table-striped table-hover table-condensed table-responsive header-fixed">
@@ -90,8 +91,8 @@
                 <div class="btn-group pull-left">
                     <a ng-click="goBack()" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Modify Search</a>
                 </div>
-                <div class="btn-group pull-right hide">
-                    <span class="btn-text text-muted hidden-xs">No luck?</span>
+                <div class="btn-group pull-right">
+                    <span class="btn-text text-muted hidden-xs">If found, click <mark class="info">select</mark>. No luck?</span>
                     <a ng-click="addPerson()" class="btn btn-success">Add a New Person<span class="hidden-xs">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon glyphicon-hand-right"></i></span></a>
                 </div>
             </div>

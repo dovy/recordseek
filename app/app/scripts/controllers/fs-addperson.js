@@ -18,63 +18,7 @@ angular.module( 'recordseekApp' )
             }
         );
 
-        if ( $rootScope.data.search.givenName && !$rootScope.data.search.givenName1 ) {
-            $rootScope.data.search.givenName1 = $rootScope.data.search.givenName;
-        }
-        if ( $rootScope.data.search.surname && !$rootScope.data.search.surname1 ) {
-            $rootScope.data.search.surname1 = $rootScope.data.search.surname;
-        }
-        if ( $rootScope.data.search.eventType == "birth" && ( !$rootScope.data.search.birthDate && !$rootScope.data.search.birthPlace ) ) {
-            if ( !$rootScope.data.search.birthPlace ) {
-                $rootScope.data.search.birthPlace = $rootScope.data.search.eventPlace;
-            }
-            if ( !$rootScope.data.search.birthDate && ( $rootScope.data.search.eventDateFrom || $rootScope.data.search.eventDateTo ) ) {
-                if ( $rootScope.data.search.eventDateFrom && $rootScope.data.search.eventDateTo ) {
-                    if ( $rootScope.data.search.eventDateFrom == $rootScope.data.search.eventDateTo ) {
-                        $rootScope.data.search.birthDate = $rootScope.data.search.eventDateFrom;
-                    } else {
-                        $rootScope.data.search.birthDate = $rootScope.data.search.eventDateFrom + '-' + $rootScope.data.search.eventDateTo;
-                    }
-                } else {
-                    if ( $rootScope.data.search.eventDateFrom ) {
-                        $rootScope.data.search.birthDate = $rootScope.data.search.eventDateFrom;
-                    } else if ( $rootScope.data.search.eventDateTo ) {
-                        $rootScope.data.search.birthDate = $rootScope.data.search.eventDateTo;
-                    }
-                }
-            }
-        }
-        if ( $rootScope.data.search.eventType == "death" && ( !$rootScope.data.search.deathDate && !$rootScope.data.search.deathPlace ) ) {
-            if ( !$rootScope.data.search.deathPlace ) {
-                $rootScope.data.search.deathPlace = $rootScope.data.search.eventPlace;
-            }
-            if ( !$rootScope.data.search.deathDate && ($rootScope.data.search.eventDateFrom || $rootScope.data.search.eventDateTo) ) {
-                if ( $rootScope.data.search.eventDateFrom && $rootScope.data.search.eventDateTo ) {
-                    if ( $rootScope.data.search.eventDateFrom == $rootScope.data.search.eventDateTo ) {
-                        $rootScope.data.search.deathDate = $rootScope.data.search.eventDateFrom;
-                    } else {
-                        $rootScope.data.search.deathDate = $rootScope.data.search.eventDateFrom + '-' + $rootScope.data.search.eventDateTo;
-                    }
-                } else {
-                    if ( $rootScope.data.search.eventDateFrom ) {
-                        $rootScope.data.search.deathDate = $rootScope.data.search.eventDateFrom;
-                    } else if ( $rootScope.data.search.eventDateTo ) {
-                        $rootScope.data.search.deathDate = $rootScope.data.search.eventDateTo;
-                    }
-                }
-            }
-            if ( $rootScope.data.search.deathPlace || $rootScope.data.search.deathDate ) {
-                $rootScope.data.search.status = "Deceased";
-            }
-        }
-
-        if ( $rootScope.data.search.eventType == "burial" && ( $rootScope.data.search.eventPlace || $rootScope.data.search.eventDateFrom || $rootScope.data.search.eventDateTo ) ) {
-            $rootScope.data.search.status = "Deceased";
-        }
-
-        if ( !$rootScope.data.search.langTemplate ) {
-            $rootScope.data.search.langTemplate = "Standard";
-        }
+        $rootScope.data.search = fsUtils.cleanSearch( $rootScope.data.search );
 
         if (
             $rootScope.data.search.motherGivenName ||
@@ -86,23 +30,8 @@ angular.module( 'recordseekApp' )
         ) {
             $scope.isCollapsed = true;
         }
-        if ( !$rootScope.data.search.gender ) {
-            $rootScope.data.search.gender = 'Unknown';
-        }
 
-        $scope.langTemplates = [
-            'Standard',
-            'Spanish',
-            'Portuguese',
-            'Cyrillic',
-            'Chinese',
-            'Japanese',
-            'Khmer',
-            'Korean',
-            'Mongolian',
-            'Thai',
-            'Vietnamese'
-        ];
+        $scope.langTemplates = fsUtils.langTemplates();
 
         $scope.status = {
             isopen: false

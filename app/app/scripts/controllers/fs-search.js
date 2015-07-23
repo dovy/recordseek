@@ -19,6 +19,8 @@ angular.module( 'recordseekApp' )
             }
         );
 
+        console.log($rootScope.data.search);
+
         if ( $rootScope.data.search.advanced ) {
             $scope.advancedButtonText = 'Basic';
         } else {

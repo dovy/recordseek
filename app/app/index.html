@@ -5,22 +5,18 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory --><!-- build:css(.) styles/vendor.css --><!-- bower:css -->
+<!-- endbower --><!-- endbuild --><!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
 
 </head>
 <body ng-app="recordseekApp">
 
-<!--[if lt IE 10]>
-<p class="browsehappy alert alert-danger text-center">You are using an <strong>outdated</strong> browser. Please
-    <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
+<!--[if lt IE 10]><p class="browsehappy alert alert-danger text-center">You are using an
+    <strong>outdated</strong> browser. Please
+    <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.
+</p><![endif]-->
 
 <div class="wrap">
     <!-- Add your site or application content here -->
@@ -34,7 +30,7 @@
                         <span class="icon-bar"></span> <span class="icon-bar"></span>
                     </button>
 
-                    <a class="navbar-brand" data-href="/" ng-click="actionTaken( $event )">RecordSeek</a>
+                    <a class="navbar-brand" href="{{data.url}}" target="_blank" ng-click="window.close()" popover-placement="right" popover="Return to Source Site" popover-trigger="mouseenter">RecordSeek</a>
                     <small ng-show="service" class="ng-hide navbar-brand service hidden-xs">
                         <i class="glyphicon glyphicon-chevron-right"></i> <span class="{{service}}">{{service}}</span>
                     </small>
@@ -124,8 +120,8 @@
 <script>
     !function( A, n, g, u, l, a, r ) {
         A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
-            (A[l].q = A[l].q || []).push( arguments )
-        }, A[l].l = +new Date, a = n.createElement( g ),
+                    (A[l].q = A[l].q || []).push( arguments )
+                }, A[l].l = +new Date, a = n.createElement( g ),
                 r = n.getElementsByTagName( g )[0], a.src = u, r.parentNode.insertBefore( a, r )
     }( window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga' );
 </script>

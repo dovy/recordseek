@@ -22,8 +22,6 @@ angular.module( 'recordseekApp' )
             this.environment = 'beta';
         }
 
-        this.environment = 'production';
-
         if ( document.location.origin === 'http://recordseeknew.dev' || document.location.origin === 'https://recordseeknew.dev' ) {
             //this.environment = 'production';
         }
@@ -39,7 +37,6 @@ angular.module( 'recordseekApp' )
         if ( document.location.origin !== 'http://localhost:9000' ) {
             this.redirect_uri += '/share/';
         }
-
 
 
         this.$get = function( $window, $http, $q, $timeout, $rootScope, $injector, $location ) {
@@ -68,19 +65,14 @@ angular.module( 'recordseekApp' )
                             // Don't redirect if we already have a code!
                             if ( !urlParams || ( urlParams && !urlParams.code && !urlParams.state ) ) {
                                 var url = FS.helpers.removeQueryString( document.URL );
-                                var data = {
-                                    'url': $rootScope.data.url,
-                                    'title': $rootScope.data.title,
-                                    'citation': $rootScope.data.citation,
-                                    'notes': $rootScope.data.notes,
-                                };
-                                if ($rootScope.data.sourceDescription && $rootScope.data.sourceDescription.id != '') {
-                                    data.sourceDescription = {
+
+                                if ( $rootScope.data.sourceDescription && $rootScope.data.sourceDescription.id != '' ) {
+                                    $rootScope.personData.sourceDescription = {
                                         id: $rootScope.data.sourceDescription.id
                                     }
                                 }
 
-                                url = FS.helpers.appendQueryParameters(url, data);
+                                url = FS.helpers.appendQueryParameters( url, $rootScope.personData );
 
                                 FS.getOAuth2AuthorizeURL(
                                     url

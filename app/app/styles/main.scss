@@ -544,3 +544,22 @@ a {
         margin-right: 7px;
     }
 }
+
+mark, .mark {
+    &.info {
+        background: $btn-info-bg;
+        color: $btn-info-color;
+    }
+    &.success {
+        background: $btn-success-bg;
+        color: $btn-success-color;
+    }
+    &.warning {
+        background: $btn-warning-bg;
+        color: $btn-warning-color;
+    }
+    &.danger {
+        background: $btn-danger-bg;
+        color: $btn-danger-color;
+    }
+}
