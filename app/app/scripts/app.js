@@ -192,6 +192,9 @@ angular
                     if ( urlData.indiv ) {
                         newURL.indiv = urlData.indiv;
                     }
+                    if ( urlData.pid ) {
+                        newURL.pid = urlData.pid;
+                    }
                     $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
                         fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
                     );
