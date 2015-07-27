@@ -113,9 +113,10 @@ angular
             staging: true
         };
 
-        var split = document.URL.split('#/');
+        var split = document.URL.split( '#/' );
 
         var params = fsAPI.helpers.decodeQueryString( split[0] );
+        $rootScope.log(params);
 
         if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) === -1 ) {
             //var $url = $location.$$absUrl.replace( '?_', '#/?_' );
@@ -126,14 +127,13 @@ angular
         //console.log(document.location.origin+'/');
 
 
-
         $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
 
         if ( params ) {
             var obj = params;
             var personData = {};
             var skip = [
-                'h1', '_', 'title', 'citation', 'notes', 'url'
+                'h1', '_'
             ];
 
             for ( var prop in obj ) {
@@ -142,9 +142,11 @@ angular
                     if ( prop.indexOf( '.' ) !== -1 ) {
                         var index = prop.split( '.' );
                         obj[index[0]] = (obj[index[0]]) ? obj[index[0]] : [];
-                        obj[index[0]][index[1]] = obj[prop].replace(/(\r\n|\n|\r)/gm,"").replace(/ +(?= )/g,'').trim();
+                        obj[index[0]][index[1]] = obj[prop].replace( /(\r\n|\n|\r)/gm, "" ).replace(
+                            / +(?= )/g, ''
+                        ).trim();
                     } else {
-                        obj[prop] = obj[prop].replace(/(\r\n|\n|\r)/gm,"").replace(/ +(?= )/g,'').trim();
+                        obj[prop] = obj[prop].replace( /(\r\n|\n|\r)/gm, "" ).replace( / +(?= )/g, '' ).trim();
                     }
                     if ( skip.indexOf( prop ) === -1 && obj[prop] != "" ) {
                         personData[prop] = obj[prop];
@@ -154,7 +156,7 @@ angular
             }
 
             if ( !angular.equals( {}, personData ) ) {
-                $rootScope.log(personData);
+                $rootScope.log( personData );
                 $rootScope.personData = personData;
             }
 
@@ -182,6 +184,7 @@ angular
                 // Clean up the Ancestry search URLs
                 if ( $rootScope.data.url.indexOf( 'search.ancestry.com' ) > -1 ) {
                     var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
+
                     var newURL = {};
                     if ( urlData.h ) {
                         newURL.h = urlData.h;
@@ -192,16 +195,20 @@ angular
                     if ( urlData.indiv ) {
                         newURL.indiv = urlData.indiv;
                     }
-                    if ( urlData.pid ) {
-                        newURL.pid = urlData.pid;
-                    }
                     $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
                         fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
                     );
                 }
                 // Clean up the ancestry interactive URLs
                 if ( $rootScope.data.url.indexOf( 'interactive.ancestry.com' ) > -1 ) {
-                    $rootScope.data.url = fsAPI.helpers.removeQueryString( $rootScope.data.url );
+                    var iurlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
+                    var inewURL = {};
+                    if ( iurlData.pid ) {
+                        inewURL.pid = iurlData.pid;
+                    }
+                    $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
+                        fsAPI.helpers.removeQueryString( $rootScope.data.url ), inewURL
+                    );
                 }
                 if ( $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
                     var $split = $rootScope.data.url.split( '/' );
@@ -276,7 +283,7 @@ angular
         $rootScope.auth = {};
 
         var advanced = '';
-        $rootScope.resetSearch = function($data) {
+        $rootScope.resetSearch = function( $data ) {
             if ( $rootScope.data.search && $rootScope.data.search.advanced ) {
                 advanced = $rootScope.data.search.advanced;
             }
@@ -312,7 +319,7 @@ angular
             } else {
                 advanced = false;
             }
-            if ($data) {
+            if ( $data ) {
                 return $blank;
             } else {
                 $rootScope.data.search = $blank;
@@ -325,7 +332,7 @@ angular
             if ( $rootScope.personData && !angular.equals( {}, $rootScope.personData ) ) {
                 for ( var prop in $rootScope.personData ) {
                     $rootScope.personData[prop];
-                    if ( $rootScope.data.search.hasOwnProperty(prop) !== -1 ) {
+                    if ( $rootScope.data.search.hasOwnProperty( prop ) !== -1 ) {
                         $rootScope.data.search[prop] = $rootScope.personData[prop];
                     }
                 }

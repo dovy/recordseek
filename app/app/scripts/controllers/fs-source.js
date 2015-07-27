@@ -69,11 +69,26 @@ angular.module( 'recordseekApp' )
             $location.path( '/fs-create' );
         };
 
-        if ( $rootScope.personData && !angular.equals( {}, $rootScope.personData ) && !$rootScope.skipSource ) {
-            $rootScope.skipSource = 1;
-            $scope.goNext();
+        if ( $rootScope.personData ) {
+            var $test = $rootScope.personData;
+            if ( $test.title ) {
+                delete $test.title;
+            }
+            if ( $test.notes ) {
+                delete $test.notes;
+            }
+            if ( $test.citation ) {
+                delete $test.citation;
+            }
+            if ( $test.url ) {
+                delete $test.url;
+            }
+            if ( $test && !angular.equals( {}, $test ) && !$rootScope.skipSource ) {
+                $rootScope.skipSource = 1;
+                $scope.goNext();
+            }
+            console.log($rootScope.personData);
         }
-
 
         //if ( !$rootScope.auth.familysearch ) {
         //

@@ -72,6 +72,18 @@ angular.module( 'recordseekApp' )
                                     }
                                 }
 
+                                if ( angular.equals( {}, $rootScope.personData ) ) {
+                                    $rootScope.personData = {
+                                        url: $rootScope.data.url,
+                                        title: $rootScope.data.title,
+                                        citation: $rootScope.data.citation,
+                                        notes: $rootScope.data.notes,
+                                    };
+                                    if ( $rootScope.data.tags ) {
+                                        $rootScope.personData.tags = $rootScope.data.tags;
+                                    }
+                                }
+
                                 url = FS.helpers.appendQueryParameters( url, $rootScope.personData );
 
                                 FS.getOAuth2AuthorizeURL(
