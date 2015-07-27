@@ -273,11 +273,11 @@ angular
         $rootScope.auth = {};
 
         var advanced = '';
-        $rootScope.resetSearch = function() {
+        $rootScope.resetSearch = function($data) {
             if ( $rootScope.data.search && $rootScope.data.search.advanced ) {
                 advanced = $rootScope.data.search.advanced;
             }
-            $rootScope.data.search = {
+            var $blank = {
                 givenName: '',
                 givenNameExact: '',
                 surname: '',
@@ -305,7 +305,14 @@ angular
                 status: '',
             };
             if ( advanced !== '' ) {
-                $rootScope.data.search.advanced = advanced;
+                $blank.advanced = advanced;
+            } else {
+                advanced = false;
+            }
+            if ($data) {
+                return $blank;
+            } else {
+                $rootScope.data.search = $blank;
             }
         };
 

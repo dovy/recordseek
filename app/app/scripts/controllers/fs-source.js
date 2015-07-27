@@ -70,7 +70,6 @@ angular.module( 'recordseekApp' )
         };
 
         if ( $rootScope.personData && !angular.equals( {}, $rootScope.personData ) && !$rootScope.skipSource ) {
-            console.log($rootScope.personData);
             $rootScope.skipSource = 1;
             $scope.goNext();
         }

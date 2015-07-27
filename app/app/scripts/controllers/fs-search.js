@@ -19,13 +19,13 @@ angular.module( 'recordseekApp' )
             }
         );
 
-        console.log($rootScope.data.search);
-
         if ( $rootScope.data.search.advanced ) {
             $scope.advancedButtonText = 'Basic';
         } else {
             $scope.advancedButtonText = 'Advanced';
         }
+
+        $scope.emptyData = $rootScope.resetSearch(true);
 
         $scope.getLocation = fsUtils.getLocation;
 
@@ -41,8 +41,17 @@ angular.module( 'recordseekApp' )
             }
         };
 
+        $scope.validData = function() {
+            if ( !angular.equals( $scope.emptyData, $rootScope.data.search ) ) {
+                return false;
+            }
+            return true;
+        }
+
         $scope.goNext = function() {
-            $location.path( '/fs-results' );
+            if ( !angular.equals( $scope.emptyData, $rootScope.data.search ) ) {
+                $location.path( '/fs-results' );
+            }
         };
         $scope.goBack = function() {
             $location.path( '/fs-source' );
