@@ -2,7 +2,7 @@
 <h3>Create a New Person</h3>
 
 <form class="addPerson" ng-init="isDisabled = false" ng-submit="goNext()">
-    <div class="row">
+    <div class="row hide">
         <div class="col-xs-12 form-group">
             <div class="btn-group" dropdown is-open="status.isopen">
                 <span class="btn-text btn-xs text-muted">Name Template:</span>
@@ -231,7 +231,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row hide">
         <div class="col-xs-12">
             <div class="form-group">
                 <a class="btn btn-default btn-xs" ng-click="isCollapsed = !isCollapsed">
@@ -240,7 +240,7 @@
             </div>
         </div>
     </div>
-    <div collapse="!isCollapsed">
+    <div class="hide" collapse="!isCollapsed">
         <div class="row">
             <div class="col-xs-6">
                 <div class="form-group">

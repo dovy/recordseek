@@ -27,7 +27,7 @@
             </tr>
             <tr ng-repeat="result in searchResults" class="ng-hide" ng-show="searchResults">
                 <td class="select vert-align">
-                    <a class="btn btn-xs btn-default" ng-click="goNext(result.pid, result.name, result.url)">Select</a><br/><span
+                    <a class="btn btn-xs btn-success" ng-click="goNext(result.pid, result.name, result.url)">Select</a><br/><span
                         class="confidence"
                         popover-placement="right"
                         popover="How well this matches your search."
@@ -92,8 +92,8 @@
                     <a ng-click="goBack()" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Modify Search</a>
                 </div>
                 <div class="btn-group pull-right">
-                    <span class="btn-text text-muted hidden-xs">If found, click <mark class="info">select</mark>. No luck?</span>
-                    <a ng-click="addPerson()" class="btn btn-success">Add a New Person<span class="hidden-xs">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon glyphicon-hand-right"></i></span></a>
+                    <span class="btn-text text-muted hidden-xs">If found, click <mark class="success">Select</mark>. No luck?</span>
+                    <a ng-click="addPerson()" class="btn btn-default">Add a New Person<span class="hidden-xs">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon glyphicon-hand-right"></i></span></a>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
-@import "_variables.scss";
+@import "_variables";
+@import "_timer-loader";
 
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
@@ -7,8 +8,8 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 //@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 
-@import "_bootswatch.scss";
-@import "timer-loader.scss";
+@import "_bootswatch";
+
 .header {
     .dropdown-menu {
         right: 0;

@@ -1,4 +1,4 @@
-// Generated on 2015-06-01 using generator-angular 0.11.1
+// Generated on 2015-07-27 using generator-angular 0.12.1
 'use strict';
 
 // # Globbing
@@ -9,11 +9,17 @@
 
 module.exports = function( grunt ) {
 
-    // Load grunt tasks automatically
-    require( 'load-grunt-tasks' )( grunt );
-
     // Time how long tasks take. Can help when optimizing build times
     require( 'time-grunt' )( grunt );
+
+    // Automatically load required Grunt tasks
+    require( 'jit-grunt' )(
+        grunt, {
+            useminPrepare: 'grunt-usemin',
+            ngtemplates: 'grunt-angular-templates',
+            cdnify: 'grunt-google-cdn'
+        }
+    );
 
     // Configurable paths for the application
     var appConfig = {
@@ -47,7 +53,7 @@ module.exports = function( grunt ) {
                 },
                 compass: {
                     files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                    tasks: ['compass:server', 'autoprefixer']
+                    tasks: ['compass:server', 'autoprefixer:server']
                 },
                 gruntfile: {
                     files: ['Gruntfile.js']
@@ -264,43 +270,22 @@ module.exports = function( grunt ) {
                 }
             },
 
-            // replace the font file path
-            replace: {
-                dist: {
-                    src: ['<%= yeoman.dist %>/styles//*.css'],
-                    overwrite: true,                 // overwrite matched source files
-                    replacements: [{
-                        from: '../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/',
-                        to: '../fonts/'
-                    }]
-                }
-            },
-
             // Performs rewrites based on filerev and the useminPrepare configuration
             usemin: {
                 html: ['<%= yeoman.dist %>/{,*/}*.html'],
                 css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+                js: ['<%= yeoman.dist %>/scripts/{,*/}*.js'],
                 options: {
                     assetsDirs: [
                         '<%= yeoman.dist %>',
                         '<%= yeoman.dist %>/images',
                         '<%= yeoman.dist %>/styles'
-                    ]
+                    ],
+                    patterns: {
+                        js: [[/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']]
+                    }
                 }
             },
-
-            //cssmin: {
-            //    options: {
-            //        rebase: false
-            //    },
-            //    dist: {
-            //        files: {
-            //            '<%= yeoman.dist %>/styles/main.css': [
-            //                '.tmp/styles/{,*/}*.css'
-            //            ]
-            //        }
-            //    }
-            //},
 
             // The following *-min tasks will produce minified files in the dist folder
             // By default, your `index.html`'s <!-- Usemin block --> will take care of
@@ -356,15 +341,27 @@ module.exports = function( grunt ) {
                         collapseWhitespace: true,
                         conservativeCollapse: true,
                         collapseBooleanAttributes: true,
-                        removeCommentsFromCDATA: true,
-                        removeOptionalTags: true
+                        removeCommentsFromCDATA: true
                     },
                     files: [{
                         expand: true,
                         cwd: '<%= yeoman.dist %>',
-                        src: ['*.html', 'views/{,*/}*.html'],
+                        src: ['*.html'],
                         dest: '<%= yeoman.dist %>'
                     }]
+                }
+            },
+
+            ngtemplates: {
+                dist: {
+                    options: {
+                        module: 'recordseekApp',
+                        htmlmin: '<%= htmlmin.dist.options %>',
+                        usemin: 'scripts/scripts.js'
+                    },
+                    cwd: '<%= yeoman.app %>',
+                    src: 'views/{,*/}*.html',
+                    dest: '.tmp/templateCache.js'
                 }
             },
 
@@ -391,38 +388,43 @@ module.exports = function( grunt ) {
             // Copies remaining files to places other tasks can use
             copy: {
                 dist: {
-                    files: [
-                        {
-                            expand: true,
-                            dot: true,
-                            cwd: '<%= yeoman.app %>',
-                            dest: '<%= yeoman.dist %>',
-                            src: [
-                                '*.{ico,png,txt}',
-                                '.htaccess',
-                                '*.html',
-                                'views/{,*/}*.html',
-                                'images/{,*/}*.{webp}',
-                            ]
-                        }, {
-                            expand: true,
-                            cwd: '.tmp/images',
-                            dest: '<%= yeoman.dist %>/images',
-                            src: ['generated/*']
-                        },
-                        {
-                            expand: true,
-                            cwd: '.',
-                            flatten: true,
-                            src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                            dest: '<%= yeoman.dist %>/fonts/'
-                        }]
-                },
-                styles: {
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    dest: '.tmp/styles/',
-                    src: '{,*/}*.css',
+                    files: [{
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= yeoman.app %>',
+                        dest: '<%= yeoman.dist %>',
+                        src: [
+                            '*.{ico,png,txt}',
+                            '.htaccess',
+                            '*.html',
+                            'images/{,*/}*.{webp}',
+                            'styles/fonts/{,*/}*.*',
+                        ]
+                    }, {
+                        expand: true,
+                        cwd: '.tmp/images',
+                        dest: '<%= yeoman.dist %>/images',
+                        src: ['generated/*']
+                    }, {
+                        expand: true,
+                        cwd: '.',
+                        src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
+                        dest: '<%= yeoman.dist %>'
+                    }, {
+                        expand: true,
+                        cwd: '.tmp/styles',
+                        dest: '<%= yeoman.dist %>/styles',
+                        src: ['*.css']
+                    }]
+                }
+            },
+            cssmin: {
+                dist: {
+                    files: {
+                        '<%= yeoman.dist %>/styles/main.css': [
+                            '.tmp/styles/{,*/}*.css'
+                        ]
+                    }
                 }
             },
 
@@ -496,16 +498,16 @@ module.exports = function( grunt ) {
             'useminPrepare',
             'concurrent:dist',
             'autoprefixer',
+            'ngtemplates',
             'concat',
             'ngAnnotate',
             'copy:dist',
             'cdnify',
-            'cssmin',
+            'cssmin:dist',
             'uglify',
             'filerev',
             'usemin',
-            'htmlmin',
-            'replace:dist'
+            'htmlmin'
         ]
     );
 

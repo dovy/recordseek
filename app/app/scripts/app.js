@@ -133,7 +133,7 @@ angular
             var obj = params;
             var personData = {};
             var skip = [
-                'h1', '_'
+                'h1', '_', 'title', 'citation', 'notes', 'url'
             ];
 
             for ( var prop in obj ) {
@@ -142,9 +142,9 @@ angular
                     if ( prop.indexOf( '.' ) !== -1 ) {
                         var index = prop.split( '.' );
                         obj[index[0]] = (obj[index[0]]) ? obj[index[0]] : [];
-                        obj[index[0]][index[1]] = obj[prop].trim();
+                        obj[index[0]][index[1]] = obj[prop].replace(/(\r\n|\n|\r)/gm,"").replace(/ +(?= )/g,'').trim();
                     } else {
-                        obj[prop] = obj[prop].trim();
+                        obj[prop] = obj[prop].replace(/(\r\n|\n|\r)/gm,"").replace(/ +(?= )/g,'').trim();
                     }
                     if ( skip.indexOf( prop ) === -1 && obj[prop] != "" ) {
                         personData[prop] = obj[prop];
@@ -312,7 +312,7 @@ angular
         if ( !$rootScope.data.search ) {
             $rootScope.resetSearch();
             $rootScope.data.search.advanced = false;
-            if ( !angular.equals( {}, $rootScope.personData ) ) {
+            if ( $rootScope.personData && !angular.equals( {}, $rootScope.personData ) ) {
                 for ( var prop in $rootScope.personData ) {
                     $rootScope.personData[prop];
                     if ( $rootScope.data.search.hasOwnProperty(prop) !== -1 ) {
