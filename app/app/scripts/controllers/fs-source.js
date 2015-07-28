@@ -83,8 +83,24 @@ angular.module( 'recordseekApp' )
             if ( $test.url ) {
                 delete $test.url;
             }
+            if ( $test.sourceFormat ) {
+                delete $test.sourceFormat;
+            }
+            if ( $test.time ) {
+                delete $test.time;
+            }
+            if ( $test.domain ) {
+                delete $test.domain;
+            }
+            if ( $test.tags ) {
+                delete $test.tags;
+            }
+            if ( $test['_'] ) {
+                delete $test['_'];
+            }
             if ( $test && !angular.equals( {}, $test ) && !$rootScope.skipSource ) {
                 $rootScope.skipSource = 1;
+                $rootScope.log($test);
                 $scope.goNext();
             }
             console.log($rootScope.personData);

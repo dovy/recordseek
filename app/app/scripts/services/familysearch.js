@@ -72,19 +72,9 @@ angular.module( 'recordseekApp' )
                                     }
                                 }
 
-                                if ( angular.equals( {}, $rootScope.personData ) ) {
-                                    $rootScope.personData = {
-                                        url: $rootScope.data.url,
-                                        title: $rootScope.data.title,
-                                        citation: $rootScope.data.citation,
-                                        notes: $rootScope.data.notes,
-                                    };
-                                    if ( $rootScope.data.tags ) {
-                                        $rootScope.personData.tags = $rootScope.data.tags;
-                                    }
-                                }
-
-                                url = FS.helpers.appendQueryParameters( url, $rootScope.personData );
+                                $rootScope.setCookie( 'recordseek-auth', angular.toJson( $rootScope.data ) );
+                                url = FS.helpers.appendQueryParameters( url, {r: 1, '_': $rootScope.data['_']} );
+                                $rootScope.log( url );
 
                                 FS.getOAuth2AuthorizeURL(
                                     url

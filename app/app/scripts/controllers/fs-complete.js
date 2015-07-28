@@ -9,12 +9,14 @@
  */
 angular.module( 'recordseekApp' )
     .controller(
-    'FsCompleteCtrl', ['fsAPI', '$rootScope', '$scope', '$location', function( fsAPI, $rootScope, $scope, $location ) {
+    'FsCompleteCtrl',
+    ['fsAPI', '$rootScope', '$scope', '$location', '$cookies', function( fsAPI, $rootScope, $scope, $location, $cookie ) {
         $rootScope.service = 'FamilySearch';
-        console.log($rootScope.data);
+        $rootScope.log( $rootScope.data );
+        $cookie.remove( 'recordseek-auth' );
         $scope.goSearch = function() {
+            $rootScope.setCookie( 'recordseek-auth', angular.toJson( $rootScope.data ) );
             $location.path( '/fs-search' );
         };
-
     }]
 );

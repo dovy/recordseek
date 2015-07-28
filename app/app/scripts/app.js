@@ -76,6 +76,16 @@ angular
                 $log.debug( $message );
             }
         };
+        $rootScope.setCookie = function( $key, $data ) {
+            var date = new Date(),
+                $exp = new Date( date );
+            $exp.setMinutes( date.getMinutes() + $rootScope.expires );
+            $cookie.put(
+                $key, $data, {
+                    expires: $exp
+                }
+            );
+        };
         $rootScope.logout = function() {
             if ( $rootScope.service === "FamilySearch" ) {
                 fsAPI.helpers.eraseAccessToken( true );
@@ -115,8 +125,16 @@ angular
 
         var split = document.URL.split( '#/' );
 
+
         var params = fsAPI.helpers.decodeQueryString( split[0] );
-        $rootScope.log(params);
+        $rootScope.log( params );
+        if ( params.r == 1 ) {
+            delete params.r;
+            var cData = $cookie.get( 'recordseek-auth' );
+            if ( cData != "" ) {
+                params = angular.fromJson( cData );
+            }
+        }
 
         if ( $location.$$absUrl.indexOf( '?_' ) > -1 && $location.$$absUrl.indexOf( '/#' ) === -1 ) {
             //var $url = $location.$$absUrl.replace( '?_', '#/?_' );
@@ -133,7 +151,7 @@ angular
             var obj = params;
             var personData = {};
             var skip = [
-                'h1', '_'
+                'h1'
             ];
 
             for ( var prop in obj ) {
