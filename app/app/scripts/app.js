@@ -190,7 +190,19 @@ angular
                 $rootScope.log( personData );
                 $rootScope.personData = personData;
             }
+            var date = new Date();
+            Date.prototype.yyyymmdd = function() {
+                var yyyy = this.getFullYear().toString();
+                var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+                var dd  = this.getDate().toString();
+                return yyyy +'/'+ (mm[1]?mm:"0"+mm[0]) +'/'+ (dd[1]?dd:"0"+dd[0]); // padding
+            };
+            obj.time = date.yyyymmdd();
 
+            if ( obj.url.indexOf( 'billiongraves.com' ) > -1 ) {
+                var $removeHash = obj.url.split( '#' );
+                obj.url = $removeHash[0];
+            }
             $rootScope.data = obj;
 
             if ( !$rootScope.data.sourceFormat ) {
@@ -243,7 +255,7 @@ angular
                 }
                 if ( $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
                     var $split = $rootScope.data.url.split( '/' );
-                    $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed '.$rootScope.data.time + '), '.$rootScope.data.description + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
+                    $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed ' + $rootScope.data.time + '), '+$rootScope.data.title + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
                 } else if ( !$rootScope.data.citation ) {
                     $rootScope.data.citation = '"' + $rootScope.data.title + '." ' + $rootScope.data.title + '. N.p., n.d. Web. ' + $rootScope.data.time + '. <' + $rootScope.data.url + '>.';
                 }
