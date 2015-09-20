@@ -397,7 +397,18 @@ angular
 )
     .constant( '_', _ )
     .config(
-    function( $routeProvider ) {
+    ["$provide", "$routeProvider", function( $provide, $routeProvider ) {
+        $provide.decorator(
+            "$exceptionHandler", ["$delegate", "$window", function( $delegate, $window ) {
+                return function( exception, cause ) {
+                    if ( $window.trackJs ) {
+                        $window.trackJs.track( exception );
+                    }
+                    // (Optional) Pass the error through to the delegate formats it for the console
+                    $delegate( exception, cause );
+                };
+            }]
+        )
         $routeProvider
             .when(
             '/', {
@@ -491,6 +502,6 @@ angular
             {
                 redirectTo: '/'
             }
-        );
-    }
+        )
+    }]
 );
