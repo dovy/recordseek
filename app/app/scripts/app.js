@@ -5,7 +5,6 @@ RecordSeek.helpers = {
     isNotString: function( str ) {
         return (typeof str !== 'string');
     }
-
 };
 
 if ( 'addEventListener' in document ) {
@@ -39,11 +38,10 @@ angular
     ]
 )
     .run(
-    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$http', '$log', function( $rootScope, $location, $cookie, $window, fsAPI, $http, $log ) {
+    ['$rootScope', '$location', '$cookies', '$window', 'fsAPI', '$http', '$log', '$timeout', function( $rootScope, $location, $cookie, $window, fsAPI, $http, $log, $timeout ) {
         /* global ga, _ */
         /* jshint camelcase: true */
         // For debugging purposes obviously
-
         $http.defaults.useXDomain = true;
         delete $http.defaults.headers.common['X-Requested-With'];
 
@@ -58,7 +56,6 @@ angular
         }
         //var referrer = window.location.href.substring(window.location.origin.length, window.location.href.length);
 
-
         $rootScope.helpers = RecordSeek.helpers;
         $rootScope.attachMsg = 'This source was created for free with http://RecordSeek.com';
 
@@ -70,6 +67,7 @@ angular
         }
 
         $rootScope.service = '';
+        $rootScope.expires = 15; // Mins until the cookie is expired
 
         $rootScope.log = function( $message ) {
             if ( $rootScope.debug ) {
@@ -106,6 +104,12 @@ angular
             if ( $el['data-tracking'] ) {
                 $rootScope.track( {eventCategory: 'App', eventAction: $el['data-tracking'].value} );
             }
+
+            // Redirect if they've already been to the main page before
+            if ( $el['data-tracking'] && ($el['data-tracking'].value === "FamilySearch" || $el['data-tracking'].value === "Ancestry") ) {
+                $rootScope.setCookie( 'recordseek-last-service', $el['data-tracking'].value );
+            }
+
             if ( $el['target'] && $el['target'].value === "_blank" ) {
                 $window.open( $el['data-href'].value );
             } else {
@@ -113,20 +117,33 @@ angular
             }
         };
 
-        $rootScope.expires = 15; // Mins until the cookie is expired
-        window.liveSettings = {
-            api_key: '11643e1c6ccd4371bfb889827b19fde3',
-            picker: '#languagePicker',
-            detectlang: true,
-            dynamic: true,
-            autocollect: true,
-            staging: true
-        };
-
         var split = document.URL.split( '#/' );
 
-
         var params = fsAPI.helpers.decodeQueryString( split[0] );
+
+        if ( params.tags ) {
+            var $todo = params.tags.split( ',' );
+            params.tags = {};
+            $todo.map(
+                function( item ) {
+                    params.tags[item.toLowerCase()] = true;
+                }
+            );
+        } else {
+            params.tags = {};
+        }
+        if ( params.birthPlace || params.birthDate ) {
+            params.tags.birth = true;
+        }
+        if ( params.deathPlace || params.deathDate ) {
+            params.tags.death = true;
+        }
+        if ( params.givenName || params.surname ) {
+            params.tags.name = true;
+        }
+        if ( params.gender ) {
+            params.tags.gender = true;
+        }
         $rootScope.log( params );
         if ( params.r == 1 ) {
             delete params.r;
@@ -143,9 +160,6 @@ angular
         }
 
         //console.log(document.location.origin+'/');
-
-
-        $rootScope.sourceBoxURL = 'https://familysearch.org/links-gadget/linkpage.jsp?referrer=/links-gadget/linkpage.jsp#sbp';
 
         if ( params ) {
             var obj = params;
@@ -169,7 +183,6 @@ angular
                     if ( skip.indexOf( prop ) === -1 && obj[prop] != "" ) {
                         personData[prop] = obj[prop];
                     }
-
                 }
             }
 
@@ -343,6 +356,30 @@ angular
                 $rootScope.data.search = $blank;
             }
         };
+
+        $rootScope.tagCounting = function() {
+            var count = 0;
+            angular.forEach(
+                $rootScope.data.tags, function( value, key ) {
+                    if ( value === true ) {
+                        count++;
+                    }
+                }, count
+            );
+            if ( count === 0 ) {
+                count = '';
+            }
+            $rootScope.tagCount = count;
+        }
+        $rootScope.tagCounting();
+
+        $rootScope.closeTags = function() {
+            $timeout(
+                function() {
+                    angular.element( '#sourceTags' ).trigger( 'click' );
+                }, 0
+            );
+        }
 
         if ( !$rootScope.data.search ) {
             $rootScope.resetSearch();

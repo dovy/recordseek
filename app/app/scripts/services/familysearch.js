@@ -12,19 +12,25 @@ angular.module( 'recordseekApp' )
     'fsAPI', ['_', function( _ ) {
         /* jshint camelcase:false */
 
-        this.environment = 'sandbox'; // production, sandbox, staging
+        //        this.environment = 'sandbox'; // production, sandbox, staging
 
         if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
             this.environment = 'production';
-        } else if ( document.location.origin === 'http://localhost:9000' ) {
-            this.environment = 'sandbox';
         } else {
-            this.environment = 'beta';
+            this.environment = 'sandbox';
         }
 
-        if ( document.location.origin === 'http://recordseeknew.dev' || document.location.origin === 'https://recordseeknew.dev' ) {
-            //this.environment = 'production';
-        }
+        //if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
+        //    this.environment = 'production';
+        //} else if ( document.location.origin === 'http://localhost:9000' || document.location.origin === 'http://localhost:9001' ) {
+        //    this.environment = 'sandbox';
+        //} else {
+        //    this.environment = 'beta';
+        //}
+
+        //if ( document.location.origin === 'http://recordseeknew.dev' || document.location.origin === 'https://recordseeknew.dev' ) {
+        //this.environment = 'production';
+        //}
 
         if ( this.environment === 'sandbox' ) {
             this.client_id = 'a0T3000000ByxnUEAR';
@@ -34,10 +40,9 @@ angular.module( 'recordseekApp' )
 
         this.redirect_uri = document.location.origin;
 
-        if ( document.location.origin !== 'http://localhost:9000' ) {
+        if ( document.location.origin !== 'http://localhost:9000' && document.location.origin !== 'http://localhost:9001' ) {
             this.redirect_uri += '/share/';
         }
-
 
         this.$get = function( $window, $http, $q, $timeout, $rootScope, $injector, $location ) {
             if ( this.client_id && this.environment && this.redirect_uri ) {
@@ -76,6 +81,7 @@ angular.module( 'recordseekApp' )
                                 url = FS.helpers.appendQueryParameters( url, {r: 1, '_': $rootScope.data['_']} );
                                 $rootScope.log( url );
 
+
                                 FS.getOAuth2AuthorizeURL(
                                     url
                                 ).then(
@@ -87,6 +93,10 @@ angular.module( 'recordseekApp' )
                         }
                     }
                 );
+
+                $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-gadget/linkpage.jsp?referrer=/#sbp';
+                $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree&section=pedigree';
+
                 this.urlParams = this.client.helpers.decodeQueryString( document.URL );
                 // Check if we have a code and do what we should accordingly
                 if ( this.urlParams.code && this.urlParams.state ) {

@@ -37,6 +37,7 @@ angular.module( 'recordseekApp' )
 
         $scope.goBack = function() {
             $rootScope.service = '';
+            $cookie.remove('recordseek-last-service');
             $location.path( '/' );
         };
     }]

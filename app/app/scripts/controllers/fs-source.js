@@ -24,25 +24,6 @@ angular.module( 'recordseekApp' )
             }
         );
 
-
-
-
-
-        $scope.tagCounting = function() {
-            var count = 0;
-            angular.forEach($scope.data.tags, function(value, key) {
-                if (value === true) {
-                    count++;
-                }
-            }, count);
-            if (count === 0) {
-                count = '';
-            }
-            $scope.tagCount = count;
-        }
-
-        $scope.tagCounting();
-
         // We're starting over. No new person yet!
         if ( $rootScope.data.search.newPerson ) {
             delete $rootScope.data.search.newPerson;
@@ -58,14 +39,17 @@ angular.module( 'recordseekApp' )
         };
 
         $scope.goBack = function() {
+            $cookie.remove('recordseek-last-service');
             $rootScope.service = '';
             $location.path( '/' );
         };
         $scope.goUpload = function() {
             $location.path( '/fs-upload' );
         };
+
         $scope.createNow = function() {
             $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
+            delete $rootScope.data.attach;
             $location.path( '/fs-create' );
         };
 
@@ -103,7 +87,7 @@ angular.module( 'recordseekApp' )
                 $rootScope.log($test);
                 $scope.goNext();
             }
-            console.log($rootScope.personData);
+            $rootScope.log($rootScope.personData);
         }
 
         //if ( !$rootScope.auth.familysearch ) {

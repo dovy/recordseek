@@ -24,15 +24,14 @@
 
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid" ng-model="data.search.givenNameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-3 col-xs-6">
                 <div class="form-group input-group-sm">
-                    <label class="hidden-xs">Last Names (Surname)</label>
-                    <label class="visible-xs">Surname</label>
+                    <label class="hidden-xs">Last Names (Surname)</label> <label class="visible-xs">Surname</label>
 
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" ng-disabled="data.search.pid"
@@ -40,7 +39,7 @@
 
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid" ng-model="data.search.surnameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
@@ -102,7 +101,7 @@
                             <div class="input-group-addon" ng-show="data.search.advanced">
                                 <input type="checkbox" ng-disabled="data.search.pid || !data.search.eventType"
                                         ng-model="data.search.eventPlaceExact"
-                                        value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                        value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                             </div>
                         </div>
                     </div>
@@ -121,7 +120,7 @@
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid"
                                     ng-model="data.search.spouseGivenNameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
@@ -139,7 +138,7 @@
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid"
                                     ng-model="data.search.spouseSurnameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
@@ -164,6 +163,7 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label>Event Place </label>
+
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control"
                                     ng-disabled="data.search.pid || !data.search.eventType"
@@ -175,7 +175,7 @@
                             <div class="input-group-addon" ng-show="data.search.advanced">
                                 <input type="checkbox" ng-disabled="data.search.pid || !data.search.eventType"
                                         ng-model="data.search.eventPlaceExact"
-                                        value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                        value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                             </div>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid"
                                     ng-model="data.search.motherGivenNameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid"
                                     ng-model="data.search.motherSurnameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid"
                                     ng-model="data.search.fatherGivenNameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>
@@ -245,7 +245,7 @@
                         <div class="input-group-addon" ng-show="data.search.advanced">
                             <input type="checkbox" ng-disabled="data.search.pid"
                                     ng-model="data.search.fatherSurnameExact"
-                                    value="0" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
+                                    value="1" popover="Exact" popover-trigger="mouseenter" popover-placement="bottom">
                         </div>
                     </div>
                 </div>

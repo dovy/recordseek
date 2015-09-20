@@ -1,12 +1,17 @@
 <span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
-<h3>Create a New Person & Attach Source<br/>
+<h3>Create a New Person & Attach Source
+    <a class="btn btn-success pull-right btn-sm" id="sourceTags" popover-template="'tagTemplate.html'" popover-placement="left"><i class="glyphicon glyphicon-tags"></i> Tag this Source to Events
+        <span class="badge">{{tagCount}}</span></a> <br/>
     <small>Source: "{{data.title}}"</small>
 </h3>
 <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
     <a href class="btn btn-default btn-xs pull-right" ng-click="goBack()">Modify Person Data</a>
     <h4>Person to be Created</h4>
+
     <div class="row">
-        <div class="col-sm-4 col-xs-6" ng-repeat="item in toCreate"><strong ng-hide="!item.title">{{item.title}}<small class="ng-hide" ng-show="item.sub"> ({{item.sub}})</small>:</strong> <span ng-bind-html="item.value"></span></div>
+        <div class="col-sm-4 col-xs-6" ng-repeat="item in toCreate"><strong ng-hide="!item.title">{{item.title}}
+            <small class="ng-hide" ng-show="item.sub"> ({{item.sub}})</small>
+            :</strong> <span ng-bind-html="item.value"></span></div>
     </div>
 </div>
 <div class="row">

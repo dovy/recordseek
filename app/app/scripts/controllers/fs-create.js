@@ -60,6 +60,7 @@ angular.module( 'recordseekApp' )
                     $rootScope.data.complete = 'noAttachment';
                     delete $rootScope.data.attach;
                     $location.path( '/fs-complete' );
+                    return;
                 }
             }
             delete $rootScope.data.complete;
@@ -69,10 +70,11 @@ angular.module( 'recordseekApp' )
             angular.forEach(
                 $rootScope.data.tags, function( value, key ) {
                     if ( value === true ) {
-                        this.push( 'http://gedcomx.org/' + key );
+                        this.push( 'http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ) );
                     }
                 }, tags
             );
+
             fsAPI.createSourceRef(
                 {
                     $personId: $rootScope.data.attach.pid,

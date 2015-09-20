@@ -12,7 +12,6 @@ angular.module( 'recordseekApp' )
     'FsCompleteCtrl',
     ['fsAPI', '$rootScope', '$scope', '$location', '$cookies', function( fsAPI, $rootScope, $scope, $location, $cookie ) {
         $rootScope.service = 'FamilySearch';
-        $rootScope.log( $rootScope.data );
         $cookie.remove( 'recordseek-auth' );
         $scope.goSearch = function() {
             $rootScope.setCookie( 'recordseek-auth', angular.toJson( $rootScope.data ) );

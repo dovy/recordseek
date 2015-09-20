@@ -17,7 +17,7 @@
             </tr>
 
             </thead>
-            <tbody style="max-height: {{windowHeight - 333}}px;">
+            <tbody style="max-height: {{windowHeight - 305}}px;">
             <tr class="active rowNotice" class="ng-hide" ng-show="bigTotalItems">
                 <td colspan="5"><span class="pull-right">{{min}}-{{max}} of {{bigTotalItems}} results</span>
                 </th>
@@ -87,6 +87,7 @@
         </table>
 
         <center>
+            <!--<pagination total-items="bigTotalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" items-per-page="15" num-pages="numPages" ng-change="pageChanged()"></pagination>-->
             <pagination total-items="bigTotalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" items-per-page="15" boundary-links="true" rotate="false" num-pages="numPages" ng-change="pageChanged()"></pagination>
         </center>
         <div class="row container-fluid text-center result-action">
@@ -95,8 +96,13 @@
                     <a ng-click="goBack()" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Modify Search</a>
                 </div>
                 <div class="btn-group pull-right">
-                    <span class="btn-text text-muted hidden-xs">If found, click <mark class="success">Select</mark>.</span>
-                    <div class="hide"><span class="btn-text text-muted hidden-xs">No luck?</span>
+                    <span class="btn-text text-muted hidden-xs">Person not found?</span>
+                    <a ng-click="createNow()" class="btn btn-default" popover-placement="left"
+                            popover="Save the source to your SourceBox, without attaching to a profile."
+                            popover-trigger="mouseenter">Save Now, Attach Later</a>
+                    <span class="btn-text text-muted hidden-xs hide">If found, click <mark class="success">Select</mark>.</span>
+                    <div class="hide">
+                        <span class="btn-text text-muted hidden-xs">No luck?</span>
                         <a ng-click="addPerson()" class="btn btn-default">Add a New Person<span class="hidden-xs">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon glyphicon-hand-right"></i></span></a>
                     </div>
                 </div>

@@ -12,6 +12,12 @@ angular.module( 'recordseekApp' )
     'FsResultsCtrl',
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
         $rootScope.service = 'FamilySearch';
+        $scope.currentPage = 1;
+        $scope.bigTotalItems = 0;
+        $scope.index = 1;
+        $scope.maxSize = 0;
+        $scope.numPages = 1;
+
         fsAPI.getCurrentUser().then(
             function( response ) {
                 $rootScope.user = response.getUser();
@@ -20,7 +26,6 @@ angular.module( 'recordseekApp' )
 
         $scope.goBack = function() {
             $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Search', eventLabel: 'Refine'} );
-
             $location.path( '/fs-search' );
         };
 
@@ -33,9 +38,14 @@ angular.module( 'recordseekApp' )
             }
         };
 
+        $scope.createNow = function() {
+            $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
+            delete $rootScope.data.attach;
+            $location.path( '/fs-create' );
+        };
+
         $scope.goNext = function( $pid, $name, $url ) {
             $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Selected', eventLabel: $pid} );
-
             $rootScope.data.attach = {
                 pid: $pid,
                 name: $name,
@@ -46,6 +56,11 @@ angular.module( 'recordseekApp' )
         };
 
         $scope.pageChanged = function() {
+            if ($scope.currentPage >= 26) {
+                $scope.bigTotalItems = (26)*15;
+                $scope.currentPage = 26;
+                $scope.index = 26;
+            }
             delete $scope.searchResults;
             $scope.getResults();
         };
@@ -54,6 +69,27 @@ angular.module( 'recordseekApp' )
 
             var searchData = angular.copy( $rootScope.data.search );
             searchData.eventDate = '';
+
+            var $checks = [
+                'givenName',
+                'surname',
+                'spouseGivenName',
+                'spouseSurname',
+                'fatherGivenName',
+                'fatherSurname',
+                'motherGivenName',
+                'motherSurname',
+                'eventPlace',
+            ];
+
+            angular.forEach($checks, function(value) {
+                if (searchData.advanced === true) {
+                    searchData[value] += (searchData[value+'Exact'] !== true && searchData[value] !== '' ) ? '~' : '';
+                } else {
+                    searchData[value] += (searchData[value] !== '') ? '~' : '';
+                }
+            });
+
             if ( searchData.eventType ) {
                 if ( searchData.eventDateFrom && searchData.eventDateFrom !== '' ) {
                     searchData.eventDate += searchData.eventDateFrom;
@@ -66,59 +102,29 @@ angular.module( 'recordseekApp' )
 
                 searchData[searchData.eventType + 'Place'] = searchData.eventPlace;
                 searchData[searchData.eventType + 'Date'] = String( searchData.eventDate ) + '~';
+                $checks.push(searchData.eventType + 'Place');
+                $checks.push(searchData.eventType + 'Date');
             }
 
-            if ( searchData.advanced === true ) {
-                searchData.givenName += (searchData.givenNameExact !== '1' && searchData.givenName !== '' ) ? '~' : '';
-                searchData.surname += (searchData.surnameExact !== '1' && searchData.surname !== '' ) ? '~' : '';
-                searchData.spouseGivenName += (searchData.spouseGivenNameExact !== '1' && searchData.spouseGivenName !== '' ) ? '~' : '';
-                searchData.spouseSurname += (searchData.spouseSurnameExact !== '1' && searchData.spouseSurname !== '' ) ? '~' : '';
-                searchData.fatherGivenName += (searchData.fatherGivenNameExact !== '1' && searchData.fatherGivenName !== '' ) ? '~' : '';
-                searchData.fatherSurname += (searchData.fatherSurnameExact !== '1' && searchData.fatherSurname !== '' ) ? '~' : '';
-                searchData.motherGivenName += (searchData.motherGivenNameExact !== '1' && searchData.motherGivenName !== '' ) ? '~' : '';
-                searchData.motherSurname += (searchData.motherSurnameExact !== '1' && searchData.motherSurname !== '' ) ? '~' : '';
-                searchData.eventPlace += (searchData.eventPlaceExact !== '1' && searchData.eventPlace !== '' ) ? '~' : '';
-            } else {
-                searchData.givenName = (searchData.givenName !== '') ? searchData.givenName + '~' : '';
-                searchData.surname = (searchData.surname !== '') ? searchData.surname + '~' : '';
-                searchData.spouseGivenName = (searchData.spouseGivenName !== '') ? searchData.spouseGivenName + '~' : '';
-                searchData.spouseSurname = (searchData.spouseSurname !== '') ? searchData.spouseSurname + '~' : '';
-                searchData.fatherGivenName = (searchData.fatherGivenName !== '') ? searchData.fatherGivenName + '~' : '';
-                searchData.fatherSurname = (searchData.fatherSurname !== '') ? searchData.fatherSurname + '~' : '';
-                searchData.motherGivenName = (searchData.motherGivenName !== '') ? searchData.motherGivenName + '~' : '';
-                searchData.motherSurname = (searchData.motherSurname !== '') ? searchData.motherSurname + '~' : '';
-                searchData.eventPlace = (searchData.eventPlace !== '') ? searchData.eventPlace + '~' : '';
-            }
+            var cleanSearchData = {};
+            angular.forEach($checks, function(value) {
+                if ($checks.indexOf(value) !== -1 && searchData[value] != "") {
+                    this[value] = searchData[value];
+                }
+            }, cleanSearchData);
 
-            // Clean keys that don't go to FS
-            delete searchData.eventType;
-            delete searchData.eventDate;
-            delete searchData.eventDateFrom;
-            delete searchData.eventDateTo;
-            delete searchData.eventPlace;
-            delete searchData.advanced;
-            delete searchData.givenNameExact;
-            delete searchData.surnameExact;
-            delete searchData.spouseGivenNameExact;
-            delete searchData.spouseSurnameExact;
-            delete searchData.fatherGivenNameExact;
-            delete searchData.fatherSurnameExact;
-            delete searchData.motherGivenNameExact;
-            delete searchData.motherSurnameExact;
-            delete searchData.eventPlaceExact;
 
-            searchData = fsUtils.removeEmptyProperties( searchData );
-
-            if ( Object.keys( searchData ).length === 0 && !$rootScope.debug ) {
+            if ( Object.keys( cleanSearchData ).length === 0 && !$rootScope.debug ) {
                 $location.path( '/fs-search' );
             }
 
             if ( $scope.context ) {
-                searchData.context = $scope.context;
+                cleanSearchData.context = $scope.context;
             }
 
             $scope.min = ($scope.currentPage * 15) - 14;
             $scope.max = $scope.currentPage * 15;
+
 
             if ( $scope.min < 1 ) {
                 $scope.min = 1;
@@ -128,17 +134,26 @@ angular.module( 'recordseekApp' )
             }
 
             $scope.maxSize = 5;
-            $scope.bigTotalItems = 0;
-            $scope.index = 0;
-            $scope.max = 0;
+            //$scope.bigTotalItems = 0;
+            //$scope.index = 0;
 
-            if ( searchData.pid && searchData.pid !== '' ) {
+
+            if ( cleanSearchData.pid && cleanSearchData.pid !== '' ) {
+                if ($scope.searchContent) {
+                    var cleanSearchDataSearch = {
+                        start: $scope.currentPage*15,
+                        content: $scope.searchContent
+                    };
+                } else {
+                    cleanSearchDataSearch = cleanSearchData.pid
+                }
                 fsAPI.getPersonWithRelationships(
-                    searchData.pid, {
-                        persons: true
+                    cleanSearchDataSearch, {
+                        persons: true,
                     }
                 ).then(
                     function( response ) {
+
                         $scope.searchResults = [];
 
                         var primaryPerson = response.getPrimaryPerson();
@@ -157,15 +172,30 @@ angular.module( 'recordseekApp' )
                     }
                 );
             } else {
+                if ($scope.searchContent) {
+                    var cleanSearchData = {
+                        start: ($scope.currentPage-1)*15,
+                        context: $scope.searchContent
+                    };
+                }
+
+                console.log(cleanSearchData);
 
                 fsAPI.getPersonSearch(
-                    searchData
+                    cleanSearchData
                 ).then(
                     function( response ) {
+
+                        $scope.searchContent = response.getContext();
+
                         $scope.searchResults = [];
                         var results = response.getSearchResults();
                         $scope.bigTotalItems = response.getResultsCount();
-                        $scope.index = response.getIndex();
+                        //$scope.index = response.getIndex();
+
+                        if ($scope.currentPage >= 26) {
+                            $scope.bigTotalItems = (26)*15;
+                        }
 
                         if ( $scope.max > $scope.bigTotalItems ) {
                             $scope.max = $scope.bigTotalItems;
@@ -205,11 +235,7 @@ angular.module( 'recordseekApp' )
             }
         };
 
-        $scope.currentPage = 1;
-        $scope.bigTotalItems = 0;
-        $scope.index = 1;
-        $scope.maxSize = 0;
-        $scope.numPages = 1;
+
         $scope.getResults();
 
     }]

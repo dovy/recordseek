@@ -94,9 +94,9 @@ body {
     min-height: 100%;
     height: auto;
     /* Negative indent footer by its height */
-    margin: 0 auto -55px;
+    //margin: 0 auto -55px;
     /* Pad bottom by footer height */
-    padding: 0 0 55px;
+    //padding: 0 0 55px;
 }
 
 html, body {
@@ -113,7 +113,7 @@ body {
     line-height: 40px;
     color: #eee;
     margin-top: 15px;
-    background: #2C3E50;
+    background: $navbar-default-bg;
     p {
         margin: 0;
     }
@@ -560,5 +560,13 @@ mark, .mark {
     &.danger {
         background: $btn-danger-bg;
         color: $btn-danger-color;
+    }
+}
+#sourceTags {
+    i {
+        margin-right: 5px;
+    }
+    .badge {
+        margin-left: 5px;
     }
 }
