@@ -56,8 +56,8 @@ angular.module( 'recordseekApp' )
         };
 
         $scope.pageChanged = function() {
-            if ($scope.currentPage >= 26) {
-                $scope.bigTotalItems = (26)*15;
+            if ( $scope.currentPage >= 26 ) {
+                $scope.bigTotalItems = (26) * 15;
                 $scope.currentPage = 26;
                 $scope.index = 26;
             }
@@ -82,13 +82,15 @@ angular.module( 'recordseekApp' )
                 'eventPlace',
             ];
 
-            angular.forEach($checks, function(value) {
-                if (searchData.advanced === true) {
-                    searchData[value] += (searchData[value+'Exact'] !== true && searchData[value] !== '' ) ? '~' : '';
-                } else {
-                    searchData[value] += (searchData[value] !== '') ? '~' : '';
+            angular.forEach(
+                $checks, function( value ) {
+                    if ( searchData.advanced === true ) {
+                        searchData[value] += (searchData[value + 'Exact'] !== true && searchData[value] !== '' ) ? '~' : '';
+                    } else {
+                        searchData[value] += (searchData[value] !== '') ? '~' : '';
+                    }
                 }
-            });
+            );
 
             if ( searchData.eventType ) {
                 if ( searchData.eventDateFrom && searchData.eventDateFrom !== '' ) {
@@ -102,16 +104,18 @@ angular.module( 'recordseekApp' )
 
                 searchData[searchData.eventType + 'Place'] = searchData.eventPlace;
                 searchData[searchData.eventType + 'Date'] = String( searchData.eventDate ) + '~';
-                $checks.push(searchData.eventType + 'Place');
-                $checks.push(searchData.eventType + 'Date');
+                $checks.push( searchData.eventType + 'Place' );
+                $checks.push( searchData.eventType + 'Date' );
             }
 
             var cleanSearchData = {};
-            angular.forEach($checks, function(value) {
-                if ($checks.indexOf(value) !== -1 && searchData[value] != "") {
-                    this[value] = searchData[value];
-                }
-            }, cleanSearchData);
+            angular.forEach(
+                $checks, function( value ) {
+                    if ( $checks.indexOf( value ) !== -1 && searchData[value] != "" ) {
+                        this[value] = searchData[value];
+                    }
+                }, cleanSearchData
+            );
 
 
             if ( Object.keys( cleanSearchData ).length === 0 && !$rootScope.debug ) {
@@ -139,9 +143,9 @@ angular.module( 'recordseekApp' )
 
 
             if ( $rootScope.data.search.pid && $rootScope.data.search.pid !== '' ) {
-                if ($scope.searchContent) {
+                if ( $scope.searchContent ) {
                     var cleanSearchDataSearch = {
-                        start: $scope.currentPage*15,
+                        start: $scope.currentPage * 15,
                         content: $scope.searchContent
                     };
                 } else {
@@ -168,18 +172,19 @@ angular.module( 'recordseekApp' )
                             $scope.searchResults.push(
                                 data
                             );
+                            $scope.goNext( data.pid, data.name, data.url );
                         }
                     }
                 );
             } else {
-                if ($scope.searchContent) {
+                if ( $scope.searchContent ) {
                     var cleanSearchData = {
-                        start: ($scope.currentPage-1)*15,
+                        start: ($scope.currentPage - 1) * 15,
                         context: $scope.searchContent
                     };
                 }
 
-                $rootScope.log(cleanSearchData);
+                $rootScope.log( cleanSearchData );
 
                 fsAPI.getPersonSearch(
                     cleanSearchData
@@ -193,8 +198,8 @@ angular.module( 'recordseekApp' )
                         $scope.bigTotalItems = response.getResultsCount();
                         //$scope.index = response.getIndex();
 
-                        if ($scope.currentPage >= 26) {
-                            $scope.bigTotalItems = (26)*15;
+                        if ( $scope.currentPage >= 26 ) {
+                            $scope.bigTotalItems = (26) * 15;
                         }
 
                         if ( $scope.max > $scope.bigTotalItems ) {
