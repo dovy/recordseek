@@ -193,13 +193,13 @@ angular
             var date = new Date();
             Date.prototype.yyyymmdd = function() {
                 var yyyy = this.getFullYear().toString();
-                var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-                var dd  = this.getDate().toString();
-                return yyyy +'/'+ (mm[1]?mm:"0"+mm[0]) +'/'+ (dd[1]?dd:"0"+dd[0]); // padding
+                var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+                var dd = this.getDate().toString();
+                return yyyy + '/' + (mm[1] ? mm : "0" + mm[0]) + '/' + (dd[1] ? dd : "0" + dd[0]); // padding
             };
             obj.time = date.yyyymmdd();
 
-            if ( obj.url.indexOf( 'billiongraves.com' ) > -1 ) {
+            if ( obj.url && obj.url.indexOf( 'billiongraves.com' ) > -1 ) {
                 var $removeHash = obj.url.split( '#' );
                 obj.url = $removeHash[0];
             }
@@ -225,7 +225,7 @@ angular
                     );
                 }
                 // Clean up the Ancestry search URLs
-                if ( $rootScope.data.url.indexOf( 'search.ancestry.com' ) > -1 ) {
+                if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'search.ancestry.com' ) > -1 ) {
                     var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
 
                     var newURL = {};
@@ -243,7 +243,7 @@ angular
                     );
                 }
                 // Clean up the ancestry interactive URLs
-                if ( $rootScope.data.url.indexOf( 'interactive.ancestry.com' ) > -1 ) {
+                if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'interactive.ancestry.com' ) > -1 ) {
                     var iurlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
                     var inewURL = {};
                     if ( iurlData.pid ) {
@@ -253,17 +253,19 @@ angular
                         fsAPI.helpers.removeQueryString( $rootScope.data.url ), inewURL
                     );
                 }
-                if ( $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
+                if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
                     var $split = $rootScope.data.url.split( '/' );
-                    $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed ' + $rootScope.data.time + '), '+$rootScope.data.title + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
+                    $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed ' + $rootScope.data.time + '), ' + $rootScope.data.title + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
                 } else if ( !$rootScope.data.citation ) {
                     $rootScope.data.citation = '"' + $rootScope.data.title + '." ' + $rootScope.data.title + '. N.p., n.d. Web. ' + $rootScope.data.time + '. <' + $rootScope.data.url + '>.';
                 }
+                if ( $rootScope.data.url ) {
+                    var $dSplit = $rootScope.data.url.split( '//' );
+                    var $domain = $dSplit[1];
+                    $dSplit = $domain.split( '/' );
+                    $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
+                }
 
-                var $dSplit = $rootScope.data.url.split( '//' );
-                var $domain = $dSplit[1];
-                $dSplit = $domain.split( '/' );
-                $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
                 $rootScope.track(
                     {
                         eventCategory: 'Domain',

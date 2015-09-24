@@ -138,14 +138,14 @@ angular.module( 'recordseekApp' )
             //$scope.index = 0;
 
 
-            if ( cleanSearchData.pid && cleanSearchData.pid !== '' ) {
+            if ( $rootScope.data.search.pid && $rootScope.data.search.pid !== '' ) {
                 if ($scope.searchContent) {
                     var cleanSearchDataSearch = {
                         start: $scope.currentPage*15,
                         content: $scope.searchContent
                     };
                 } else {
-                    cleanSearchDataSearch = cleanSearchData.pid
+                    cleanSearchDataSearch = $rootScope.data.search.pid
                 }
                 fsAPI.getPersonWithRelationships(
                     cleanSearchDataSearch, {
@@ -179,7 +179,7 @@ angular.module( 'recordseekApp' )
                     };
                 }
 
-                console.log(cleanSearchData);
+                $rootScope.log(cleanSearchData);
 
                 fsAPI.getPersonSearch(
                     cleanSearchData
