@@ -71,7 +71,9 @@ angular.module( 'recordseekApp' )
             }
             delete $rootScope.data.complete;
 
-            $scope.status = 'Attaching Source to ' + ( $rootScope.data.attach.name ) ? $rootScope.data.attach.name : 'this Profile';
+            $rootScope.data.attach.name = ( $rootScope.data.attach.name ) ? $rootScope.data.attach.name : 'this Profile';
+            $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
+
             var tags = [];
             angular.forEach(
                 $rootScope.data.tags, function( value, key ) {
