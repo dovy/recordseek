@@ -96,6 +96,8 @@ angular.module( 'recordseekApp' )
 
                 $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-gadget/linkpage.jsp?referrer=/#sbp';
                 $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree&section=pedigree';
+                $rootScope.fsURL = this.client.settings.apiServer[this.client.settings.environment];
+                $rootScope.fsAccessToken = this.client.settings.accessToken;
 
                 this.urlParams = this.client.helpers.decodeQueryString( document.URL );
                 // Check if we have a code and do what we should accordingly
@@ -110,6 +112,7 @@ angular.module( 'recordseekApp' )
                         }
                     );
                 }
+
             }
             return this.client;
         };

@@ -259,19 +259,21 @@ angular
                 } else if ( !$rootScope.data.citation ) {
                     $rootScope.data.citation = '"' + $rootScope.data.title + '." ' + $rootScope.data.title + '. N.p., n.d. Web. ' + $rootScope.data.time + '. <' + $rootScope.data.url + '>.';
                 }
+
                 if ( $rootScope.data.url ) {
                     var $dSplit = $rootScope.data.url.split( '//' );
                     var $domain = $dSplit[1];
-                    $dSplit = $domain.split( '/' );
-                    $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
-                }
-
-                $rootScope.track(
-                    {
-                        eventCategory: 'Domain',
-                        eventAction: $rootScope.data.domain.toLowerCase().replace( 'www.', '' )
+                    if ( $domain ) {
+                        $dSplit = $domain.split( '/' );
+                        $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
+                        $rootScope.track(
+                            {
+                                eventCategory: 'Domain',
+                                eventAction: $rootScope.data.domain.toLowerCase().replace( 'www.', '' )
+                            }
+                        );
                     }
-                );
+                }
             }
             if ( $rootScope.data.notes ) {
                 $rootScope.data.notes = $rootScope.data.notes.trim().replace( '#/fs-source', '' );

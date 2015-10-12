@@ -2,12 +2,16 @@
     <h3>Congratulations! A source has been created and added to your <span class="text-info">source box</span></a>.<br/>
         <small>"{{data.title}}"</small>
     </h3>
-    <p>The FamilySearch <span class="text-info">source box</span> lets you preserve the record sources that you find for later use. Once a source is in your <span class="text-info">source box</span>, you can easily find it again without having to search for it. You can also easily attach the sources in your <span class="text-info">source box</span> to your ancestors in FamilySearch Family Tree.</p>
+    <p>The FamilySearch
+        <span class="text-info">source box</span> lets you preserve the record sources that you find for later use. Once a source is in your
+        <span class="text-info">source box</span>, you can easily find it again without having to search for it. You can also easily attach the sources in your
+        <span class="text-info">source box</span> to your ancestors in FamilySearch Family Tree.</p>
+
     <div class="text-center">
 
-        <a href="{{$parent.sourceBoxURL}}" class=" btn btn-info"
+        <br /><a href="{{fsRedirect($parent.sourceBoxURL)}}" class=" btn btn-info"
                 target="_blank">View source box on FamilySearch</a><br/><br/>
-        <a href="{{$parent.treeViewURL}}" target="_blank" class="btn btn-warning">Add new records to your Family Tree</a><br/><br/>
+        <a href="{{fsRedirect($parent.treeViewURL)}}" target="_blank" class="btn btn-warning">Add new records to your Family Tree</a><br/><br/>
     </div>
 </div>
 
@@ -24,7 +28,7 @@
             <br/><span class="ng-hide" ng-hide="!data.complete"><a
                 href="{{data.complete.url}}"
                 class="btn btn-info" target="_blank">View Profile on FamilySearch</a><br/><br/></span>
-        <span class="ng-hide" ng-hide="data.complete"><a href="{{$parent.sourceBoxURL}}" class=" btn btn-info"
+        <span class="ng-hide" ng-hide="data.complete"><a href="{{fsRedirect($parent.sourceBoxURL)}}" class=" btn btn-info"
                 target="_blank">View SourceBox on FamilySearch</a><br/><br/></span>
             <a ng-click="goSearch()" class="btn btn-warning">Attach to <span class="ng-hide"
                     ng-hide="data.complete">a</span><span
@@ -54,4 +58,4 @@
     </h3>
 </div>
 
-<br /><br /><br /><p class="text-muted text-center">To search for a new record, just close this window.</p>
+<br/><br/><br/><p class="text-muted text-center">You may now close this window.</p>

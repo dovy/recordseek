@@ -24,21 +24,24 @@ angular.module( 'recordseekApp' )
                     'name': primaryPerson.$getDisplayName(),
                     'birthDate': primaryPerson.$getBirthDate(),
                     'gender': primaryPerson.$getDisplayGender(),
-                    'url': primaryPerson.$getPersistentIdentifier(),
+                    'url': this.redirectURL( primaryPerson.$getPersistentIdentifier() ),
                     'birthPlace': primaryPerson.$getBirthPlace(),
                     'deathDate': primaryPerson.$getDeathDate(),
                     'deathPlace': primaryPerson.$getDeathPlace()
                 };
             },
+            redirectURL: function( $url ) {
+                return $rootScope.fsURL + '/platform/redirect?uri=' + encodeURIComponent( $url ) + '&access_token=' + $rootScope.fsAccessToken;
+            },
             getLocation: function( $loc ) {
-                return fsAPI.getPlacesSearch( { name: $loc, count: 10 } ).then(
+                return fsAPI.getPlacesSearch( {name: $loc, count: 10} ).then(
                     function( response ) {
                         var data = [];
                         var results = response.getSearchResults();
 
-                        for(var i = 0; i < results.length; i++){
+                        for ( var i = 0; i < results.length; i++ ) {
                             var place = results[i].$getPlace();
-                            data.push(place.$getFullName());
+                            data.push( place.$getFullName() );
                         }
                         return data;
                     }
@@ -71,7 +74,7 @@ angular.module( 'recordseekApp' )
                     data.push(
                         {
                             'pid': persons[i].id,
-                            'url': persons[i].$getPersistentIdentifier(),
+                            'url': this.redirectURL( persons[i].$getPersistentIdentifier() ),
                             'name': persons[i].$getDisplayName(),
                             'gender': persons[i].$getDisplayGender(),
                             'data': persons[i]

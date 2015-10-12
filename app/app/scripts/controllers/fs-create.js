@@ -19,38 +19,44 @@ angular.module( 'recordseekApp' )
         );
 
         function createPerson() {
-            $scope.status = 'Creating Person Profile for ' + $rootScope.data.search.givenName1+ ' '+$rootScope.data.search.surname1;
+            $scope.status = 'Creating Person Profile for ' + $rootScope.data.search.givenName1 + ' ' + $rootScope.data.search.surname1;
 
             var person = fsAPI.createPerson();
 
-            if ($rootScope.toCreate.names) {
-                angular.forEach($rootScope.toCreate.names, function(value, key) {
-                    person.$addName(value);
-                });
+            if ( $rootScope.toCreate.names ) {
+                angular.forEach(
+                    $rootScope.toCreate.names, function( value, key ) {
+                        person.$addName( value );
+                    }
+                );
             }
 
-            if ($rootScope.toCreate.events) {
-                angular.forEach($rootScope.toCreate.events, function(value, key) {
-                    person.$addFact(value);
-                });
+            if ( $rootScope.toCreate.events ) {
+                angular.forEach(
+                    $rootScope.toCreate.events, function( value, key ) {
+                        person.$addFact( value );
+                    }
+                );
             }
-            if ($rootScope.toCreate.gender) {
-                person.$setGender($rootScope.toCreate.gender);
+            if ( $rootScope.toCreate.gender ) {
+                person.$setGender( $rootScope.toCreate.gender );
             }
-            person.$save($rootScope.attachMsg, true).then(function(response) {
-                if (!$rootScope.data.attach) {
-                    $rootScope.data.attach = {};
+            person.$save( $rootScope.attachMsg, true ).then(
+                function( response ) {
+                    if ( !$rootScope.data.attach ) {
+                        $rootScope.data.attach = {};
+                    }
+                    $rootScope.data.attach.pid = response;
+                    $rootScope.data.attach.name = person.$getDisplayName();
+                    $rootScope.data.attach.url = person.identifiers["http://gedcomx.org/Persistent"][0];
+                    delete $rootScope.toCreate;
+                    attachSource();
                 }
-                $rootScope.data.attach.pid = response;
-                $rootScope.data.attach.name = person.$getDisplayName();
-                $rootScope.data.attach.url = person.identifiers["http://gedcomx.org/Persistent"][0];
-                delete $rootScope.toCreate;
-                attachSource();
-            });
+            );
         }
 
         function attachSource() {
-            if ($rootScope.toCreate) {
+            if ( $rootScope.toCreate ) {
                 createPerson();
                 return;
             }
@@ -65,7 +71,7 @@ angular.module( 'recordseekApp' )
             }
             delete $rootScope.data.complete;
 
-            $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
+            $scope.status = 'Attaching Source to ' + ( $rootScope.data.attach.name ) ? $rootScope.data.attach.name : 'this Profile';
             var tags = [];
             angular.forEach(
                 $rootScope.data.tags, function( value, key ) {
