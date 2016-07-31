@@ -19,8 +19,8 @@ angular.module( 'recordseekApp' )
             } else {
                 this.environment = 'beta';
             }
-
-
+            // this.environment = "production";
+            
             //if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
             //    this.environment = 'production';
             //} else if ( document.location.origin === 'http://localhost:9000' || document.location.origin === 'http://localhost:9001' ) {

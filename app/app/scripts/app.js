@@ -59,7 +59,7 @@ angular
             $rootScope.helpers = RecordSeek.helpers;
             $rootScope.attachMsg = 'Source created by http://RecordSeek.com';
 
-            $rootScope.debug = (fsAPI.environment === 'production' || fsAPI.environment === 'beta') ? false : true;
+            $rootScope.debug = (fsAPI.settings.environment == 'production' || fsAPI.settings.environment == 'beta') ? false : true;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
@@ -96,7 +96,7 @@ angular
 
             $rootScope.safeApply = function() {
                 var phase = this.$root.$$phase;
-                if ( phase === '$apply' || phase === '$digest' ) {
+                if ( phase == '$apply' || phase == '$digest' ) {
                 } else {
                     this.$apply();
                 }
@@ -156,7 +156,7 @@ angular
                 params.tags.gender = true;
             }
             $rootScope.log( params );
-            if ( params.r === 1 ) {
+            if ( params.r == 1 ) {
                 delete params.r;
                 var cData = $cookie.get( 'recordseek-auth' );
                 if ( cData != "" ) {
