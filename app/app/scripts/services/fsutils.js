@@ -20,14 +20,14 @@ angular.module( 'recordseekApp' )
             },
             getPrimaryPerson: function( primaryPerson ) {
                 return {
-                    'pid': primaryPerson.id,
-                    'name': primaryPerson.$getDisplayName(),
-                    'birthDate': primaryPerson.$getBirthDate(),
-                    'gender': primaryPerson.$getDisplayGender(),
-                    'url': this.redirectURL( primaryPerson.$getPersistentIdentifier() ),
-                    'birthPlace': primaryPerson.$getBirthPlace(),
-                    'deathDate': primaryPerson.$getDeathDate(),
-                    'deathPlace': primaryPerson.$getDeathPlace()
+                    'pid': primaryPerson.getId(),
+                    'name': primaryPerson.getDisplayName(),
+                    'birthDate': primaryPerson.getBirthDate(),
+                    'gender': primaryPerson.getDisplayGender(),
+                    'url': this.redirectURL( primaryPerson.getPersistentIdentifier() ),
+                    'birthPlace': primaryPerson.getBirthPlace(),
+                    'deathDate': primaryPerson.getDeathDate(),
+                    'deathPlace': primaryPerson.getDeathPlace()
                 };
             },
             redirectURL: function( $url ) {
@@ -40,8 +40,8 @@ angular.module( 'recordseekApp' )
                         var results = response.getSearchResults();
 
                         for ( var i = 0; i < results.length; i++ ) {
-                            var place = results[i].$getPlace();
-                            data.push( place.$getFullName() );
+                            var place = results[i].getPlace();
+                            data.push( place.getFullName() );
                         }
                         return data;
                     }
@@ -73,10 +73,10 @@ angular.module( 'recordseekApp' )
                     }
                     data.push(
                         {
-                            'pid': persons[i].id,
-                            'url': this.redirectURL( persons[i].$getPersistentIdentifier() ),
-                            'name': persons[i].$getDisplayName(),
-                            'gender': persons[i].$getDisplayGender(),
+                            'pid': persons[i].getId(),
+                            'url': this.redirectURL( persons[i].getPersistentIdentifier() ),
+                            'name': persons[i].getDisplayName(),
+                            'gender': persons[i].getDisplayGender(),
                             'data': persons[i]
                         }
                     );
@@ -344,8 +344,8 @@ angular.module( 'recordseekApp' )
 //
 //            agentSetter: function( scope ) {
 //                return function( item ) {
-//                    if ( item && item.attribution && item.attribution.$getAgentUrl() && !scope.agent ) {
-//                        return fsAgentCache.getAgent( item.attribution.$getAgentUrl() ).then(
+//                    if ( item && item.attribution && item.attribution.getAgentUrl() && !scope.agent ) {
+//                        return fsAgentCache.getAgent( item.attribution.getAgentUrl() ).then(
 //                            function( agent ) {
 //                                scope.agent = agent;
 //                            }
@@ -438,7 +438,7 @@ angular.module( 'recordseekApp' )
 //                            person: child,
 //                            parentsId: _.find(
 //                                childRelationships, function( rel ) {
-//                                    return rel.$getChildId() === child.id;
+//                                    return rel.getChildId() === child.id;
 //                                }
 //                            ).id
 //                        };
@@ -468,12 +468,12 @@ angular.module( 'recordseekApp' )
 //            },
 //
 //            getSourceRefContexts: function( description, getAgents, max ) {
-//                return description.$getSourceRefsQuery().then(
+//                return description.getSourceRefsQuery().then(
 //                    function( response ) {
 //                        var promises = [];
 //
 //                        function getAgent( sourceRef ) {
-//                            return getAgents ? fsAgentCache.getAgent( sourceRef.attribution.$getAgentUrl() ) : $q.when( null );
+//                            return getAgents ? fsAgentCache.getAgent( sourceRef.attribution.getAgentUrl() ) : $q.when( null );
 //                        }
 //
 //                        response.getPersonSourceRefs().forEach(
@@ -514,8 +514,8 @@ angular.module( 'recordseekApp' )
 //                                                return {
 //                                                    sourceRef: sourceRef,
 //                                                    couple: couple,
-//                                                    husband: responses[0].getPerson( couple.$getHusbandId() ),
-//                                                    wife: responses[0].getPerson( couple.$getWifeId() ),
+//                                                    husband: responses[0].getPerson( couple.getHusbandId() ),
+//                                                    wife: responses[0].getPerson( couple.getWifeId() ),
 //                                                    agent: responses[1]
 //                                                };
 //                                            }
@@ -542,9 +542,9 @@ angular.module( 'recordseekApp' )
 //                                                return {
 //                                                    sourceRef: sourceRef,
 //                                                    parents: parents,
-//                                                    child: responses[0].getPerson( parents.$getChildId() ),
-//                                                    father: parents.$getFatherId() ? responses[0].getPerson( parents.$getFatherId() ) : null,
-//                                                    mother: parents.$getMotherId() ? responses[0].getPerson( parents.$getMotherId() ) : null,
+//                                                    child: responses[0].getPerson( parents.getChildId() ),
+//                                                    father: parents.getFatherId() ? responses[0].getPerson( parents.getFatherId() ) : null,
+//                                                    mother: parents.getMotherId() ? responses[0].getPerson( parents.getMotherId() ) : null,
 //                                                    agent: responses[1]
 //                                                };
 //                                            }

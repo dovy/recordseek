@@ -1,6 +1,6 @@
 <span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
 <h3>Create a New Person & Attach Source
-    <a class="btn btn-success pull-right btn-sm" id="sourceTags" popover-template="'tagTemplate.html'" popover-placement="left"><i class="glyphicon glyphicon-tags"></i> Tag this Source to Events
+    <a class="btn btn-success pull-right btn-sm" id="sourceTags" popover-template="myPopover.templateUrl" popover-placement="left" popover-is-open="myPopover.isOpen" ng-click="myPopover.toggle()"><i class="glyphicon glyphicon-tags"></i> Tag this Source to Events
         <span class="badge">{{tagCount}}</span></a> <br/>
     <small>Source: "{{data.title}}"</small>
 </h3>

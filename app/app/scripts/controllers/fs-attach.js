@@ -13,9 +13,8 @@ angular.module( 'recordseekApp' )
     ['$rootScope', '$location', '$scope', 'fsAPI', function( $rootScope, $location, $scope, fsAPI ) {
 
         $rootScope.service = 'FamilySearch';
-        fsAPI.getCurrentUser().then(function (response) {
-            $rootScope.fsUser = response.getUser();
-        });
+
+        fsAPI.displayUser($scope);
 
         if ( !$rootScope.data.attach && !$rootScope.debug ) {
             if ( !$rootScope.data.search ) {
@@ -28,8 +27,30 @@ angular.module( 'recordseekApp' )
             $rootScope.data.attach.justification = '';
         }
 
+        $scope.myPopover = {
+            isOpen: false,
+            templateUrl: 'tagTemplate.html',
+            toggle: function toggle() {
+                if ($scope.myPopover.isOpen != true) {
+                    $scope.myPopover.isOpen = false;
+                } else {
+                    $scope.myPopover.isOpen = true;
+                }
+            },
+            close: function close() {
+                $scope.myPopover.isOpen = false;
+            },
+        };
+
         $scope.goBack = function() {
-            $location.path( '/fs-results' );
+            $rootScope.log($rootScope.data)
+            if ($rootScope.data.search.pid && $rootScope.data.search.pid!= "" ) {
+                // $rootScope.data.search.pid = ""
+                $location.path( '/fs-search' );
+            } else {
+                $location.path( '/fs-results' );
+            }
+
         };
         $scope.goNext = function() {
             $location.path( '/fs-create' );

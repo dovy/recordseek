@@ -256,9 +256,9 @@
             <hr>
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="form-group input-group-sm">
+                    <div class="form-group input-group-sm" ng-class="pid_state()"  >
                         <label>Search by Person ID Number </label>
-                        <input type="text" class="form-control" ng-model="data.search.pid">
+                        <input type="text" class="form-control text-center" ng-model="data.search.pid" ng-trim="false" ng-change="pid_check()" style="text-transform:uppercase;">
                     </div>
                 </div>
             </div>

@@ -12,11 +12,8 @@ angular.module( 'recordseekApp' )
     'FsAddpersonCtrl',
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
         $rootScope.service = 'FamilySearch';
-        fsAPI.getCurrentUser().then(
-            function( response ) {
-                $rootScope.user = response.getUser();
-            }
-        );
+
+        fsAPI.displayUser($scope);
 
         $rootScope.data.search = fsUtils.cleanSearch( $rootScope.data.search );
 

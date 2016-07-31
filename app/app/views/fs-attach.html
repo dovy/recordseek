@@ -1,7 +1,7 @@
 <span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
 <h3>Attach Source to
     <a href="{{data.attach.url}}" target="_blank" popover-placement="top" popover="View on FamilySearch" popover-trigger="mouseenter">{{data.attach.name}}</a>
-    <a class="btn btn-success pull-right btn-sm" id="sourceTags" popover-template="'tagTemplate.html'" popover-placement="left"><i class="glyphicon glyphicon-tags"></i> Tag this Source to Events
+    <a class="btn btn-success pull-right btn-sm" id="sourceTags" popover-template="myPopover.templateUrl" popover-placement="left" popover-is-open="myPopover.isOpen" ng-click="myPopover.toggle()"><i class="glyphicon glyphicon-tags"></i> Tag this Source to Events
         <span class="badge">{{tagCount}}</span></a> <br/>
     <small>Source: "{{data.title}}"</small>
 </h3>
@@ -22,6 +22,9 @@
                 class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Go Back </a> &nbsp;&nbsp;
         <button type="submit" class="btn btn-primary">Create<span class="hidden-xs"> & Attach</span></button>
     </div>
+    <select ng-repeat="source in sourceBox">
+        <option value="RecordSeek">RecordSeek</option>
+    </select>
 </form>
 
 

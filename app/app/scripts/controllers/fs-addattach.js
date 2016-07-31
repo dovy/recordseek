@@ -13,12 +13,8 @@ angular.module( 'recordseekApp' )
     ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
 
         $rootScope.service = 'FamilySearch';
-        ;
-        fsAPI.getCurrentUser().then(
-            function( response ) {
-                $rootScope.fsUser = response.getUser();
-            }
-        );
+
+        fsAPI.displayUser($scope);
 
         $rootScope.log( $rootScope.data.search );
 
@@ -28,7 +24,20 @@ angular.module( 'recordseekApp' )
         var $data = "";
         var maybeMakePerson = {};
 
-
+        $scope.myPopover = {
+            isOpen: false,
+            templateUrl: 'tagTemplate.html',
+            toggle: function toggle() {
+                if ($scope.myPopover.isOpen != true) {
+                    $scope.myPopover.isOpen = false;
+                } else {
+                    $scope.myPopover.isOpen = true;
+                }
+            },
+            close: function close() {
+                $scope.myPopover.isOpen = false;
+            },
+        };
 
 
         if ( $rootScope.data.search.langTemplate ) {
