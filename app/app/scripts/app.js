@@ -85,7 +85,7 @@ angular
                 );
             };
             $rootScope.logout = function() {
-                console.log( fsAPI );
+                $rootScope.log( fsAPI );
                 if ( $rootScope.service === "FamilySearch" ) {
                     // fsAPI.invalidateAccessToken();
                     fsAPI.helpers.eraseAccessToken( true );
@@ -170,7 +170,7 @@ angular
                 //return;
             }
 
-            //console.log(document.location.origin+'/');
+            //$rootScope.log(document.location.origin+'/');
 
             if ( params ) {
                 var obj = params;

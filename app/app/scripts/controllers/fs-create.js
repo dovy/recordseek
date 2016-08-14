@@ -13,7 +13,7 @@ angular.module( 'recordseekApp' )
         ['fsAPI', '$rootScope', '$scope', '$location', 'fsUtils', function( fsAPI, $rootScope, $scope, $location, fsUtils ) {
             $rootScope.service = 'FamilySearch';
 
-            if ( !$rootScope.data.attach ) {
+            if ( !$rootScope.data.attach && $rootScope.data.complete != 'noAttachment' ) {
                 $location.path( '/fs-search' );
             }
 
@@ -57,12 +57,101 @@ angular.module( 'recordseekApp' )
                 );
             }
 
+            function createSource() {
+                // Check if the source has been created, or create it.
+                if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
+                    $scope.status = 'Generating Source';
+
+                    $rootScope.log(
+                        fsUtils.removeEmptyProperties(
+                            {
+                                about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
+                                citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
+                                title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
+                                text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
+                            }
+                        )
+                    );
+
+                    $rootScope.data.sourceDescription = fsAPI.createSourceDescription(
+                        fsUtils.removeEmptyProperties(
+                            {
+                                about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
+                                citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
+                                title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
+                                text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
+                            }
+                        )
+                    );
+
+                    $rootScope.data.sourceDescription.save( $rootScope.attachMsg ).then(
+                        function( response ) {
+                            $rootScope.track(
+                                {
+                                    eventCategory: 'FamilySearch',
+                                    eventAction: 'Source Created',
+                                    eventLabel: $rootScope.data.sourceDescription.getId()
+                                }
+                            );
+                            sourceFolder();
+                        }
+                    );
+                } else {
+                    $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Source Attached to Another'} );
+                    // Already a source description
+                    sourceFolder();
+                }
+            }
+
+
+            function sourceFolder() {
+
+                $scope.status = 'Moving Source to Collection';
+                $rootScope.safeApply();
+                if ( $rootScope.data.sourcebox == "CREATE" ) {
+                    $rootScope.data.sourceboxfolder = fsAPI.createCollection(
+                        {'title': 'RecordSeek'}
+                    );
+                    $rootScope.data.sourceboxfolder.save( 'Created by http://recordseek.com/' ).then(
+                        function( response ) {
+                            $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
+                            fsAPI.moveSourceDescriptionsToCollection(
+                                $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescription.getId()]
+                            ).then(
+                                function( response ) {
+                                    attachSource();
+                                }
+                            );
+                        }
+                    );
+                } else {
+                    fsAPI.moveSourceDescriptionsToCollection(
+                        $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescription.getId()]
+                    ).then(
+                        function( response ) {
+                            attachSource();
+                        }
+                    );
+                }
+
+
+            }
+
+
             function attachSource() {
 
+                // We're just saving the source
+                if ( !$rootScope.data.attach ) {
+                    $location.path( '/fs-complete' );
+                    return $rootScope.safeApply();
+                }
+
+                // Let's create a person
                 if ( $rootScope.toCreate ) {
                     createPerson();
                     return;
                 }
+
 
                 if ( $rootScope.data.sourceDescription ) {
                     if ( $rootScope.data.complete == 'noAttachment' ) {
@@ -80,17 +169,17 @@ angular.module( 'recordseekApp' )
 
                 var $sourceRef = fsAPI.createSourceRef(
                     {
-                        'attribution':{
-                            "changeMessage" : "Created by http://RecordSeek.com"
+                        'attribution': {
+                            "changeMessage": "Created by http://RecordSeek.com"
                         }
                     }
                 )
-                    .setSourceDescription($rootScope.data.sourceDescription)
-                    .setAttachedEntityId($rootScope.data.attach.pid);
+                    .setSourceDescription( $rootScope.data.sourceDescription )
+                    .setAttachedEntityId( $rootScope.data.attach.pid );
 
                 $rootScope.data.tags, function( value, key ) {
                     if ( value === true ) {
-                        $sourceRef.addTag('http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ))
+                        $sourceRef.addTag( 'http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ) )
                     }
                 }
 
@@ -99,11 +188,13 @@ angular.module( 'recordseekApp' )
 
                         var $person = response.getPerson();
 
-                        $sourceRef.save($person.data.links.person.href, 'A change message')
+                        $sourceRef.save( $person.data.links.person.href, 'A change message' )
                             .then(
                                 function( response ) {
-                                    var id = $sourceRef.data.links['source-reference'].href.split('?')[0].split('/');
-                                    id = id[id.length-1];
+                                    var id = $sourceRef.data.links['source-reference'].href.split( '?' )[0].split(
+                                        '/'
+                                    );
+                                    id = id[id.length - 1];
                                     $rootScope.track(
                                         {
                                             eventCategory: 'FamilySearch',
@@ -150,64 +241,8 @@ angular.module( 'recordseekApp' )
                     );
             }
 
-            if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
-                $scope.status = 'Generating Source';
+            createSource();
 
-                $rootScope.log(
-                    fsUtils.removeEmptyProperties(
-                        {
-                            about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
-                            citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
-                            title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
-                            text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
-                        }
-                    )
-                );
 
-                $rootScope.data.sourceDescription = fsAPI.createSourceDescription(
-                    fsUtils.removeEmptyProperties(
-                        {
-                            about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
-                            citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
-                            title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
-                            text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
-                        }
-                    )
-                );
-
-                $rootScope.data.sourceDescription.save( $rootScope.attachMsg ).then(
-                    function( response ) {
-                        $rootScope.track(
-                            {
-                                eventCategory: 'FamilySearch',
-                                eventAction: 'Source Created',
-                                eventLabel: $rootScope.data.sourceDescription.getId()
-                            }
-                        );
-                        /*
-                        $scope.status = 'Moving Source to Collection';
-                        if ($rootScope.data.sourcebox == "Create") {
-                            $rootScope.data.sourceboxfolder = fsAPI.createCollection(
-                                {'title':'RecordSeek'}
-                            );
-                            $rootScope.data.sourceboxfolder.save('Chanege message').then(function(response) {
-                                $rootScope.data.sourcebox=$rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
-                                fsAPI.moveSourceDescriptionsToCollection($rootScope.data.sourceDescription,$rootScope.data.sourcebox).save('Message again').then(function(response) {
-                                    attachSource();
-                                });
-                            });
-                        } else {
-                            fsAPI.moveSourceDescriptionsToCollection($rootScope.data.sourceDescription,$rootScope.data.sourcebox).save('Message again').then(function(response) {
-                            });
-                        }
-                        */
-                        attachSource();
-                    }
-                );
-            } else {
-                $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Source Attached to Another'} );
-                // Already a source description
-                attachSource();
-            }
         }]
     );

@@ -50,9 +50,9 @@ angular.module( 'recordseekApp' )
             getDate: function( $val ) {
                 return fsAPI.getDate( $val ).then(
                     function( response ) {
-                        //console.log(response);
+                        //$rootScope.log(response);
                         var $date = response.getDate();
-                        //console.log($date);
+                        //$rootScope.log($date);
                         if ( $date.normalized ) {
                             if ( $date.normalized.indexOf( "/" ) != -1 ) {
                                 $date.normalized = $date.normalized.split( '/' );

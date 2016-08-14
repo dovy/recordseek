@@ -49,7 +49,7 @@ angular.module( 'recordseekApp' )
                         {eventCategory: 'FamilySearch', eventAction: 'Citation', eventLabel: 'Modified'}
                     );
                 }
-                console.log( $rootScope.data );
+                $rootScope.log( $rootScope.data );
 
             };
 
@@ -65,7 +65,9 @@ angular.module( 'recordseekApp' )
             $scope.createNow = function() {
                 $rootScope.track( {eventCategory: 'FamilySearch', eventAction: 'Create', eventLabel: 'Now'} );
                 delete $rootScope.data.attach;
+                $rootScope.data.complete = 'noAttachment'
                 $location.path( '/fs-create' );
+                $rootScope.safeApply();
             };
 
             if ( $rootScope.personData ) {
@@ -104,21 +106,6 @@ angular.module( 'recordseekApp' )
                 }
                 $rootScope.log( $rootScope.personData );
             }
-
-
-            // var sourceboxfolder = fsAPI.createCollection({
-            //     'title':'Dovy is here7'
-            // }).save('Create message').then(function(response){
-            //     console.log(sourceboxfolder);
-            //     console.log(Object.getOwnPropertyNames(sourceboxfolder));
-            //     console.log(Object.getOwnPropertyNames(response));
-            //     console.log(response)
-            //     console.log(response.getCollection())
-            //     // console.log(sourceboxfolder.getCollectionUrl());
-            //     console.log(sourceboxfolder.getId());
-            //     // $rootScope.sourcebox['Dovy is here'] = sourceboxfolder.getCollectionUrl();
-            // });
-
 
         }]
     );

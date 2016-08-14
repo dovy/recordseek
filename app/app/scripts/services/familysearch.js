@@ -20,7 +20,7 @@ angular.module( 'recordseekApp' )
                 this.environment = 'beta';
             }
             // this.environment = "production";
-            
+
             //if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
             //    this.environment = 'production';
             //} else if ( document.location.origin === 'http://localhost:9000' || document.location.origin === 'http://localhost:9001' ) {
@@ -198,8 +198,8 @@ angular.module( 'recordseekApp' )
                         return this.user_data;
                     }
 
-                    $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-gadget/linkpage.jsp?referrer=/#sbp';
-                    $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree&section=pedigree';
+                    $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
+                    $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree';
                     $rootScope.fsURL = this.client.settings.apiServer[this.client.settings.environment];
                     $rootScope.fsAccessToken = this.client.settings.accessToken;
 

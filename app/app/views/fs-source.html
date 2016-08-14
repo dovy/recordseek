@@ -32,13 +32,13 @@
                 <small>(Notes)</small>
             </label> <textarea class="form-control" ng-model="data.notes" rows="3"></textarea>
         </div>
-        <!--<div ng-class="getSourceBoxes ? 'form-group input-group-sm has-warning' : 'form-group input-group-sm'" class="" title="Loading data..."><label>Source Box <small>(Folder)</small></label>-->
-            <!--<select class="form-control" ng-model="data.sourcebox" popover-placement="top"-->
-                    <!--popover="If highlighted in orange, your SourceBox folders are being fetched from FamilySearch. Please wait."-->
-                    <!--popover-trigger="mouseenter">-->
-                <!--<option ng-repeat="(key, value) in sourcebox" ng-selected="{{key == 'RecordSeek'}}" value="{{value}}">{{key}}</option>-->
-            <!--</select>-->
-        <!--</div>-->
+        <div ng-class="getSourceBoxes ? 'form-group input-group-sm has-warning' : 'form-group input-group-sm'" class="" title="Loading data..."><label>Source Box <small>(Folder)</small></label>
+            <select class="form-control" ng-model="data.sourcebox" popover-placement="top"
+                    popover="If in orange, your SourceBox folders are being fetched. Please wait if you want a specific folder."
+                    popover-trigger="mouseenter">
+                <option ng-repeat="(key, value) in sourcebox" ng-selected="{{key == 'RecordSeek'}}" value="{{value}}">{{key}}</option>
+            </select>
+        </div>
         <div class="text-right">
             <a ng-click="goBack()" type="submit" class="btn btn-default pull-left"><i
                     class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Go Back </a>
