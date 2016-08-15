@@ -130,7 +130,7 @@ angular.module( 'recordseekApp' )
                         if ( !$rootScope.sourcebox ) {
                             $scope.getSourceBoxes = true;
                             $rootScope.data.sourcebox = "CREATE";
-                            $scope.sourcebox = {'RecordSeek': 'CREATE'}
+                            $scope.sourcebox = {'RecordSeek': 'CREATE', 'Home (Unorganized)': ''}
                             this.getCollectionsForUser().then(
                                 function( response ) {
                                     var collections = response.getCollections();
@@ -148,12 +148,15 @@ angular.module( 'recordseekApp' )
                                     if ( !data['RecordSeek'] ) {
                                         data['RecordSeek'] = "CREATE";
                                     }
-                                    const ordered = {};
+                                    const ordered = {
+                                        'Home (Unorganized)': ''
+                                    };
                                     Object.keys( data ).sort().forEach(
                                         function( key ) {
                                             ordered[key] = data[key];
                                         }
                                     );
+
                                     $rootScope.sourcebox = ordered;
                                     $rootScope.log( $rootScope.sourcebox );
                                     $scope.sourcebox = $rootScope.sourcebox;

@@ -106,6 +106,10 @@ angular.module( 'recordseekApp' )
 
             function sourceFolder() {
 
+                if ( $rootScope.data.sourcebox == "" ) {
+                    return attachSource();
+                }
+
                 $scope.status = 'Moving Source to Collection';
                 $rootScope.safeApply();
                 if ( $rootScope.data.sourcebox == "CREATE" ) {
