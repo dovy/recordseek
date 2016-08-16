@@ -129,8 +129,8 @@ angular.module( 'recordseekApp' )
                         }
                         if ( !$rootScope.sourcebox ) {
                             $scope.getSourceBoxes = true;
-                            $rootScope.data.sourcebox = "CREATE";
-                            $scope.sourcebox = {'RecordSeek': 'CREATE', 'Home (Unorganized)': ''}
+                            $rootScope.data.sourcebox = "";
+                            $scope.sourcebox = {'Home (Unorganized)': '', 'RecordSeek': 'CREATE'}
                             this.getCollectionsForUser().then(
                                 function( response ) {
                                     var collections = response.getCollections();
@@ -138,9 +138,6 @@ angular.module( 'recordseekApp' )
                                     angular.forEach(
                                         collections, function( key ) {
                                             if ( key.getTitle() != "" ) {
-                                                if ( key.getTitle() == "RecordSeek" ) {
-                                                    $rootScope.data.sourcebox = key.getCollectionUrl()
-                                                }
                                                 data[key.getTitle()] = key.getCollectionUrl();
                                             }
                                         }, data
