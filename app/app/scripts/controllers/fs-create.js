@@ -107,7 +107,8 @@ angular.module( 'recordseekApp' )
             function sourceFolder() {
 
                 if ( $rootScope.data.sourcebox == "" ) {
-                    return attachSource();
+                    attachSource();
+                    return;
                 }
 
                 $scope.status = 'Moving Source to Collection';
@@ -181,11 +182,18 @@ angular.module( 'recordseekApp' )
                     .setSourceDescription( $rootScope.data.sourceDescription )
                     .setAttachedEntityId( $rootScope.data.attach.pid );
 
-                $rootScope.data.tags, function( value, key ) {
+                var $tags = [];
+                angular.forEach($rootScope.data.tags, function(value, key) {
                     if ( value === true ) {
-                        $sourceRef.addTag( 'http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ) )
+                        this.push('http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ));
+                        //$sourceRef.addTag( 'http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ) )
                     }
-                }
+
+                }, $tags);
+
+                $sourceRef.setTags($tags);
+
+                // console.log($sourceRef);
 
                 fsAPI.getPerson( $rootScope.data.attach.pid ).then(
                     function( response ) {
