@@ -236,36 +236,30 @@ angular
                         );
                     }
                     // Clean up the Ancestry search URLs
-                    /*
-                     if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'search.ancestry.com' ) > -1 ) {
-                     var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
 
-                     var newURL = {};
-                     if ( urlData.h ) {
-                     newURL.h = urlData.h;
-                     }
-                     if ( urlData.db ) {
-                     newURL.db = urlData.db;
-                     }
-                     if ( urlData.indiv ) {
-                     newURL.indiv = urlData.indiv;
-                     }
-                     $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
-                     fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
-                     );
-                     }
-                     // Clean up the ancestry interactive URLs
-                     if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'interactive.ancestry.com' ) > -1 ) {
-                     var iurlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
-                     var inewURL = {};
-                     if ( iurlData.pid ) {
-                     inewURL.pid = iurlData.pid;
-                     }
-                     $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
-                     fsAPI.helpers.removeQueryString( $rootScope.data.url ), inewURL
-                     );
-                     }
-                     */
+                    var ancestry_parts = [
+                        'pid',
+                        'h',
+                        'db',
+                        'indiv',
+                        'treeid'
+                    ];
+
+                    if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'ancestry.com' ) > -1 ) {
+                        var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
+
+                        var newURL = {};
+                        angular.forEach(ancestry_parts, function(value) {
+                            if (urlData[value]) {
+                                this[value] = urlData[value];
+                            }
+                        },newURL);
+
+                        $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
+                            fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
+                        );
+                    }
+
                     if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
                         var $split = $rootScope.data.url.split( '/' );
                         $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed ' + $rootScope.data.time + '), ' + $rootScope.data.title + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
