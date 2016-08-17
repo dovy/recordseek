@@ -145,7 +145,7 @@ angular.module( 'recordseekApp' )
                                     if ( !data['RecordSeek'] ) {
                                         data['RecordSeek'] = "CREATE";
                                     }
-                                    const ordered = {
+                                    var ordered = {
                                         'Home (Unorganized)': ''
                                     };
                                     Object.keys( data ).sort().forEach(
