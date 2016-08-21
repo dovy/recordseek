@@ -200,7 +200,7 @@ angular.module( 'recordseekApp' )
 
                         var $person = response.getPerson();
 
-                        $sourceRef.save( $person.data.links.person.href, 'A change message' )
+                        $sourceRef.save( $person.data.links.person.href, $rootScope.data.attach.justification )
                             .then(
                                 function( response ) {
                                     var id = $sourceRef.data.links['source-reference'].href.split( '?' )[0].split(
