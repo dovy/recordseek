@@ -21,19 +21,19 @@ angular.module( 'recordseekApp' )
 
                 $url += JSON.stringify( {
                     "citation": {
-                        "title": $rootScope.data.citation,
-                        "url": $rootScope.data.url
+                        "title": encodeURIComponent( $rootScope.data.citation ),
+                        "url": encodeURIComponent( $rootScope.data.url )
                     },
                     "source": {
-                        "title": $rootScope.data.title,
+                        "title": encodeURIComponent( $rootScope.data.title ),
                         "publisherName": "http://recordseek.com",
                         "publishedDate": "",
                         "publishedLocation": ""
                     },
-                    "repositoryDomain": $rootScope.data.domain,
+                    "repositoryDomain": encodeURIComponent( $rootScope.data.domain ),
                     "media": {
                         "url": "",
-                        "note": $rootScope.data.notes
+                        "note": encodeURIComponent( $rootScope.data.notes )
                     }
                 } );
 
