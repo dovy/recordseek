@@ -249,11 +249,13 @@ angular
                         var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
 
                         var newURL = {};
-                        angular.forEach(ancestry_parts, function(value) {
-                            if (urlData[value]) {
-                                this[value] = urlData[value];
-                            }
-                        },newURL);
+                        angular.forEach(
+                            ancestry_parts, function( value ) {
+                                if ( urlData[value] ) {
+                                    this[value] = urlData[value];
+                                }
+                            }, newURL
+                        );
 
                         $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
                             fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
@@ -271,8 +273,10 @@ angular
                         var $dSplit = $rootScope.data.url.split( '//' );
                         var $domain = $dSplit[1];
                         if ( $domain ) {
-                            $dSplit = $domain.split( '/' );
-                            $rootScope.data.domain = $dSplit[0].charAt( 0 ).toUpperCase() + $dSplit[0].slice( 1 );
+                            $dSplit = $domain.replace( 'www.', '' ).split( '/' )[0];
+
+                            $rootScope.data.domain = $dSplit.charAt( 0 ).toUpperCase() + $dSplit.slice( 1 );
+                            console.log( $rootScope.data.domain );
                             $rootScope.track(
                                 {
                                     eventCategory: 'Domain',

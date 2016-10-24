@@ -19,23 +19,25 @@ angular.module( 'recordseekApp' )
                 }
                 var $url = 'https://www.ancestry.com/savetoancestry/?postData=';
 
-                $url += JSON.stringify( {
-                    "citation": {
-                        "title": encodeURIComponent( $rootScope.data.citation ),
-                        "url": encodeURIComponent( $rootScope.data.url )
+                var $aObj = {
+                    'citation': {
+                        'title': $rootScope.data.citation,
+                        'url': $rootScope.data.url
                     },
-                    "source": {
-                        "title": encodeURIComponent( $rootScope.data.title ),
-                        "publisherName": "http://recordseek.com",
-                        "publishedDate": "",
-                        "publishedLocation": ""
+                    'source': {
+                        'title': $rootScope.data.title,
+                        'publisherName': $rootScope.data.domain,
+                        'publishedDate': '',
+                        'publishedLocation': ''
                     },
-                    "repositoryDomain": encodeURIComponent( $rootScope.data.domain ),
-                    "media": {
-                        "url": "",
-                        "note": encodeURIComponent( $rootScope.data.notes )
+                    'repositoryDomain': $rootScope.data.domain,
+                    'media': {
+                        'url': 'https://recordseek.com/assets/images/ancestry.jpg',
+                        'note': $rootScope.data.notes
                     }
-                } );
+                };
+
+                $url += JSON.stringify( $aObj );
 
                 $rootScope.track( {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
 
