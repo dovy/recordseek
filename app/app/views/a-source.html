@@ -3,29 +3,28 @@
 </h3>
 <div class="row container-fluid">
     <form ng-submit="goNext()">
-        <div class="form-group ng-hide" ng-show="debug">
+        <div class="form-group input-group-sm">
+            <label>Source Title </label>
+            <input type="text" class="form-control" ng-model="data.title" placeholder="Enter a title for this source"
+                    required>
+        </div>
+        <div class="form-group input-group-sm">
             <label>Source
                 <small>(URL)</small>
-            </label>
-
-            <input type="url" class="form-control" ng-model="data.url" placeholder="Enter a URL" readonly>
+            </label> <input type="text" class="form-control" ng-model="data.url" placeholder="Enter a URL"
+                required>
         </div>
-        <div class="form-group ng-hide" ng-show="debug">
-            <label>Source
-                <small>(Domain)</small>
-            </label>
-            <input type="text" class="form-control" ng-model="data.domain" readonly>
-        </div>
-        <div class="form-group">
-            <label for="sourceTitle">Source Title</label>
-            <input type="text" class="form-control" ng-model="data.title" required
-                   placeholder="Enter a title for this source">
-        </div>
-        <div class="form-group">
-            <label for="citation">Where the Record Is Found
+        <div class="form-group input-group-sm">
+            <label>Where the Record Is Found
                 <small>(Citation)</small>
             </label>
-            <textarea class="form-control" ng-model="data.citation" required rows="5"></textarea>
+
+            <textarea class="form-control" ng-model="data.citation" rows="3" required></textarea>
+        </div>
+        <div class="form-group input-group-sm" show-errors>
+            <label>Describe the Record
+                <small>(Notes)</small>
+            </label> <textarea class="form-control" ng-model="data.notes" rows="3"></textarea>
         </div>
         <div class="text-right">
             <a ng-click="goBack()" type="submit" class="btn btn-default pull-left"><i

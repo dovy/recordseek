@@ -9,36 +9,43 @@
  */
 angular.module( 'recordseekApp' )
     .controller(
-    'ASourceCtrl',
-    ['$rootScope', '$location', '$scope', '$window', '$cookies', function( $rootScope, $location, $scope, $window, $cookie ) {
-        $rootScope.service = 'Ancestry';
+        'ASourceCtrl',
+        ['$rootScope', '$location', '$scope', '$window', '$cookies', function( $rootScope, $location, $scope, $window, $cookie ) {
+            $rootScope.service = 'Ancestry';
 
-        $scope.goNext = function() {
-            if ( $rootScope.debug ) {
-                $cookie.remove( 'recordseek' );
-            }
-            var $url = 'http://trees.ancestry.com/savetoancestry?o_sch=Web+Property';
-            if ( $rootScope.data.url ) {
-                $url += '&url=' + encodeURIComponent( $rootScope.data.url );
-            }
-            if ( $rootScope.data.domain ) {
-                $url += '&domain=' + encodeURIComponent( $rootScope.data.domain );
-            }
-            if ( $rootScope.data.title ) {
-                $url += '&collection=' + encodeURIComponent( $rootScope.data.title );
-            }
-            if ( $rootScope.data.citation ) {
-                $url += '&details=' + encodeURIComponent( $rootScope.data.citation );
-            }
-            $rootScope.track( {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
+            $scope.goNext = function() {
+                if ( $rootScope.debug ) {
+                    $cookie.remove( 'recordseek' );
+                }
+                var $url = 'https://www.ancestry.com/savetoancestry/?postData=';
 
-            $window.location.href = $url;
-        };
+                $url += JSON.stringify( {
+                    "citation": {
+                        "title": $rootScope.data.citation,
+                        "url": $rootScope.data.url
+                    },
+                    "source": {
+                        "title": $rootScope.data.title,
+                        "publisherName": "http://recordseek.com",
+                        "publishedDate": "",
+                        "publishedLocation": ""
+                    },
+                    "repositoryDomain": $rootScope.data.domain,
+                    "media": {
+                        "url": "",
+                        "note": $rootScope.data.notes
+                    }
+                } );
 
-        $scope.goBack = function() {
-            $rootScope.service = '';
-            $cookie.remove('recordseek-last-service');
-            $location.path( '/' );
-        };
-    }]
-);
+                $rootScope.track( {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
+
+                $window.location.href = $url;
+            };
+
+            $scope.goBack = function() {
+                $rootScope.service = '';
+                $cookie.remove( 'recordseek-last-service' );
+                $location.path( '/' );
+            };
+        }]
+    );
