@@ -160,15 +160,34 @@ angular.module( 'recordseekApp' )
                                 var data = fsUtils.getPrimaryPerson( primaryPerson );
 
                                 data.confidence = 5;
-                                data.father = fsUtils.getRelativeData( response.getFathers() );
-                                data.mother = fsUtils.getRelativeData( response.getMothers() );
-                                data.spouse = fsUtils.getRelativeData( response.getSpouses() );
-                                data.children = fsUtils.getRelativeData( response.getChildren() );
+
+                                try {
+                                    data.father = fsUtils.getRelativeData( response.getFathers() );
+                                } catch ( err ) {
+                                    $rootScope.log( err );
+                                }
+
+                                try {
+                                    data.mother = fsUtils.getRelativeData( response.getMothers() );
+                                } catch ( err ) {
+                                    $rootScope.log( err );
+                                }
+
+                                try {
+                                    data.spouse = fsUtils.getRelativeData( response.getSpouses() );
+                                } catch ( err ) {
+                                    $rootScope.log( err );
+                                }
+
+                                try {
+                                    data.children = fsUtils.getRelativeData( response.getChildren() );
+                                } catch ( err ) {
+                                    $rootScope.log( err );
+                                }
 
                                 $scope.searchResults.push(
                                     data
                                 );
-
                                 $scope.goNext( data.pid, data.name, data.url );
 
                             }

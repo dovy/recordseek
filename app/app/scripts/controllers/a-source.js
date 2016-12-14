@@ -21,11 +21,11 @@ angular.module( 'recordseekApp' )
 
                 var $aObj = {
                     'citation': {
-                        'title': $rootScope.data.citation,
-                        'url': $rootScope.data.url
+                        'title': encodeURIComponent( $rootScope.data.citation ),
+                        'url': encodeURIComponent( $rootScope.data.url )
                     },
                     'source': {
-                        'title': $rootScope.data.title,
+                        'title': encodeURIComponent( $rootScope.data.title ),
                         'publisherName': $rootScope.data.domain,
                         'publishedDate': '',
                         'publishedLocation': ''
@@ -33,7 +33,7 @@ angular.module( 'recordseekApp' )
                     'repositoryDomain': $rootScope.data.domain,
                     'media': {
                         'url': 'https://recordseek.com/assets/images/ancestry.jpg',
-                        'note': $rootScope.data.notes
+                        'note': encodeURIComponent( $rootScope.data.notes )
                     }
                 };
 
