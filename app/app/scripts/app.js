@@ -257,9 +257,9 @@ angular
                             }, newURL
                         );
 
-                        $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
-                            fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
-                        );
+                        // $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
+                        //     fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
+                        // );
                     }
 
                     if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {

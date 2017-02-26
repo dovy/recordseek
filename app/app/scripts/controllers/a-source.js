@@ -21,23 +21,23 @@ angular.module( 'recordseekApp' )
 
                 var $aObj = {
                     'citation': {
-                        'title': encodeURIComponent( $rootScope.data.citation ),
-                        'url': encodeURIComponent( $rootScope.data.url )
+                        'title': $rootScope.data.citation,
+                        'url': $rootScope.data.url
                     },
                     'source': {
-                        'title': encodeURIComponent( $rootScope.data.title ),
+                        'title': $rootScope.data.title,
                         'publisherName': $rootScope.data.domain,
-                        'publishedDate': '',
-                        'publishedLocation': ''
+                        // 'publishedDate': '',
+                        // 'publishedLocation': ''
                     },
                     'repositoryDomain': $rootScope.data.domain,
                     'media': {
                         'url': 'https://recordseek.com/assets/images/ancestry.jpg',
-                        'note': encodeURIComponent( $rootScope.data.notes )
+                        'note': $rootScope.data.notes
                     }
                 };
 
-                $url += JSON.stringify( $aObj );
+                $url += encodeURIComponent( JSON.stringify( $aObj ) );
 
                 $rootScope.track( {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
 
