@@ -32,7 +32,6 @@ module.exports = function(config) {
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-touch/angular-touch.js',
-      'bower_components/familysearch-javascript-sdk/familysearch-javascript-sdk.min.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/fastclick/lib/fastclick.js',
       'bower_components/lodash/lodash.js',

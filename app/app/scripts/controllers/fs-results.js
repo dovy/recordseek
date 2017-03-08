@@ -144,7 +144,7 @@ angular.module( 'recordseekApp' )
 
                     var cleanSearchDataSearch = $rootScope.data.search.pid;
 
-                    fsAPI.getPersonWithRelationships(
+                    fsAPI.getPerson(
                         cleanSearchDataSearch, {
                             persons: true,
                         }
