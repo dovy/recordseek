@@ -243,6 +243,7 @@ angular
                         "new",
                         "rank",
                         "cp",
+                        "ssrc",
                         // "catbucket",
                         "gss"
                     ];
