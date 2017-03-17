@@ -245,6 +245,7 @@ angular
                         "cp",
                         "ssrc",
                         // "catbucket",
+                        "//cgi-bin",
                         "gss"
                     ];
 
