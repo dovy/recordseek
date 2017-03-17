@@ -398,7 +398,7 @@ module.exports = function( grunt ) {
                             '.htaccess',
                             '*.html',
                             'images/**/*',
-                            'styles/fonts/{,*/}*.*',
+                            // 'styles/fonts/{,*/}*.*',
                         ]
                     }, {
                         expand: true,
@@ -407,15 +407,35 @@ module.exports = function( grunt ) {
                         src: ['generated/*']
                     }, {
                         expand: true,
-                        cwd: '.',
-                        src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                        dest: '<%= yeoman.dist %>'
+                        cwd: '.tmp/images',
+                        dest: '<%= yeoman.dist %>/images',
+                        src: ['generated/*']
                     }, {
                         expand: true,
                         cwd: '.tmp/styles',
                         dest: '<%= yeoman.dist %>/styles',
                         src: ['*.css']
                     }]
+                },
+                extras: {
+                    files: [
+                        {
+                            expand: true,
+                            // dot: true,
+                            // cwd: '.tmp/fonts',
+                            flatten: true,
+                            dest: '<%= yeoman.dist %>/fonts',
+                            src: ['<%= yeoman.app %>/../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+                        },
+                        {
+                            expand: true,
+                            flatten: true,
+                            // dot: true,
+                            // cwd: '.tmp/scripts',
+                            dest: '<%= yeoman.dist %>/scripts/',
+                            src: ['<%= yeoman.app %>/scripts/familysearch*.js'],
+                        }
+                    ]
                 }
             },
             cssmin: {
@@ -449,7 +469,24 @@ module.exports = function( grunt ) {
                     configFile: 'test/karma.conf.js',
                     singleRun: true
                 }
-            }
+            },
+            replace: {
+                dist: {
+                    options: {
+                        patterns: [
+                            {
+                                match: /bower_components\/bootstrap-sass-official\/assets\/fonts\/bootstrap/g,
+                                usePrefix: false,
+                                replacement: "fonts",
+
+                            }
+                        ]
+                    },
+                    files: [
+                        {flatten: true, src: ['.tmp/styles/*.css'], dest: '<%= yeoman.dist %>/'}
+                    ]
+                },
+            },
         }
     );
 
@@ -507,7 +544,9 @@ module.exports = function( grunt ) {
             'uglify',
             'filerev',
             'usemin',
-            'htmlmin'
+            'htmlmin',
+            'copy:extras',
+            // 'replace'
         ]
     );
 
