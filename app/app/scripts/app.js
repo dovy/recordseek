@@ -237,29 +237,41 @@ angular
                     }
                     // Clean up the Ancestry search URLs
 
-                    var ancestry_parts = [
-                        'pid',
-                        'h',
-                        'db',
-                        'indiv',
-                        'treeid'
+                    var remove_parts = [
+                        "backurl",
+                        "usepubjs",
+                        "new",
+                        "rank",
+                        "cp",
+                        // "catbucket",
+                        "gss"
                     ];
 
                     if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'ancestry.com' ) > -1 ) {
                         var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
-
                         var newURL = {};
-                        angular.forEach(
-                            ancestry_parts, function( value ) {
-                                if ( urlData[value] ) {
-                                    this[value] = urlData[value];
+                        for (var key in urlData) {
+                            key = key.toLowerCase()
+                            if (urlData.hasOwnProperty(key)) {
+                                if (remove_parts.indexOf(key) > -1) {
+                                    continue;
                                 }
-                            }, newURL
-                        );
+                                if (key.includes('__') || key[0] == "_" || urlData[key] == "") {
+                                    continue;
+                                }
+                                if (key.length > 1) {
+                                    if ((key[0]+key[1]) == "ms") {
+                                        continue;
+                                    }
+                                }
+                                newURL[key] = urlData[key]
+                                console.log(key + " -> " + urlData[key]);
+                            }
+                        }
 
-                        // $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
-                        //     fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
-                        // );
+                        $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
+                            fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
+                        );
                     }
 
                     if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'billiongraves.com' ) > -1 ) {
