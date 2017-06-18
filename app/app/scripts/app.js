@@ -233,43 +233,19 @@ angular
                             'ancestryinstitution.com', 'ancestry.com'
                         ).replace( 'ancestrylibrary.com', 'ancestry.com' ).replace(
                             'ancestrylibrary.proquest.com', 'ancestry.com'
+                        ).replace( 'ancestryclassroom.com', 'ancestry.com' ).replace(
+                            'ancestrylibrary.proquest.com', 'ancestry.com'
                         );
                     }
                     // Clean up the Ancestry search URLs
-
-                    var remove_parts = [
-                        "backurl",
-                        "usepubjs",
-                        "new",
-                        "rank",
-                        "cp",
-                        "ssrc",
-                        // "catbucket",
-                        "//cgi-bin",
-                        "gss"
-                    ];
-
-                    if ( $rootScope.data.url && $rootScope.data.url.indexOf( 'ancestry.com' ) > -1 ) {
+                    if ( $rootScope.data.url && ( $rootScope.data.url.indexOf( 'www.ancestry.' ) > -1 || $rootScope.data.url.indexOf( 'search.ancestry.' ) > -1 ) ) {
                         var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
-                        var newURL = {};
-                        for (var key in urlData) {
-                            key = key.toLowerCase()
-                            if (urlData.hasOwnProperty(key)) {
-                                if (remove_parts.indexOf(key) > -1) {
-                                    continue;
-                                }
-                                if (key.includes('__') || key[0] == "_" || urlData[key] == "") {
-                                    continue;
-                                }
-                                if (key.length > 1) {
-                                    if ((key[0]+key[1]) == "ms") {
-                                        continue;
-                                    }
-                                }
-                                newURL[key] = urlData[key]
-                                console.log(key + " -> " + urlData[key]);
-                            }
-                        }
+                        var $x = urlData['dbid'] ? 'dbid' : 'db';
+                        var newURL = {
+                            indiv: 'try',
+                            h: urlData['h'],
+                        };
+                        newURL[$x] = urlData[$x];
 
                         $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
                             fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
