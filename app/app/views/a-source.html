@@ -11,35 +11,46 @@
         <div class="form-group input-group-sm">
             <label>Source
                 <small>(URL)</small>
-            </label> <input type="text" class="form-control" name="citationUrl" ng-model="data.url" placeholder="Enter a URL"
-                required>
+            </label>
+            <input type="text" class="form-control" name="citationUrl" ng-model="data.url" placeholder="Enter a URL"
+                    required>
         </div>
+
+        <div style="margin-bottom:5px;">
+            <label style="margin-bottom:0">Source Media Image
+                <small>(URL)</small>
+            </label>
+        </div>
+        <div class="input-group input-group-sm" style="margin-top:0;margin-bottom:10px;">
+            <input type="text" name="mediaUrl" class="form-control" ng-model="data.media_url" placeholder="Enter a URL of an image">
+            <span class="input-group-btn">
+                <button ng-click="clearMediaURL()" class="btn btn-default btn-secondary" type="button">Clear</button>
+            </span>
+        </div><!-- /input-group -->
         <div class="form-group input-group-sm">
             <label>Where the Record Is Found
                 <small>(Citation)</small>
             </label>
-
             <textarea class="form-control" name="citationTitle" ng-model="data.citation" rows="3" required></textarea>
         </div>
+
         <div class="form-group input-group-sm" show-errors>
             <label>Describe the Record
                 <small>(Notes)</small>
             </label> <textarea class="form-control" name="mediaNote" ng-model="data.notes" rows="3"></textarea>
         </div>
 
-        <input type="hidden" name="mediaUrl" value="https://recordseek.com/assets/images/ancestry.jpg" />
-        <input type="hidden" name="repositoryDomain" ng-model="data.domain" />
-        <input type="hidden" name="sourcePublishedDate" value="" />
-        <input type="hidden" name="sourcePublishedLocation" value="" />
-        <input type="hidden" name="sourcePublisherName" ng-model="data.domain" />
+        <input type="hidden" name="repositoryDomain" ng-model="data.domain"/>
+        <input type="hidden" name="sourcePublishedDate" value=""/>
+        <input type="hidden" name="sourcePublishedLocation" value=""/>
+        <input type="hidden" name="sourcePublisherName" ng-model="data.domain"/>
 
         <div class="text-right">
             <a ng-click="goBack()" type="submit" class="btn btn-default pull-left"><i
-                    class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Go Back
-            </a>
+                    class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp; Go Back </a>
             &nbsp;&nbsp;
-            <button type="submit" class="btn btn-primary">Next &nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right"></i></button>
+            <button type="submit" class="btn btn-primary">Next &nbsp;&nbsp;<i class="glyphicon glyphicon-arrow-right"></i>
+            </button>
         </div>
     </form>
-
 </div>

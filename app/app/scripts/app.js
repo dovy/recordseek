@@ -116,6 +116,11 @@ angular
                     $rootScope.track( {eventCategory: 'App', eventAction: $el['data-tracking'].value} );
                 }
 
+                // Allow people to remove the RecordSeek icon from sources for Ancestry
+                if ( $el['data-tracking'].value == "Ancestry" && $el['id']['nodeValue'] ) {
+                    $rootScope.data.media_url = "https://recordseek.com/assets/images/ancestry.jpg";
+                }
+
                 // Redirect if they've already been to the main page before
                 if ( $el['data-tracking'] && ($el['data-tracking'].value === "FamilySearch" || $el['data-tracking'].value === "Ancestry") ) {
                     $rootScope.setCookie( 'recordseek-last-service', $el['data-tracking'].value );
@@ -238,7 +243,8 @@ angular
                         );
                     }
                     // Clean up the Ancestry search URLs
-                    if ( $rootScope.data.url && ( $rootScope.data.url.indexOf( 'www.ancestry.' ) > -1 || $rootScope.data.url.indexOf( 'search.ancestry.' ) > -1 ) ) {
+                    if ( $rootScope.data.url && ( $rootScope.data.url.indexOf(
+                            'www.ancestry.' ) > -1 || $rootScope.data.url.indexOf( 'search.ancestry.' ) > -1 ) ) {
                         var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
                         var $x = urlData['dbid'] ? 'dbid' : 'db';
                         var newURL = {
