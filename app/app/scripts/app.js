@@ -62,7 +62,6 @@ angular
             $rootScope.debug = fsAPI.settings.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
-            alert('tracking');
                 ga( 'create', 'UA-16096334-10' );
                 ga( 'send', 'pageview' );
             }
