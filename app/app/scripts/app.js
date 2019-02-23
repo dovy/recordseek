@@ -64,6 +64,7 @@ angular
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
                 ga( 'send', 'pageview' );
+	            Sentry.init({ dsn: 'https://446c24f6e25e4168b4d71a90cbf74794@sentry.io/105393' });
             }
 
             $rootScope.service = '';
