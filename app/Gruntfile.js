@@ -21,7 +21,11 @@ module.exports = function( grunt ) {
         }
     );
 
-    // Configurable paths for the application
+	grunt.loadNpmTasks('grunt-replace-regex');
+
+
+
+	// Configurable paths for the application
     var appConfig = {
         app: require( './bower.json' ).appPath || 'app',
         dist: './dist'
@@ -427,14 +431,14 @@ module.exports = function( grunt ) {
                             dest: '<%= yeoman.dist %>/fonts',
                             src: ['<%= yeoman.app %>/../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
                         },
-                        {
-                            expand: true,
-                            flatten: true,
-                            // dot: true,
-                            // cwd: '.tmp/scripts',
-                            dest: '<%= yeoman.dist %>/scripts/',
-                            src: ['<%= yeoman.app %>/scripts/familysearch*.js'],
-                        }
+//                        {
+//                            expand: true,
+//                            flatten: true,
+//                            // dot: true,
+//                            // cwd: '.tmp/scripts',
+//                            dest: '<%= yeoman.dist %>/scripts/',
+//                            src: ['<%= yeoman.app %>/scripts/familysearch*.js'],
+//                        }
                     ]
                 }
             },
@@ -470,23 +474,21 @@ module.exports = function( grunt ) {
                     singleRun: true
                 }
             },
-            replace: {
-                dist: {
-                    options: {
-                        patterns: [
-                            {
-                                match: /bower_components\/bootstrap-sass-official\/assets\/fonts\/bootstrap/g,
-                                usePrefix: false,
-                                replacement: "fonts",
-
-                            }
-                        ]
-                    },
-                    files: [
-                        {flatten: true, src: ['.tmp/styles/*.css'], dest: '<%= yeoman.dist %>/'}
-                    ]
-                },
-            },
+	        replace: {
+		        dist: {
+			        options: {
+				        patterns: [
+					        {
+						        match: /\.\.\/bower_components\/bootstrap-sass-official\/assets\/fonts\/bootstrap\//g,
+						        replacement: '../fonts/'
+					        }
+				        ]
+			        },
+			        files: [
+				        {expand: true, flatten: true, src: ['dist/styles/*.css'], dest: 'dist/styles/'}
+			        ]
+		        }
+	        }
         }
     );
 
@@ -507,13 +509,6 @@ module.exports = function( grunt ) {
                     'watch'
                 ]
             );
-        }
-    );
-
-    grunt.registerTask(
-        'server', 'DEPRECATED TASK. Use the "serve" task instead', function( target ) {
-            grunt.log.warn( 'The `server` task has been deprecated. Use `grunt serve` to start a server.' );
-            grunt.task.run( ['serve:' + target] );
         }
     );
 
@@ -546,7 +541,8 @@ module.exports = function( grunt ) {
             'usemin',
             'htmlmin',
             'copy:extras',
-            // 'replace'
+//            'addErrorLogging',
+            'replace'
         ]
     );
 

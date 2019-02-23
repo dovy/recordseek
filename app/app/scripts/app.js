@@ -57,11 +57,12 @@ angular
             //var referrer = window.location.href.substring(window.location.origin.length, window.location.href.length);
 
             $rootScope.helpers = RecordSeek.helpers;
-            $rootScope.attachMsg = 'Source created by http://RecordSeek.com';
+            $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
-            $rootScope.debug = (fsAPI.settings.environment == 'production' || fsAPI.settings.environment == 'beta') ? false : true;
+            $rootScope.debug = fsAPI.settings.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
+            alert('tracking');
                 ga( 'create', 'UA-16096334-10' );
                 ga( 'send', 'pageview' );
             }
@@ -133,9 +134,12 @@ angular
                 }
             };
 
-            var split = document.URL.split( '#/' );
-
+            var split = document.URL.split( '#' );
             var params = fsAPI.helpers.decodeQueryString( split[0] );
+
+            if ( $rootScope.debug ) {
+              console.log( params );
+            }
 
             if ( params.tags ) {
                 var $todo = params.tags.split( ',' );
@@ -262,7 +266,37 @@ angular
                         var $split = $rootScope.data.url.split( '/' );
                         $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed ' + $rootScope.data.time + '), ' + $rootScope.data.title + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
                     } else if ( !$rootScope.data.citation ) {
-                        $rootScope.data.citation = '"' + $rootScope.data.title + '." ' + $rootScope.data.title + '. N.p., n.d. Web. ' + $rootScope.data.time + '. <' + $rootScope.data.url + '>.';
+                        var $formats = {
+                            'MLA': "“{title}.” {publisher}{hasPublisher}{url}. Accessed {time}."
+                        }
+
+                        var publisher = '';
+                        var has_publisher = '';
+                        var title = $rootScope.data.title.split('|')[0];
+
+                        var split_key = '';
+	                    if ( $rootScope.data.title.includes('|')) {
+		                    split_key = '|';
+	                    } else if ( $rootScope.data.title.includes('—')) {
+		                    split_key = '—';
+	                    }
+
+                        if ( split_key != '' ) {
+                            var title_split = $rootScope.data.title.split(split_key);
+	                        publisher = "<i>"+title_split[title_split.length-1]
+	                        title = title_split[0]
+                            has_publisher = "</i>, "
+                        }
+                        $rootScope.data.citation = $formats[$rootScope.data.sourceFormat];
+	                    if ( title.includes('"') ) {
+		                    title = title.replace(new RegExp('"', 'g'), "'");
+                        }
+	                    $rootScope.data.citation = $rootScope.data.citation.replace('{title}', title);
+	                    $rootScope.data.citation = $rootScope.data.citation.replace('{publisher}', publisher);
+	                    $rootScope.data.citation = $rootScope.data.citation.replace('{hasPublisher}', has_publisher);
+	                    $rootScope.data.citation = $rootScope.data.citation.replace('{url}', $rootScope.data.url);
+	                    $rootScope.data.citation = $rootScope.data.citation.replace('{time}', $rootScope.data.time);
+
                     }
 
                     if ( $rootScope.data.url ) {
