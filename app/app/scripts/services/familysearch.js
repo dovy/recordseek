@@ -19,20 +19,7 @@ angular.module( 'recordseekApp' )
             } else {
                 this.environment = 'beta';
             }
-		    this.environment = 'production';
-            // this.environment = "production";
-
-            //if ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) {
-            //    this.environment = 'production';
-            //} else if ( document.location.origin === 'http://localhost:9000' || document.location.origin === 'http://localhost:9001' ) {
-            //    this.environment = 'sandbox';
-            //} else {
-            //    this.environment = 'beta';
-            //}
-
-            //if ( document.location.origin === 'http://recordseeknew.dev' || document.location.origin === 'https://recordseeknew.dev' ) {
-            //this.environment = 'production';
-            //}
+		    // this.environment = 'production';
 
             if ( this.environment === 'sandbox' ) {
                 this.client_id = 'a0T3000000ByxnUEAR';
