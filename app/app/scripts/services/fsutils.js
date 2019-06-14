@@ -31,7 +31,7 @@ angular.module( 'recordseekApp' )
                 };
             },
             redirectURL: function( $ID ) {
-                return $rootScope.fsURL + '/tree/person/details/' + $ID;
+                return $rootScope.fsURL.replace("api.", "www.") + '/tree/person/details/' + $ID;
             },
             getLocation: function( $loc ) {
                 return fsAPI.getPlacesSearch( {name: $loc, count: 10} ).then(
