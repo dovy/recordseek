@@ -24,14 +24,14 @@ angular.module( 'recordseekApp' )
                     'name': primaryPerson.getDisplayName(),
                     'birthDate': primaryPerson.getBirthDate(),
                     'gender': primaryPerson.getDisplayGender(),
-                    'url': this.redirectURL( primaryPerson.getPersistentIdentifier() ),
+                    'url': this.redirectURL( primaryPerson.getId() ),
                     'birthPlace': primaryPerson.getBirthPlace(),
                     'deathDate': primaryPerson.getDeathDate(),
                     'deathPlace': primaryPerson.getDeathPlace()
                 };
             },
-            redirectURL: function( $url ) {
-                return $rootScope.fsURL + '/platform/redirect?uri=' + encodeURIComponent( $url ) + '&access_token=' + $rootScope.fsAccessToken;
+            redirectURL: function( $ID ) {
+                return $rootScope.fsURL + '/tree/person/details/' + $ID;
             },
             getLocation: function( $loc ) {
                 return fsAPI.getPlacesSearch( {name: $loc, count: 10} ).then(
