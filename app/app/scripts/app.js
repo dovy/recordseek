@@ -4,6 +4,32 @@ var RecordSeek = RecordSeek || {};
 RecordSeek.helpers = {
     isNotString: function( str ) {
         return (typeof str !== 'string');
+    },
+    decodeQueryString: function(url) {
+      var obj = {};
+      if (url) {
+        var pos = url.indexOf('?');
+        if (pos !== -1) {
+          var segments = url.substring(pos+1).split('&');
+          segments.forEach(function(segment) {
+            var kv = segment.split('=', 2);
+            if (kv && kv[0]) {
+              var key = decodeURIComponent(kv[0]);
+              var value = (kv[1] != null ? decodeURIComponent(kv[1]) : kv[1]); // catches null and undefined
+              if (obj[key] != null && !utils.isArray(obj[key])) {
+                obj[key] = [ obj[key] ];
+              }
+              if (obj[key] != null) {
+                obj[key].push(value);
+              }
+              else {
+                obj[key] = value;
+              }
+            }
+          });
+        }
+      }
+      return obj;
     }
 };
 
@@ -59,7 +85,7 @@ angular
             $rootScope.helpers = RecordSeek.helpers;
             $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
-            $rootScope.debug = fsAPI.settings.environment == 'production' ? false : true;
+            $rootScope.debug = true; //fsAPI.settings.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
@@ -92,8 +118,7 @@ angular
             $rootScope.logout = function() {
                 $rootScope.log( fsAPI );
                 if ( $rootScope.service === "FamilySearch" ) {
-                    // fsAPI.invalidateAccessToken();
-                    fsAPI.helpers.eraseAccessToken( true );
+                    fsAPI.deleteAccessToken();
                     $rootScope.user = ""
                     $location.path( '/' );
                 }
@@ -139,11 +164,39 @@ angular
             };
 
             var split = document.URL.split( '#' );
-            var params = fsAPI.helpers.decodeQueryString( split[0] );
+            var params = $rootScope.helpers.decodeQueryString( split[0] );
 
             if ( $rootScope.debug ) {
-              console.log( params );
+                console.log( params );
             }
+/*
+            if (params.code) {
+                if (fsAPI.getAccessToken()) {
+                    // redirect to non params URL
+                    var out = [];
+
+                    for (var key in params) {
+                        if (params.hasOwnProperty(key) && key !== 'code') {
+                            out.push(key + '=' + encodeURIComponent(params[key]));
+                        }
+                    }
+                    location.href = document.location.origin + "#" + (split && split[1]) ? split[1] : '' + out.join('&');
+
+                }
+                fsAPI.oauthToken(params.code, function(error, tokenResponse){
+    
+                    // error will be set when there was a networking error (i.e. the request
+                    // didn't make it to the FS API or we didn't receive the response from the
+                    // API). If we did get a response then we still check the status code 
+                    // to make sure the user successfully signed in.
+                    if(error || tokenResponse.statusCode >= 400){
+                        $rootScope.log(error || restError(tokenResponse));
+                    }
+
+                    fsAPI.setAccessToken(tokenResponse.data.access_token);
+
+                });
+            }*/
 
             if ( params.tags ) {
                 var $todo = params.tags.split( ',' );

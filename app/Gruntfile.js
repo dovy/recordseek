@@ -431,14 +431,14 @@ module.exports = function( grunt ) {
                             dest: '<%= yeoman.dist %>/fonts',
                             src: ['<%= yeoman.app %>/../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
                         },
-                       {
+                        /* {
                            expand: true,
                            flatten: true,
                            // dot: true,
                            // cwd: '.tmp/scripts',
                            dest: '<%= yeoman.dist %>/scripts/',
                            src: ['<%= yeoman.app %>/scripts/familysearch*.js'],
-                       }
+                        } */
                     ]
                 }
             },

@@ -19,12 +19,13 @@ angular.module( 'recordseekApp' )
             } else {
                 this.environment = 'beta';
             }
-		    // this.environment = 'production';
+		    this.environment = 'production';
 
             if ( this.environment === 'sandbox' ) {
                 this.client_id = 'a0T3000000ByxnUEAR';
             } else {
                 this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
+                // return code = -40-937-4739-30-32-112-20-339107410-34-5-1273-30-1964385-2312199-58-797359-88-46
             }
 
             this.redirect_uri = document.location.origin;
@@ -49,16 +50,16 @@ angular.module( 'recordseekApp' )
                     /* globals FamilySearch */
                     this.client = new FamilySearch(
                         {
-                            client_id: this.client_id,
+                            appKey: this.client_id,
                             environment: this.environment,
-                            redirect_uri: this.redirect_uri,
+                            redirectUri: this.redirect_uri,
                             http_function: $http,
                             deferred_function: $q.defer,
-                            save_access_token: true,
+                            saveAccessToken: true,
                             auto_expire: true,
                             timeout_function: $timeout,
                             expire_callback: function( FS ) {
-
+                                console.log("Expire callback");
                                 var urlParams = FS.helpers.decodeQueryString( document.URL );
                                 // Don't redirect if we already have a code!
                                 if ( !urlParams || ( urlParams && !urlParams.code && !urlParams.state ) ) {
@@ -87,34 +88,30 @@ angular.module( 'recordseekApp' )
                             }
                         }
                     );
-
-
+                    let that = this;
                     this.client.displayUser = function( $scope ) {
                         if ( !$rootScope.user ) {
-                            this.getCurrentUser().then(
-                                function( userResponse ) {
-                                    return userResponse.getUser();
-                                }
-                            )
-                            // Retrieve the person
-                                .then(
-                                    function( data ) {
-                                        $rootScope.user = data.data;
-                                        $scope.user = $rootScope.user;
-                                        $rootScope.log( $scope.user );
-                                        $scope.$apply();
+                            if (that.client.getAccessToken()) {
+                                that.client.get('/platform/users/current', function(error, response){
+                                    if(error){
+                                        console.error(error);
+                                    } else {
+                                        if (response.data && response.data.users && response.data.users.length > 0) {
+                                            $rootScope.user = response.data.users[0];
+                                            $scope.user = $rootScope.user;
+                                            $rootScope.log( $scope.user );
+                                            $scope.$apply();
+                                        }
                                     }
-                                )
-                                // Catch any errors
-                                .catch(
-                                    function( e ) {
-                                        $rootScope.log( e );
-                                        return false;
-                                    }
-                                );
-                        } else {
-                            $scope.user = $rootScope.user;
+                                });
+                            } else {
+                                location.href = that.client.oauthRedirectURL();
+                                that.client.deleteAccessToken();
+                            }
+                            // 
                         }
+
+                        /*
                         if ( !$rootScope.sourcebox ) {
                             $scope.getSourceBoxes = true;
                             $rootScope.data.sourcebox = "";
@@ -149,62 +146,60 @@ angular.module( 'recordseekApp' )
                                 }
                             );
                         }
-
+                        */
                     }
 
                     this.client.completeLogout = function() {
-                        this.helpers.eraseAccessToken( true );
+                        this.client.deleteAccessToken();
                         delete $rootScope.user;
                         $location.path( '/' );
                     }
 
                     this.client.user = function() {
-                        //if ( this.user_data == {} ) {
-
-                        // Get the current user. From the user profile, extract the tree person id.
-                        this.getCurrentUser().then(
-                            function( userResponse ) {
-                                return userResponse.getUser();
-                            }
-                        )
-                        // Retrieve the person
-                            .then(
-                                function( data ) {
-                                    $rootScope.log( data.data );
-                                    return data.data;
-
+                        if (!$rootScope.user) {
+                            // Get the current user. From the user profile, extract the tree person id.
+                            that.client.get('/platform/users/current').then(
+                                function( error, userResponse ) {
+                                    if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
+                                        $rootScope.user = userResponse.data.users[0];
+                                        $scope.user = $rootScope.user;
+                                        $rootScope.log( $scope.user );
+                                        $scope.$apply();
+                                    }
                                 }
                             )
-                            // Catch any errors
-                            .catch(
-                                function( e ) {
-                                    $rootScope.log( e );
-                                    return false;
-                                }
-                            );
-                        //}
-                        return this.user_data;
+                        }
+                        return $rootScope.user;
                     }
 
-                    $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
-                    $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree';
-                    $rootScope.fsURL = this.client.settings.apiServer[this.client.settings.environment];
-                    $rootScope.fsAccessToken = this.client.settings.accessToken;
 
-                    this.urlParams = this.client.helpers.decodeQueryString( document.URL );
+                    this.urlParams = RecordSeek.helpers.decodeQueryString( document.URL );
                     // Check if we have a code and do what we should accordingly
                     if ( this.urlParams.code && this.urlParams.state ) {
                         $rootScope.status = 'Authenticating, please wait.';
                         $location.path( '/loading' );
                         var redirect = this.urlParams.state.split( '#' );
                         redirect = redirect[0] += '#/fs-source';
-                        this.client.getAccessToken( this.urlParams.code ).then(
-                            function() {
-                                window.location = redirect;
+                        fsAPI.oauthToken(params.code, function(error, tokenResponse){
+    
+                            // error will be set when there was a networking error (i.e. the request
+                            // didn't make it to the FS API or we didn't receive the response from the
+                            // API). If we did get a response then we still check the status code 
+                            // to make sure the user successfully signed in.
+                            if(error || tokenResponse.statusCode >= 400){
+                                $rootScope.log(error || restError(tokenResponse));
                             }
-                        );
-                    }
 
+                            fsAPI.setAccessToken(tokenResponse.data.access_token);
+                            window.location = redirect;
+                        });
+                    }
+/*                   
+                    $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
+                    $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree';
+                    $rootScope.fsURL = this.client.settings.apiServer[this.client.settings.environment];
+                    $rootScope.fsAccessToken = this.client.settings.accessToken;                   
+*/
                 }
                 return this.client;
             };
