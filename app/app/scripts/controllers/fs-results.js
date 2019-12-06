@@ -211,8 +211,144 @@ angular.module( 'recordseekApp' )
 
                     $rootScope.log( cleanSearchData );
 
-                    fsAPI.getPersonSearch( cleanSearchData ).then(
-                        function( response ) {
+                    var sampleData =  {
+                          "description" : "#sd1",
+                          "persons" : [ {
+                            "id" : "primaryPerson",
+                            "gender" : {
+                              "type" : "http://gedcomx.org/Male"
+                            },
+                            "names" : [ {
+                              "type" : "http://gedcomx.org/BirthName",
+                              "nameForms" : [ {
+                                "fullText" : "Israel Heaton"
+                              } ]
+                            } ],
+                            "facts" : [ {
+                              "type" : "http://gedcomx.org/Birth",
+                              "date" : {
+                                "original" : "30 January 1880"
+                              },
+                              "place" : {
+                                "original" : "Orderville, UT"
+                              }
+                            }, {
+                              "type" : "http://gedcomx.org/Death",
+                              "date" : {
+                                "original" : "29 August 1936"
+                              },
+                              "place" : {
+                                "original" : "Kanab, Kane, UT"
+                              }
+                            } ]
+                          }, {
+                            "id" : "father1",
+                            "gender" : {
+                              "type" : "http://gedcomx.org/Male"
+                            },
+                            "names" : [ {
+                              "nameForms" : [ {
+                                "fullText" : "Jonathan Heaton"
+                              } ]
+                            } ]
+                          }, {
+                            "id" : "mother1",
+                            "gender" : {
+                              "type" : "http://gedcomx.org/Female"
+                            },
+                            "names" : [ {
+                              "nameForms" : [ {
+                                "fullText" : "Clarissa Hoyt"
+                              } ]
+                            } ]
+                          }, {
+                            "id" : "spouse1",
+                            "gender" : {
+                              "type" : "http://gedcomx.org/Female"
+                            },
+                            "names" : [ {
+                              "nameForms" : [ {
+                                "fullText" : "Charlotte Cox"
+                              } ]
+                            } ]
+                          }, {
+                            "id" : "child1",
+                            "gender" : {
+                              "type" : "http://gedcomx.org/Male"
+                            },
+                            "names" : [ {
+                              "nameForms" : [ {
+                                "fullText" : "Alma Heaton"
+                              } ]
+                            } ]
+                          } ],
+                          "relationships" : [ {
+                            "type" : "http://gedcomx.org/ParentChild",
+                            "person1" : {
+                              "resource" : "#father1"
+                            },
+                            "person2" : {
+                              "resource" : "#primaryPerson"
+                            }
+                          }, {
+                            "type" : "http://gedcomx.org/ParentChild",
+                            "person1" : {
+                              "resource" : "#mother1"
+                            },
+                            "person2" : {
+                              "resource" : "#primaryPerson"
+                            }
+                          }, {
+                            "type" : "http://gedcomx.org/Couple",
+                            "person1" : {
+                              "resource" : "#primaryPerson"
+                            },
+                            "person2" : {
+                              "resource" : "#spouse1"
+                            }
+                          }, {
+                            "type" : "http://gedcomx.org/ParentChild",
+                            "person1" : {
+                              "resource" : "#primaryPerson"
+                            },
+                            "person2" : {
+                              "resource" : "#child1"
+                            }
+                          } ],
+                          "sourceDescriptions" : [ {
+                            "id" : "sd1",
+                            "about" : "#primaryPerson",
+                            "identifiers" : {
+                              "http://gedcomx.org/Persistent" : [ "#sd1" ]
+                            }
+                          } ]
+                        };
+/* {
+                          "description" : "#sd1",
+                          "persons" : [ {
+                            "id" : "primaryPerson",
+                            "names" : [ {
+                              "type" : "http://gedcomx.org/BirthName",
+                              "nameForms" : [ {
+                                "fullText" : "Israel Heaton~"
+                              } ]
+                            } ]
+                          } ],
+                          "sourceDescriptions" : [ {
+                            "id" : "sd1",
+                            "about" : "#primaryPerson",
+                            "identifiers" : {
+                              "http://gedcomx.org/Persistent" : [ "#sd1" ]
+                            }
+                          } ]
+                        }; */
+
+
+
+                    fsAPI.post('/platform/tree/matches', {
+                        headers: { Accept: 'application/x-gedcomx-atom+json', 'Content-Type': 'application/x-gedcomx-v1+json' },
+                        body: sampleData
+                    }, function( err, response ) {
 
                             $scope.searchResults = [];
                             $scope.searchContent = response.getContext();
@@ -275,18 +411,15 @@ angular.module( 'recordseekApp' )
                                 }
                             );
 
+                        },
+                        // catch for errors
+                        function( e ) {
+                            $rootScope.log( e );
+                            $rootScope.log( 'there' );
+                            $scope.searchResults = [];
+                            $rootScope.safeApply();
                         }
-                    )
-
-                    // Catch any errors
-                        .catch(
-                            function( e ) {
-                                $rootScope.log( e );
-                                $rootScope.log( 'there' );
-                                $scope.searchResults = [];
-                                $rootScope.safeApply();
-                            }
-                        );
+                    );
 
 
                 }
