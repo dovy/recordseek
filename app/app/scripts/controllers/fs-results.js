@@ -211,54 +211,14 @@ angular.module( 'recordseekApp' )
 
                     $rootScope.log( cleanSearchData );
 
-                    var sampleData =  {
+                    var sampleData = {
                           "description" : "#sd1",
                           "persons" : [ {
                             "id" : "primaryPerson",
-                            "gender" : {
-                              "type" : "http://gedcomx.org/Male"
-                            },
                             "names" : [ {
                               "type" : "http://gedcomx.org/BirthName",
                               "nameForms" : [ {
                                 "fullText" : "Israel Heaton"
-                              } ]
-                            } ],
-                            "facts" : [ {
-                              "type" : "http://gedcomx.org/Birth",
-                              "date" : {
-                                "original" : "30 January 1880"
-                              },
-                              "place" : {
-                                "original" : "Orderville, UT"
-                              }
-                            }, {
-                              "type" : "http://gedcomx.org/Death",
-                              "date" : {
-                                "original" : "29 August 1936"
-                              },
-                              "place" : {
-                                "original" : "Kanab, Kane, UT"
-                              }
-                            } ]
-                          }, {
-                            "id" : "father1",
-                            "gender" : {
-                              "type" : "http://gedcomx.org/Male"
-                            },
-                            "names" : [ {
-                              "nameForms" : [ {
-                                "fullText" : "Jonathan Heaton"
-                              } ]
-                            } ]
-                          }, {
-                            "id" : "mother1",
-                            "gender" : {
-                              "type" : "http://gedcomx.org/Female"
-                            },
-                            "names" : [ {
-                              "nameForms" : [ {
-                                "fullText" : "Clarissa Hoyt"
                               } ]
                             } ]
                           }, {
@@ -271,34 +231,8 @@ angular.module( 'recordseekApp' )
                                 "fullText" : "Charlotte Cox"
                               } ]
                             } ]
-                          }, {
-                            "id" : "child1",
-                            "gender" : {
-                              "type" : "http://gedcomx.org/Male"
-                            },
-                            "names" : [ {
-                              "nameForms" : [ {
-                                "fullText" : "Alma Heaton"
-                              } ]
-                            } ]
-                          } ],
+                          }],
                           "relationships" : [ {
-                            "type" : "http://gedcomx.org/ParentChild",
-                            "person1" : {
-                              "resource" : "#father1"
-                            },
-                            "person2" : {
-                              "resource" : "#primaryPerson"
-                            }
-                          }, {
-                            "type" : "http://gedcomx.org/ParentChild",
-                            "person1" : {
-                              "resource" : "#mother1"
-                            },
-                            "person2" : {
-                              "resource" : "#primaryPerson"
-                            }
-                          }, {
                             "type" : "http://gedcomx.org/Couple",
                             "person1" : {
                               "resource" : "#primaryPerson"
@@ -306,15 +240,7 @@ angular.module( 'recordseekApp' )
                             "person2" : {
                               "resource" : "#spouse1"
                             }
-                          }, {
-                            "type" : "http://gedcomx.org/ParentChild",
-                            "person1" : {
-                              "resource" : "#primaryPerson"
-                            },
-                            "person2" : {
-                              "resource" : "#child1"
-                            }
-                          } ],
+                          }],
                           "sourceDescriptions" : [ {
                             "id" : "sd1",
                             "about" : "#primaryPerson",
@@ -322,27 +248,8 @@ angular.module( 'recordseekApp' )
                               "http://gedcomx.org/Persistent" : [ "#sd1" ]
                             }
                           } ]
-                        };
-/* {
-                          "description" : "#sd1",
-                          "persons" : [ {
-                            "id" : "primaryPerson",
-                            "names" : [ {
-                              "type" : "http://gedcomx.org/BirthName",
-                              "nameForms" : [ {
-                                "fullText" : "Israel Heaton~"
-                              } ]
-                            } ]
-                          } ],
-                          "sourceDescriptions" : [ {
-                            "id" : "sd1",
-                            "about" : "#primaryPerson",
-                            "identifiers" : {
-                              "http://gedcomx.org/Persistent" : [ "#sd1" ]
-                            }
-                          } ]
-                        }; */
-
+                        }; 
+ 
 
 
                     fsAPI.post('/platform/tree/matches', {
