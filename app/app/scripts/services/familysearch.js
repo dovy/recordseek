@@ -53,9 +53,9 @@ angular.module( 'recordseekApp' )
                             appKey: this.client_id,
                             environment: this.environment,
                             redirectUri: this.redirect_uri,
+                            saveAccessToken: true,
                             http_function: $http,
                             deferred_function: $q.defer,
-                            saveAccessToken: true,
                             auto_expire: true,
                             timeout_function: $timeout,
                             expire_callback: function( FS ) {
@@ -64,7 +64,6 @@ angular.module( 'recordseekApp' )
                                 // Don't redirect if we already have a code!
                                 if ( !urlParams || ( urlParams && !urlParams.code && !urlParams.state ) ) {
                                     var url = FS.helpers.removeQueryString( document.URL );
-
                                     if ( $rootScope.data.sourceDescription && $rootScope.data.sourceDescription.id != '' ) {
                                         $rootScope.personData.sourceDescription = {
                                             id: $rootScope.data.sourceDescription.id
@@ -91,24 +90,34 @@ angular.module( 'recordseekApp' )
                     let that = this;
                     this.client.displayUser = function( $scope ) {
                         if ( !$rootScope.user ) {
+                            console.log(that.client.getAccessToken());
                             if (that.client.getAccessToken()) {
-                                that.client.get('/platform/users/current', function(error, response){
-                                    if(error){
-                                        console.error(error);
+                                that.client.get('/platform/users/current', {
+                                    Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
+                                },
+                                function( error, userResponse ) {
+                                    if(error || userResponse.data.errors){
+                                        if (error) console.error(error);
+                                        if (userResponse.data.errors) 
+                                            userResponse.data.errors.forEach((error) => console.error(error));
+                                        // In case of any errors of current user, we first redirect user to homepage
+                                        location.href = that.client.oauthRedirectURL();
+                                        that.client.deleteAccessToken();
+
                                     } else {
-                                        if (response.data && response.data.users && response.data.users.length > 0) {
-                                            $rootScope.user = response.data.users[0];
+                                        if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
+                                            $rootScope.user = userResponse.data.users[0];
                                             $scope.user = $rootScope.user;
                                             $rootScope.log( $scope.user );
                                             $scope.$apply();
                                         }
                                     }
                                 });
+                                
                             } else {
                                 location.href = that.client.oauthRedirectURL();
                                 that.client.deleteAccessToken();
                             }
-                            // 
                         }
 
                         /*
@@ -172,27 +181,28 @@ angular.module( 'recordseekApp' )
                         return $rootScope.user;
                     }
 
-
                     this.urlParams = RecordSeek.helpers.decodeQueryString( document.URL );
+
                     // Check if we have a code and do what we should accordingly
-                    if ( this.urlParams.code && this.urlParams.state ) {
+                    if ( this.urlParams.code) {//&& this.urlParams.state ) {
+
                         $rootScope.status = 'Authenticating, please wait.';
                         $location.path( '/loading' );
-                        var redirect = this.urlParams.state.split( '#' );
-                        redirect = redirect[0] += '#/fs-source';
-                        fsAPI.oauthToken(params.code, function(error, tokenResponse){
-    
-                            // error will be set when there was a networking error (i.e. the request
-                            // didn't make it to the FS API or we didn't receive the response from the
-                            // API). If we did get a response then we still check the status code 
-                            // to make sure the user successfully signed in.
-                            if(error || tokenResponse.statusCode >= 400){
-                                $rootScope.log(error || restError(tokenResponse));
-                            }
-
-                            fsAPI.setAccessToken(tokenResponse.data.access_token);
-                            window.location = redirect;
-                        });
+                        var redirect = '#/fs-source';
+                        if (!this.client.getAccessToken()) {
+                            this.client.oauthToken(this.urlParams.code, function(error, tokenResponse){
+        
+                                // error will be set when there was a networking error (i.e. the request
+                                // didn't make it to the FS API or we didn't receive the response from the
+                                // API). If we did get a response then we still check the status code 
+                                // to make sure the user successfully signed in.
+                                if(error || tokenResponse.statusCode >= 400){
+                                    $rootScope.log(error || restError(tokenResponse));
+                                }
+                                that.client.setAccessToken(tokenResponse.data.access_token);
+                                window.location = redirect;
+                            });
+                        }
                     }
 /*                   
                     $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
