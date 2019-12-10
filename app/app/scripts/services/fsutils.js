@@ -74,7 +74,7 @@ angular.module( 'recordseekApp' )
                     data.push(
                         {
                             'pid': persons[i].id,
-                            'url': this.redirectURL( maybe(maybe(persons[i].links).person).href ),
+                            'url': this.redirectURL( persons[i].id ),
                             'name': persons[i].display.name,
                             'gender': persons[i].display.gender,
                             'data': persons[i]

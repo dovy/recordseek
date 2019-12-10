@@ -47,10 +47,10 @@ angular.module( 'recordseekApp' )
             return $rootScope.fsURL.replace("api.", "www.") + '/tree/person/details/' + $ID;
         }
 
+        /* Parent Helpers */
         service.getFathers = function() {
             let persons = this.getPersons();
             let parentIDs = this.getParentRelationshipIDs();
-            console.log(parentIDs);
             return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female") === false);
         }
 
@@ -63,6 +63,32 @@ angular.module( 'recordseekApp' )
         service.getParentRelationshipIDs = function() {
             let parentRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
             return _.map(parentRelationships, 'person1.resourceId');
+        }
+
+
+        /* Spouse Helpers */
+        service.getSpouses = function() {
+            let persons = this.getPersons();
+            let spouseIDs = this.getSpouseRelationshipIDs();
+            return _.filter(persons, (person) => spouseIDs.includes(person.id));
+        }
+
+        service.getSpouseRelationshipIDs = function() {
+            let spouseRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid);
+            return _.map(spouseRelationships, 'person1.resourceId');
+        }
+
+
+        /* Children Helpers */
+        service.getChildren = function() {
+            let persons = this.getPersons();
+            let childrenIDs = this.getChildrenRelationshipIDs();
+            return _.filter(persons, (person) => childrenIDs.includes(person.id));
+        }
+
+        service.getChildrenRelationshipIDs = function() {
+            let childrenRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
+            return _.map(childrenRelationships, 'person2.resourceId');
         }
         return service;
     }

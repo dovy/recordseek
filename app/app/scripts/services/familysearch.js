@@ -117,13 +117,13 @@ angular.module( 'recordseekApp' )
                                 that.client.deleteAccessToken();
                             }
                         }
+                        console.log($rootScope);
 
-                        /*
-                        if ( !$rootScope.sourcebox ) {
+                        if ( !$rootScope.sourcebox && $rootScope.user && $rootScope.user.personId ) {
                             $scope.getSourceBoxes = true;
                             $rootScope.data.sourcebox = "";
                             $scope.sourcebox = {'Home (Unorganized)': '', 'RecordSeek': 'CREATE'}
-                            this.getCollectionsForUser().then(
+                            that.client.getCollectionsForUser().then(
                                 function( response ) {
                                     var collections = response.getCollections();
                                     var data = {};
@@ -153,8 +153,57 @@ angular.module( 'recordseekApp' )
                                 }
                             );
                         }
-                        */
+
                     }
+
+                    // create source description
+                    this.client.createSourceDescription = function(sourceDescriptionData) {
+                        let draft = {};
+                        if (sourceDescriptionData.about) draft.about = sourceDescriptionData.about;
+                        if (sourceDescriptionData.citation) {
+                            draft.citations = [];
+                            draft.citations.push({value: sourceDescriptionData.citation});
+                        }
+                        if (sourceDescriptionData.title) {
+                            draft.titles = [];
+                            draft.titles.push({value: sourceDescriptionData.title});
+                        }
+                        if (sourceDescriptionData.text) {
+                            draft.notes = [];
+                            draft.notes.push({text: sourceDescriptionData.text});
+                        }
+
+                        if (sourceDescriptionData.changeMessage) {
+                            draft.attribution = {};
+                            draft.attribution.changeMessage = sourceDescriptionData.changeMessage;
+                            if ($rootScope.user && $rootScope.user.id)
+                                draft.attribution.contributor = {"resource": "https://api.familysearch.org/platform/users/agents/" + $rootScope.user.id, "resourceId": $rootScope.user.id};
+                        }
+
+                        return new Promise(function(resolve, reject) {
+                            that.client.post('/platform/sources/descriptions', {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
+                                body: { sourceDescriptions: [draft] }
+                            }, function( error, response ) {
+                                return resolve(response);
+                            });
+                        });
+                    }
+
+
+                    // Create source box and return promise
+                    this.client.createCollection = function(collectionData) {
+                        let draft = {...collectionData};
+                        return new Promise((resolve, reject) => {
+                            that.client.post('/platform/sources/collections', {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
+                                body: { collections: [draft] }
+                            }, function( error, response ) {
+                                return resolve(response);
+                            });
+                        });
+                    }
+
 
                     this.client.completeLogout = function() {
                         this.client.deleteAccessToken();
@@ -162,11 +211,13 @@ angular.module( 'recordseekApp' )
                         $location.path( '/' );
                     }
 
+                    // Not sure it's called from somewhere, however made this function to be compatible with new library
                     this.client.user = function() {
                         if (!$rootScope.user) {
                             // Get the current user. From the user profile, extract the tree person id.
-                            that.client.get('/platform/users/current').then(
-                                function( error, userResponse ) {
+                            that.client.get('/platform/users/current', {
+                                    Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
+                                }, function( error, userResponse ) {
                                     if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
                                         $rootScope.user = userResponse.data.users[0];
                                         $scope.user = $rootScope.user;
@@ -177,6 +228,18 @@ angular.module( 'recordseekApp' )
                             )
                         }
                         return $rootScope.user;
+                    }
+
+                    // Get source folder collections for user.
+                    this.client.getCollectionsForUser = function() {
+                        return new Promise((resolve, reject) => {
+                            if (!$rootScope.user || !$rootScope.user.personId) reject(null);
+                            that.client.post('/platform/sources/' +  $rootScope.user.personId + '/collections', {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
+                            }, function( error, response ) {
+                                return resolve(response);
+                            });
+                        });
                     }
 
                     this.urlParams = RecordSeek.helpers.decodeQueryString( document.URL );

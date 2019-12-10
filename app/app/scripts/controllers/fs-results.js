@@ -255,18 +255,14 @@ angular.module( 'recordseekApp' )
                         } else {
                             for ( var i = 0, len = results.length; i < len; i++ ) {
                                 var result = results[i];
-                                console.log(result);
-                                //$rootScope.log( result );
                                 fsResult.setData(result);
                                 var primaryPerson = fsResult.getPrimaryPerson();
-                                //$rootScope.log( primaryPerson );
                                 var data = _.cloneDeep(primaryPerson);
                                 data.confidence = results[i].confidence;
                                 data.father = fsUtils.getRelativeData( fsResult.getFathers() );
                                 data.mother = fsUtils.getRelativeData( fsResult.getMothers() );
-                                console.log(data);
-                                // data.spouse = fsUtils.getRelativeData( result.getSpouses() );
-                                // data.children = fsUtils.getRelativeData( result.getChildren() );
+                                data.spouse = fsUtils.getRelativeData( fsResult.getSpouses() );
+                                data.children = fsUtils.getRelativeData( fsResult.getChildren() );
                                 $scope.searchResults.push(
                                     data
                                 );

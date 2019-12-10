@@ -62,37 +62,25 @@ angular.module( 'recordseekApp' )
                 if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
                     $scope.status = 'Generating Source';
 
-                    $rootScope.log(
-                        fsUtils.removeEmptyProperties(
-                            {
-                                about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
-                                citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
-                                title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
-                                text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
-                            }
-                        )
-                    );
+                    let draftSourceDescription = fsUtils.removeEmptyProperties(
+                    {
+                        about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : 'SOMEOTHER-ABOUT',
+                        citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : 'SOMEOTHER-citation',
+                        title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : 'SOMEOTHER-title',
+                        text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : 'SOMEOTHER-text',
+                        changeMessage: $rootScope.attachMsg.trim() ? $rootScope.attachMsg.trim() : 'CHANGED-message'
+                    });
 
-                    $rootScope.data.sourceDescription = fsAPI.createSourceDescription(
-                        fsUtils.removeEmptyProperties(
-                            {
-                                about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
-                                citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
-                                title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
-                                text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : ''
-                            }
-                        )
-                    );
-
-                    $rootScope.data.sourceDescription.save( $rootScope.attachMsg ).then(
+                    fsAPI.createSourceDescription(draftSourceDescription).then(
                         function( response ) {
                             $rootScope.track(
                                 {
                                     eventCategory: 'FamilySearch',
                                     eventAction: 'Source Created',
-                                    eventLabel: $rootScope.data.sourceDescription.getId()
+                                    eventLabel: response.headers['x-entity-id']
                                 }
                             );
+                            $rootScope.data.sourceDescriptionID = response.headers['x-entity-id'];
                             sourceFolder();
                         }
                     );
@@ -105,8 +93,8 @@ angular.module( 'recordseekApp' )
 
 
             function sourceFolder() {
-
-                if ( $rootScope.data.sourcebox == "" ) {
+                console.log($rootScope.data.sourcebox);
+                if ( !$rootScope.data.sourcebox || $rootScope.data.sourcebox == "" ) {
                     attachSource();
                     return;
                 }
@@ -114,9 +102,12 @@ angular.module( 'recordseekApp' )
                 $scope.status = 'Moving Source to Collection';
                 $rootScope.safeApply();
                 if ( $rootScope.data.sourcebox == "CREATE" ) {
-                    $rootScope.data.sourceboxfolder = fsAPI.createCollection(
+                    fsAPI.createCollection(
                         {'title': 'RecordSeek'}
-                    );
+                    ).then(function(response) {
+                        console.log(response);
+                    });
+                    /* 
                     $rootScope.data.sourceboxfolder.save( 'Created by http://recordseek.com/' ).then(
                         function( response ) {
                             $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
@@ -128,10 +119,10 @@ angular.module( 'recordseekApp' )
                                 }
                             );
                         }
-                    );
+                    ); */
                 } else {
                     fsAPI.moveSourceDescriptionsToCollection(
-                        $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescription.getId()]
+                        $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescriptionID]
                     ).then(
                         function( response ) {
                             attachSource();
