@@ -73,10 +73,10 @@ angular.module( 'recordseekApp' )
                     }
                     data.push(
                         {
-                            'pid': persons[i].getId(),
-                            'url': this.redirectURL( persons[i].getPersistentIdentifier() ),
-                            'name': persons[i].getDisplayName(),
-                            'gender': persons[i].getDisplayGender(),
+                            'pid': persons[i].id,
+                            'url': this.redirectURL( maybe(maybe(persons[i].links).person).href ),
+                            'name': persons[i].display.name,
+                            'gender': persons[i].display.gender,
                             'data': persons[i]
                         }
                     );

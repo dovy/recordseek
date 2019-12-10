@@ -50,17 +50,18 @@ angular.module( 'recordseekApp' )
         service.getFathers = function() {
             let persons = this.getPersons();
             let parentIDs = this.getParentRelationshipIDs();
-            return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.contains("Female") === false);
+            console.log(parentIDs);
+            return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female") === false);
         }
 
         service.getMothers = function() {
             let persons = this.getPersons();
             let parentIDs = this.getParentRelationshipIDs();
-            return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.contains("Female"));
+            return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female"));
         }
 
         service.getParentRelationshipIDs = function() {
-            let parentRelationships = _.filter(data.relationships, (relationship) => relationship.type.contains("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
+            let parentRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
             return _.map(parentRelationships, 'person1.resourceId');
         }
         return service;
