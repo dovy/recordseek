@@ -5,7 +5,7 @@
  * @returns {*} Original value or empty object
  */
 window.maybe = function(value) {
-  return value != null ? value : {}; // != null also covers undefined
+    return value != null ? value : {}; // != null also covers undefined
 };
 var RecordSeek = RecordSeek || {};
 RecordSeek.helpers = {
@@ -13,30 +13,30 @@ RecordSeek.helpers = {
         return (typeof str !== 'string');
     },
     decodeQueryString: function(url) {
-      var obj = {};
-      if (url) {
-        var pos = url.indexOf('?');
-        if (pos !== -1) {
-          var segments = url.substring(pos+1).split('&');
-          segments.forEach(function(segment) {
-            var kv = segment.split('=', 2);
-            if (kv && kv[0]) {
-              var key = decodeURIComponent(kv[0]);
-              var value = (kv[1] != null ? decodeURIComponent(kv[1]) : kv[1]); // catches null and undefined
-              if (obj[key] != null && !utils.isArray(obj[key])) {
-                obj[key] = [ obj[key] ];
-              }
-              if (obj[key] != null) {
-                obj[key].push(value);
-              }
-              else {
-                obj[key] = value;
-              }
+        var obj = {};
+        if (url) {
+            var pos = url.indexOf('?');
+            if (pos !== -1) {
+                var segments = url.substring(pos+1).split('&');
+                segments.forEach(function(segment) {
+                    var kv = segment.split('=', 2);
+                    if (kv && kv[0]) {
+                        var key = decodeURIComponent(kv[0]);
+                        var value = (kv[1] != null ? decodeURIComponent(kv[1]) : kv[1]); // catches null and undefined
+                        if (obj[key] != null && !utils.isArray(obj[key])) {
+                            obj[key] = [ obj[key] ];
+                        }
+                        if (obj[key] != null) {
+                            obj[key].push(value);
+                        }
+                        else {
+                            obj[key] = value;
+                        }
+                    }
+                });
             }
-          });
         }
-      }
-      return obj;
+        return obj;
     }
 };
 
@@ -98,9 +98,9 @@ angular
                 ga( 'create', 'UA-16096334-10' );
                 ga( 'send', 'pageview' );
                 try {
-                  Sentry.init({ dsn: 'https://446c24f6e25e4168b4d71a90cbf74794@sentry.io/105393' });
+                    Sentry.init({ dsn: 'https://446c24f6e25e4168b4d71a90cbf74794@sentry.io/105393' });
                 } catch(error) {
-                  console.error('Sentry failing');
+                    console.error('Sentry failing');
                 }
             }
 
@@ -176,7 +176,7 @@ angular
             if ( $rootScope.debug ) {
                 console.log( params );
             }
-/*
+
             if (params.code) {
                 if (fsAPI.getAccessToken()) {
                     // redirect to non params URL
@@ -203,7 +203,7 @@ angular
                     fsAPI.setAccessToken(tokenResponse.data.access_token);
 
                 });
-            }*/
+            }
 
             if ( params.tags ) {
                 var $todo = params.tags.split( ',' );
@@ -339,27 +339,27 @@ angular
                         var title = $rootScope.data.title.split('|')[0];
 
                         var split_key = '';
-	                    if ( $rootScope.data.title.includes('|')) {
-		                    split_key = '|';
-	                    } else if ( $rootScope.data.title.includes('—')) {
-		                    split_key = '—';
-	                    }
+                        if ( $rootScope.data.title.includes('|')) {
+                            split_key = '|';
+                        } else if ( $rootScope.data.title.includes('—')) {
+                            split_key = '—';
+                        }
 
                         if ( split_key != '' ) {
                             var title_split = $rootScope.data.title.split(split_key);
-	                        publisher = "<i>"+title_split[title_split.length-1]
-	                        title = title_split[0]
+                            publisher = "<i>"+title_split[title_split.length-1]
+                            title = title_split[0]
                             has_publisher = "</i>, "
                         }
                         $rootScope.data.citation = $formats[$rootScope.data.sourceFormat];
-	                    if ( title.includes('"') ) {
-		                    title = title.replace(new RegExp('"', 'g'), "'");
+                        if ( title.includes('"') ) {
+                            title = title.replace(new RegExp('"', 'g'), "'");
                         }
-	                    $rootScope.data.citation = $rootScope.data.citation.replace('{title}', title);
-	                    $rootScope.data.citation = $rootScope.data.citation.replace('{publisher}', publisher);
-	                    $rootScope.data.citation = $rootScope.data.citation.replace('{hasPublisher}', has_publisher);
-	                    $rootScope.data.citation = $rootScope.data.citation.replace('{url}', $rootScope.data.url);
-	                    $rootScope.data.citation = $rootScope.data.citation.replace('{time}', $rootScope.data.time);
+                        $rootScope.data.citation = $rootScope.data.citation.replace('{title}', title);
+                        $rootScope.data.citation = $rootScope.data.citation.replace('{publisher}', publisher);
+                        $rootScope.data.citation = $rootScope.data.citation.replace('{hasPublisher}', has_publisher);
+                        $rootScope.data.citation = $rootScope.data.citation.replace('{url}', $rootScope.data.url);
+                        $rootScope.data.citation = $rootScope.data.citation.replace('{time}', $rootScope.data.time);
 
                     }
 
