@@ -1,5 +1,12 @@
 'use strict';
-
+/**
+ * Return an empty object if passed in a null or undefined, similar to the maybe monad
+ * @param {*} value Value to test
+ * @returns {*} Original value or empty object
+ */
+window.maybe = function(value) {
+  return value != null ? value : {}; // != null also covers undefined
+};
 var RecordSeek = RecordSeek || {};
 RecordSeek.helpers = {
     isNotString: function( str ) {

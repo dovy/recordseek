@@ -10,7 +10,7 @@
 angular.module( 'recordseekApp' )
     .controller(
         'FsResultsCtrl',
-        ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', function( $rootScope, $location, $scope, fsAPI, fsUtils ) {
+        ['$rootScope', '$location', '$scope', 'fsAPI', 'fsUtils', 'fsResult', function( $rootScope, $location, $scope, fsAPI, fsUtils, fsResult ) {
             $rootScope.service = 'FamilySearch';
             $scope.currentPage = 1;
             $scope.bigTotalItems = 0;
@@ -211,122 +211,88 @@ angular.module( 'recordseekApp' )
 
                     $rootScope.log( cleanSearchData );
 
-                    var sampleData = {
-                          "description" : "#sd1",
-                          "persons" : [ {
-                            "id" : "primaryPerson",
-                            "names" : [ {
-                              "type" : "http://gedcomx.org/BirthName",
-                              "nameForms" : [ {
-                                "fullText" : "Israel Heaton"
-                              } ]
-                            } ]
-                          }, {
-                            "id" : "spouse1",
-                            "gender" : {
-                              "type" : "http://gedcomx.org/Female"
-                            },
-                            "names" : [ {
-                              "nameForms" : [ {
-                                "fullText" : "Charlotte Cox"
-                              } ]
-                            } ]
-                          }],
-                          "relationships" : [ {
-                            "type" : "http://gedcomx.org/Couple",
-                            "person1" : {
-                              "resource" : "#primaryPerson"
-                            },
-                            "person2" : {
-                              "resource" : "#spouse1"
-                            }
-                          }],
-                          "sourceDescriptions" : [ {
-                            "id" : "sd1",
-                            "about" : "#primaryPerson",
-                            "identifiers" : {
-                              "http://gedcomx.org/Persistent" : [ "#sd1" ]
-                            }
-                          } ]
-                        }; 
- 
+                    // Based on new search criteria, we prefix the search terms with "q."
+                    let queryString = '';
+                    for (const [term, value] of Object.entries(cleanSearchData)) {
+                        queryString += "q." + term + "=" + value + "&";
+                    }
+
+                    let start = ($scope.currentPage - 1) * 20;
 
 
-                    fsAPI.post('/platform/tree/matches', {
-                        headers: { Accept: 'application/x-gedcomx-atom+json', 'Content-Type': 'application/x-gedcomx-v1+json' },
-                        body: sampleData
+                    fsAPI.get('/platform/tree/search?' + queryString + 'count=20&offset=' + start, {
+                        headers: { Accept: 'application/x-gedcomx-atom+json', 'Content-Type': 'application/x-gedcomx-v1+json' }
                     }, function( err, response ) {
 
-                            $scope.searchResults = [];
-                            $scope.searchContent = response.getContext();
-                            var results = response.getSearchResults();
+                        $scope.searchResults = [];
+                        var results = response.data.entries;
 
-                            if ( results.length === 0 ) {
-                                $rootScope.log( 'EMPTY' );
-                                $rootScope.safeApply();
-                                return;
-                            }
+                        if ( results.length === 0 ) {
+                            $rootScope.log( 'EMPTY' );
+                            $rootScope.safeApply();
+                            return;
+                        }
 
-                            $scope.bigTotalItems = response.getResultsCount();
+                        $scope.bigTotalItems = response.data.results;
 
-                            //$scope.index = response.getIndex();
+                        if ( $scope.currentPage >= 26 ) {
+                            $scope.bigTotalItems = (26) * 15;
+                        }
 
-                            if ( $scope.currentPage >= 26 ) {
-                                $scope.bigTotalItems = (26) * 15;
-                            }
+                        if ( $scope.max > $scope.bigTotalItems ) {
+                            $scope.max = $scope.bigTotalItems;
+                        }
 
-                            if ( $scope.max > $scope.bigTotalItems ) {
-                                $scope.max = $scope.bigTotalItems;
-                            }
+                        //$scope.context = response.getContext();
 
-                            //$scope.context = response.getContext();
+                        $rootScope.log( 'Record length: ' + results.length );
 
-                            $rootScope.log( 'Record length: ' + results.length );
-
-                            if ( results.length == 0 ) {
+                        if ( results.length == 0 ) {
+                            $scope.searchResults.push(
+                                data
+                            );
+                            $rootScope.safeApply();
+                        } else {
+                            for ( var i = 0, len = results.length; i < len; i++ ) {
+                                var result = results[i];
+                                console.log(result);
+                                //$rootScope.log( result );
+                                fsResult.setData(result);
+                                var primaryPerson = fsResult.getPrimaryPerson();
+                                //$rootScope.log( primaryPerson );
+                                var data = _.cloneDeep(primaryPerson);
+                                data.confidence = results[i].confidence;
+                                data.father = fsUtils.getRelativeData( fsResult.getFathers() );
+                                data.mother = fsUtils.getRelativeData( fsResult.getMothers() );
+                                console.log(data);
+                                // data.spouse = fsUtils.getRelativeData( result.getSpouses() );
+                                // data.children = fsUtils.getRelativeData( result.getChildren() );
                                 $scope.searchResults.push(
                                     data
                                 );
                                 $rootScope.safeApply();
-                            } else {
-                                for ( var i = 0, len = results.length; i < len; i++ ) {
-                                    var result = results[i];
-                                    //$rootScope.log( result );
-                                    var primaryPerson = result.getPrimaryPerson();
-                                    //$rootScope.log( primaryPerson );
-                                    var data = fsUtils.getPrimaryPerson( primaryPerson );
-                                    data.confidence = results[i].confidence;
-                                    data.father = fsUtils.getRelativeData( result.getFathers() );
-                                    data.mother = fsUtils.getRelativeData( result.getMothers() );
-                                    data.spouse = fsUtils.getRelativeData( result.getSpouses() );
-                                    data.children = fsUtils.getRelativeData( result.getChildren() );
-                                    $scope.searchResults.push(
-                                        data
-                                    );
-                                    $rootScope.safeApply();
-                                }
-                                $rootScope.log( $scope.searchResults );
                             }
-
-
-                            $rootScope.track(
-                                {
-                                    eventCategory: 'FamilySearch',
-                                    eventAction: 'Search',
-                                    eventLabel: 'Results',
-                                    eventValue: results.length
-                                }
-                            );
-
-                        },
-                        // catch for errors
-                        function( e ) {
-                            $rootScope.log( e );
-                            $rootScope.log( 'there' );
-                            $scope.searchResults = [];
-                            $rootScope.safeApply();
+                            $rootScope.log( $scope.searchResults );
                         }
-                    );
+
+
+                        $rootScope.track(
+                            {
+                                eventCategory: 'FamilySearch',
+                                eventAction: 'Search',
+                                eventLabel: 'Results',
+                                eventValue: results.length
+                            }
+                        );
+
+                    },
+                    // catch for errors
+                    function( e ) {
+                        $rootScope.log( e );
+                        $rootScope.log( 'there' );
+                        $scope.searchResults = [];
+                        $rootScope.safeApply();
+                    });
 
 
                 }

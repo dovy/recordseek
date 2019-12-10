@@ -25,7 +25,6 @@ angular.module( 'recordseekApp' )
                 this.client_id = 'a0T3000000ByxnUEAR';
             } else {
                 this.client_id = 'S1M9-QH77-ZGJK-2HB1-MYZZ-6YN9-SBNQ-6YPS';
-                // return code = -40-937-4739-30-32-112-20-339107410-34-5-1273-30-1964385-2312199-58-797359-88-46
             }
 
             this.redirect_uri = document.location.origin;
@@ -90,7 +89,6 @@ angular.module( 'recordseekApp' )
                     let that = this;
                     this.client.displayUser = function( $scope ) {
                         if ( !$rootScope.user ) {
-                            console.log(that.client.getAccessToken());
                             if (that.client.getAccessToken()) {
                                 that.client.get('/platform/users/current', {
                                     Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
@@ -204,6 +202,7 @@ angular.module( 'recordseekApp' )
                             });
                         }
                     }
+                    $rootScope.fsURL = "https://api.familysearch.org";
 /*                   
                     $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
                     $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree';
