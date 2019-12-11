@@ -124,7 +124,8 @@ angular.module( 'recordseekApp' )
                             $scope.sourcebox = {'Home (Unorganized)': '', 'RecordSeek': 'CREATE'}
                             that.client.getCollectionsForUser().then(
                                 function( response ) {
-                                    var collections = response.getCollections();
+                                    var collections = [];
+                                    if (response && response.body) collections = response.body;
                                     var data = {};
                                     angular.forEach(
                                         collections, function( key ) {
@@ -193,6 +194,7 @@ angular.module( 'recordseekApp' )
                     // Create source box and return promise
                     this.client.createCollection = function(collectionData) {
                         let draft = {...collectionData};
+                        console.log("DRAFT in createCollection", draft);
                         return new Promise((resolve, reject) => {
                             that.client.post('/platform/sources/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
@@ -202,7 +204,6 @@ angular.module( 'recordseekApp' )
                             });
                         });
                     }
-
 
                     this.client.completeLogout = function() {
                         that.client.deleteAccessToken();
@@ -233,7 +234,7 @@ angular.module( 'recordseekApp' )
                     this.client.getCollectionsForUser = function() {
                         return new Promise((resolve, reject) => {
                             if (!$rootScope.user || !$rootScope.user.personId) reject(null);
-                            that.client.post('/platform/sources/' +  $rootScope.user.personId + '/collections', {
+                            that.client.get('/platform/sources/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                             }, function( error, response ) {
                                 return resolve(response);
@@ -241,11 +242,20 @@ angular.module( 'recordseekApp' )
                         });
                     }
 
-                    // TODO: Should be managed 
-                    this.client.moveSourceDescriptionsToCollection = function() {
+                    // Moving already created source descriptions to the specified folder(sourceBoxURL)
+                    this.client.moveSourceDescriptionsToCollection = function(sourceBoxURL, sourceDescription) {
+                        return new Promise((resolve, reject) => {
+                            that.client.post(sourceBoxURL, {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
+                                body: { sourceDescriptions: [sourceDescription] }
+                            }, function( error, response ) {
+                                return resolve(response);
+                            });
+                        });
 
                     }
 
+                    // attach created source description to the person
                     this.client.createPersonSourceRef = function(personPID, attribution, sourceDescriptionID, tags) {
                         let dataRequest = {
                                 "sources" : [ {

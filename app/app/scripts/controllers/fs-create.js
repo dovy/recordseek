@@ -64,13 +64,14 @@ angular.module( 'recordseekApp' )
 
                     let draftSourceDescription = fsUtils.removeEmptyProperties(
                     {
-                        about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : 'SOMEOTHER-ABOUT',
-                        citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : 'SOMEOTHER-citation',
-                        title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : 'SOMEOTHER-title',
-                        text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : 'SOMEOTHER-text',
-                        changeMessage: $rootScope.attachMsg.trim() ? $rootScope.attachMsg.trim() : 'CHANGED-message'
+                        about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
+                        citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
+                        title: $rootScope.data.title.trim() ? $rootScope.data.title.trim() : '',
+                        text: $rootScope.data.notes.trim() ? $rootScope.data.notes.trim() : '',
+                        changeMessage: $rootScope.attachMsg.trim() ? $rootScope.attachMsg.trim() : ''
                     });
 
+                    // To save the source description 
                     fsAPI.createSourceDescription(draftSourceDescription).then(
                         function( response ) {
                             $rootScope.track(
@@ -106,10 +107,9 @@ angular.module( 'recordseekApp' )
                     fsAPI.createCollection(
                         {'title': 'RecordSeek'}
                     ).then(function(response) {
-                        console.log(response);
-                        $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
+                        $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = response.headers.location;
                         fsAPI.moveSourceDescriptionsToCollection(
-                            $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescriptionID]
+                            $rootScope.data.sourcebox + '/descriptions', $rootScope.data.sourceDescription
                         ).then(
                             function( response ) {
                                 attachSource();
@@ -118,7 +118,7 @@ angular.module( 'recordseekApp' )
                     });
                 } else {
                     fsAPI.moveSourceDescriptionsToCollection(
-                        $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescriptionID]
+                        $rootScope.data.sourcebox + '/descriptions', $rootScope.data.sourceDescription
                     ).then(
                         function( response ) {
                             attachSource();
@@ -130,6 +130,8 @@ angular.module( 'recordseekApp' )
             }
 
 
+
+            // Final phase: attach a created source to a person.
             function attachSource() {
 
                 // We're just saving the source
@@ -168,7 +170,6 @@ angular.module( 'recordseekApp' )
 
                 fsAPI.createPersonSourceRef($rootScope.data.attach.pid, attribution, $rootScope.data.sourceDescription.id, $tags).then(
                     function( response ) {
-                        console.log(response);
                         let id = response.headers['x-entity-id'];
                         $rootScope.track(
                             {
