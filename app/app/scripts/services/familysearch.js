@@ -241,9 +241,30 @@ angular.module( 'recordseekApp' )
                         });
                     }
 
+                    // TODO: Should be managed 
                     this.client.moveSourceDescriptionsToCollection = function() {
 
                     }
+
+                    this.client.createPersonSourceRef = function(personPID, attribution, sourceDescriptionID, tags) {
+                        let dataRequest = {
+                                "sources" : [ {
+                                    "attribution" : attribution,
+                                    "description" : "https://api.familysearch.org/platform/sources/descriptions/" + sourceDescriptionID,
+                                    "tags" : tags
+                                } ]
+                            };
+                        return new Promise((resolve, reject) => {
+                            that.client.post('/platform/tree/persons/' + personPID, {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
+                                body: { persons: [dataRequest] }
+                            }, function( error, response ) {
+                                return resolve(response);
+                            });
+                        });
+                    }
+
+
 
                     this.urlParams = RecordSeek.helpers.decodeQueryString( document.URL );
 

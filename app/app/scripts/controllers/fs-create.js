@@ -80,7 +80,8 @@ angular.module( 'recordseekApp' )
                                     eventLabel: response.headers['x-entity-id']
                                 }
                             );
-                            $rootScope.data.sourceDescriptionID = response.headers['x-entity-id'];
+                            $rootScope.data.sourceDescription = draftSourceDescription;
+                            $rootScope.data.sourceDescription.id = response.headers['x-entity-id'];
                             sourceFolder();
                         }
                     );
@@ -108,7 +109,7 @@ angular.module( 'recordseekApp' )
                         console.log(response);
                         $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
                         fsAPI.moveSourceDescriptionsToCollection(
-                            $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescription.getId()]
+                            $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescriptionID]
                         ).then(
                             function( response ) {
                                 attachSource();
@@ -143,7 +144,6 @@ angular.module( 'recordseekApp' )
                     return;
                 }
 
-
                 if ( $rootScope.data.sourceDescription ) {
                     if ( $rootScope.data.complete == 'noAttachment' ) {
                         delete $rootScope.data.attach;
@@ -158,59 +158,35 @@ angular.module( 'recordseekApp' )
                 $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
                 $rootScope.safeApply();
 
-                var $sourceRef = fsAPI.createSourceRef(
-                    {
-                        'attribution': {
-                            "changeMessage": "Created by http://RecordSeek.com"
-                        }
-                    }
-                )
-                    .setSourceDescription( $rootScope.data.sourceDescription )
-                    .setAttachedEntityId( $rootScope.data.attach.pid );
-
+                let attribution = { "changeMessage": $rootScope.data.attach.justification ? $rootScope.data.attach.justification : "Attached by RecordSeek" };
                 var $tags = [];
                 angular.forEach($rootScope.data.tags, function(value, key) {
                     if ( value === true ) {
                         this.push('http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ));
-                        //$sourceRef.addTag( 'http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ) )
                     }
-
                 }, $tags);
 
-                $sourceRef.setTags($tags);
-
-                // console.log($sourceRef);
-
-                fsAPI.getPerson( $rootScope.data.attach.pid ).then(
+                fsAPI.createPersonSourceRef($rootScope.data.attach.pid, attribution, $rootScope.data.sourceDescription.id, $tags).then(
                     function( response ) {
-
-                        var $person = response.getPerson();
-
-                        $sourceRef.save( $person.data.links.person.href, $rootScope.data.attach.justification )
-                            .then(
-                                function( response ) {
-                                    var id = $sourceRef.data.links['source-reference'].href.split( '?' )[0].split(
-                                        '/'
-                                    );
-                                    id = id[id.length - 1];
-                                    $rootScope.track(
-                                        {
-                                            eventCategory: 'FamilySearch',
-                                            eventAction: 'Source Attached',
-                                            eventLabel: id
-                                        }
-                                    );
-                                    $rootScope.data.complete = $rootScope.data.attach;
-                                    $rootScope.data.complete.sourceRef = id;
-                                    delete $rootScope.data.attach;
-                                    $location.path( '/fs-complete' );
-                                    $rootScope.safeApply();
-                                }
-                            );
+                        console.log(response);
+                        let id = response.headers['x-entity-id'];
+                        $rootScope.track(
+                            {
+                                eventCategory: 'FamilySearch',
+                                eventAction: 'Source Attached',
+                                eventLabel: id
+                            }
+                        );
+                        $rootScope.data.complete = $rootScope.data.attach;
+                        $rootScope.data.complete.sourceRef = id;
+                        delete $rootScope.data.attach;
+                        $location.path( '/fs-complete' );
+                        $rootScope.safeApply();
                     }
                 );
-                return;
 
+                return;
+/* 
                 var srcRef = fsAPI.createSourceRef(
                     {
                         sourceDescription: $rootScope.data.sourceDescription.getSourceDescriptionUrl()
@@ -237,6 +213,7 @@ angular.module( 'recordseekApp' )
                             $rootScope.safeApply();
                         }
                     );
+                    */
             }
 
             createSource();
