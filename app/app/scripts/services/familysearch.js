@@ -98,9 +98,9 @@ angular.module( 'recordseekApp' )
                                         if (error) console.error(error);
                                         if (userResponse.data.errors) 
                                             userResponse.data.errors.forEach((error) => console.error(error));
+                                        that.client.deleteAccessToken();
                                         // In case of any errors of current user, we first redirect user to homepage
                                         location.href = that.client.oauthRedirectURL();
-                                        that.client.deleteAccessToken();
 
                                     } else {
                                         if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
@@ -117,7 +117,6 @@ angular.module( 'recordseekApp' )
                                 that.client.deleteAccessToken();
                             }
                         }
-                        console.log($rootScope);
 
                         if ( !$rootScope.sourcebox && $rootScope.user && $rootScope.user.personId ) {
                             $scope.getSourceBoxes = true;
@@ -206,7 +205,7 @@ angular.module( 'recordseekApp' )
 
 
                     this.client.completeLogout = function() {
-                        this.client.deleteAccessToken();
+                        that.client.deleteAccessToken();
                         delete $rootScope.user;
                         $location.path( '/' );
                     }
@@ -240,6 +239,10 @@ angular.module( 'recordseekApp' )
                                 return resolve(response);
                             });
                         });
+                    }
+
+                    this.client.moveSourceDescriptionsToCollection = function() {
+
                     }
 
                     this.urlParams = RecordSeek.helpers.decodeQueryString( document.URL );

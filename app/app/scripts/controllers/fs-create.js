@@ -106,20 +106,15 @@ angular.module( 'recordseekApp' )
                         {'title': 'RecordSeek'}
                     ).then(function(response) {
                         console.log(response);
+                        $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
+                        fsAPI.moveSourceDescriptionsToCollection(
+                            $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescription.getId()]
+                        ).then(
+                            function( response ) {
+                                attachSource();
+                            }
+                        );
                     });
-                    /* 
-                    $rootScope.data.sourceboxfolder.save( 'Created by http://recordseek.com/' ).then(
-                        function( response ) {
-                            $rootScope.data.sourcebox = $rootScope.sourcebox['RecordSeek'] = $rootScope.data.sourceboxfolder.getCollectionUrl();
-                            fsAPI.moveSourceDescriptionsToCollection(
-                                $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescription.getId()]
-                            ).then(
-                                function( response ) {
-                                    attachSource();
-                                }
-                            );
-                        }
-                    ); */
                 } else {
                     fsAPI.moveSourceDescriptionsToCollection(
                         $rootScope.data.sourcebox + '/descriptions', [$rootScope.data.sourceDescriptionID]
