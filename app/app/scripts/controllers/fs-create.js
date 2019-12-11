@@ -83,6 +83,7 @@ angular.module( 'recordseekApp' )
                             );
                             $rootScope.data.sourceDescription = draftSourceDescription;
                             $rootScope.data.sourceDescription.id = response.headers['x-entity-id'];
+                            // console.log("UPDATED source description", $rootScope.data.sourceDescription);
                             sourceFolder();
                         }
                     );
@@ -95,7 +96,6 @@ angular.module( 'recordseekApp' )
 
 
             function sourceFolder() {
-                console.log($rootScope.data.sourcebox);
                 if ( !$rootScope.data.sourcebox || $rootScope.data.sourcebox == "" ) {
                     attachSource();
                     return;

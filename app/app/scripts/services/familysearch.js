@@ -87,6 +87,7 @@ angular.module( 'recordseekApp' )
                         }
                     );
                     let that = this;
+                    
                     this.client.displayUser = function( $scope ) {
                         if ( !$rootScope.user ) {
                             if (that.client.getAccessToken()) {
@@ -108,6 +109,7 @@ angular.module( 'recordseekApp' )
                                             $scope.user = $rootScope.user;
                                             $rootScope.log( $scope.user );
                                             $scope.$apply();
+                                            that.client.fetchCollections($scope);
                                         }
                                     }
                                 });
@@ -117,46 +119,52 @@ angular.module( 'recordseekApp' )
                                 that.client.deleteAccessToken();
                             }
                         }
-
-                        if ( !$rootScope.sourcebox && $rootScope.user && $rootScope.user.personId ) {
-                            $scope.getSourceBoxes = true;
-                            $rootScope.data.sourcebox = "";
-                            $scope.sourcebox = {'Home (Unorganized)': '', 'RecordSeek': 'CREATE'}
-                            that.client.getCollectionsForUser().then(
-                                function( response ) {
-                                    var collections = [];
-                                    if (response && response.body) collections = response.body;
-                                    var data = {};
-                                    angular.forEach(
-                                        collections, function( key ) {
-                                            if ( key.getTitle() != "" ) {
-                                                data[key.getTitle()] = key.getCollectionUrl();
-                                            }
-                                        }, data
-                                    );
-                                    if ( !data['RecordSeek'] ) {
-                                        data['RecordSeek'] = "CREATE";
-                                    }
-                                    var ordered = {
-                                        'Home (Unorganized)': ''
-                                    };
-                                    Object.keys( data ).sort().forEach(
-                                        function( key ) {
-                                            ordered[key] = data[key];
-                                        }
-                                    );
-
-                                    $rootScope.sourcebox = ordered;
-                                    $rootScope.log( $rootScope.sourcebox );
-                                    $scope.sourcebox = $rootScope.sourcebox;
-                                    $scope.getSourceBoxes = false;
-                                }
-                            );
-                        }
+                        that.client.fetchCollections($scope);
 
                     }
 
-                    // create source description
+                    that.client.fetchCollections = function($scope) {
+
+                        if ( !$rootScope.sourcebox && $rootScope.user && $rootScope.user.id && $rootScope.user.personId ) {
+                            $scope.getSourceBoxes = true;
+                            $rootScope.data.sourcebox = "";
+                            $scope.sourcebox = {'Home (Unorganized)': '', 'RecordSeek': 'CREATE'};
+
+                            that.client.get('/platform/sources/' + $rootScope.user.id +'/collections', {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
+                            }, function( error, response ) {
+                           
+                                var collections = [];
+                                if (response && response.data) collections = response.data.collections;
+                                var data = {};
+                                angular.forEach(
+                                    collections, function( key ) {
+                                        if ( key.title != "" ) {
+                                            data[key.title] = '/platform/sources/collections/' + key.id;
+                                        }
+                                    }, data
+                                );
+                                if ( !data['RecordSeek'] ) {
+                                    data['RecordSeek'] = "CREATE";
+                                }
+                                var ordered = {
+                                    'Home (Unorganized)': ''
+                                };
+                                Object.keys( data ).sort().forEach(
+                                    function( key ) {
+                                        ordered[key] = data[key];
+                                    }
+                                );
+
+                                $rootScope.sourcebox = ordered;
+                                $rootScope.log( $rootScope.sourcebox );
+                                $scope.sourcebox = $rootScope.sourcebox;
+                                $scope.getSourceBoxes = false;
+                            });
+                        }
+                    }
+
+                    // create source description: prepare request object from general object and send the request to create a source description
                     this.client.createSourceDescription = function(sourceDescriptionData) {
                         let draft = {};
                         if (sourceDescriptionData.about) draft.about = sourceDescriptionData.about;
@@ -307,6 +315,7 @@ angular.module( 'recordseekApp' )
                     $rootScope.fsAccessToken = this.client.settings.accessToken;                   
 */
                 }
+
                 return this.client;
             };
         }]

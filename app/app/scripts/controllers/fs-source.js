@@ -41,6 +41,7 @@ angular.module( 'recordseekApp' )
                 },
             };
 
+
             $scope.goNext = function() {
 
                 $location.path( '/fs-search' );
