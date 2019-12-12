@@ -19,7 +19,7 @@ angular.module( 'recordseekApp' )
             } else {
                 this.environment = 'beta';
             }
-		    this.environment = 'production';
+		    // this.environment = 'production';
 
             if ( this.environment === 'sandbox' ) {
                 this.client_id = 'a0T3000000ByxnUEAR';

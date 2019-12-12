@@ -95,7 +95,7 @@ angular
             $rootScope.helpers = RecordSeek.helpers;
             $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
-            $rootScope.debug = true; //fsAPI.settings.environment == 'production' ? false : true;
+            $rootScope.debug = fsAPI.settings.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
