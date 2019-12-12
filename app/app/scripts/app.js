@@ -95,7 +95,7 @@ angular
             $rootScope.helpers = RecordSeek.helpers;
             $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
-            $rootScope.debug = fsAPI.settings.environment == 'production' ? false : true;
+            $rootScope.debug = true; //fsAPI.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
@@ -201,7 +201,7 @@ angular
                     // API). If we did get a response then we still check the status code 
                     // to make sure the user successfully signed in.
                     if(error || tokenResponse.statusCode >= 400){
-                        $rootScope.log(error || restError(tokenResponse));
+                        console.log("From oauthToken", error || tokenResponse.statusCode);
                     }
 
                     fsAPI.setAccessToken(tokenResponse.data.access_token);

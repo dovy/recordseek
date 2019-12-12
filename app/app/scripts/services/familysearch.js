@@ -19,7 +19,7 @@ angular.module( 'recordseekApp' )
             } else {
                 this.environment = 'beta';
             }
-		    // this.environment = 'production';
+		    this.environment = 'production';
 
             if ( this.environment === 'sandbox' ) {
                 this.client_id = 'a0T3000000ByxnUEAR';
@@ -87,6 +87,11 @@ angular.module( 'recordseekApp' )
                         } else if(response.statusCode >= 500){
                             alert("Oops, it's not you, neither us, I suspect it is the problem of FamilySearch. Please try again.");
                             return true;
+                        } else if(response.statusCode == 401){
+                            that.client.deleteAccessToken();
+                            // In case of any errors of current user, we first redirect user to homepage
+                            location.href = that.client.oauthRedirectURL();
+                            return true;
                         } else if(response.statusCode >= 400){
                             alert('Oops, there should be something wrong with RecordSeek. Please contact the administrator.');
                             return true;
@@ -100,8 +105,10 @@ angular.module( 'recordseekApp' )
                                     Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                                 },
                                 function( error, userResponse ) {
-                                    if (that.client.handleError(error, userResponse))
+                                    if (that.client.handleError(error, userResponse)){
+
                                         return;
+                                    }
                                     
                                     if(error || userResponse.data.errors){
                                         if (error) console.error(error);
@@ -240,8 +247,10 @@ angular.module( 'recordseekApp' )
                             that.client.get('/platform/users/current', {
                                     Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                                 }, function( error, userResponse ) {
-                                    if (that.client.handleError(error, response))
+                                    if (that.client.handleError(error, response)) {
+                                        console.log(error, response);
                                         return;
+                                    }
                                     if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
                                         $rootScope.user = userResponse.data.users[0];
                                         $scope.user = $rootScope.user;
