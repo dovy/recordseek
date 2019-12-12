@@ -9,7 +9,7 @@
  */
 angular.module( 'recordseekApp' )
     .provider(
-        'fsAPI', ['_', function( _ ) {
+        'fsAPI', ['_', function( _) {
             /* jshint camelcase:false */
 
             //        this.environment = 'sandbox'; // production, sandbox, staging
@@ -58,7 +58,6 @@ angular.module( 'recordseekApp' )
                             auto_expire: true,
                             timeout_function: $timeout,
                             expire_callback: function( FS ) {
-                                console.log("Expire callback");
                                 var urlParams = FS.helpers.decodeQueryString( document.URL );
                                 // Don't redirect if we already have a code!
                                 if ( !urlParams || ( urlParams && !urlParams.code && !urlParams.state ) ) {
@@ -75,30 +74,40 @@ angular.module( 'recordseekApp' )
 
                                     redirect = FS.getOAuth2AuthorizeURL( url );
                                     window.location = redirect;
-                                    //FS.getOAuth2AuthorizeURL(
-                                    //    url
-                                    //).then(
-                                    //    function( url ) {
-                                    //        window.location = url;
-                                    //    }
-                                    //);
                                 }
                             }
                         }
                     );
                     let that = this;
                     
+                    this.client.handleError = function(error, response) {
+                        if (error) {
+                            alert("Network Error");
+                            return true;
+                        } else if(response.statusCode >= 500){
+                            alert("Oops, it's not you, neither us, I suspect it is the problem of FamilySearch. Please try again.");
+                            return true;
+                        } else if(response.statusCode >= 400){
+                            alert('Oops, there should be something wrong with RecordSeek. Please contact the administrator.');
+                            return true;
+                        }
+                        return false;
+                    }
                     this.client.displayUser = function( $scope ) {
-                        if ( !$rootScope.user ) {
+                        if (!$rootScope.user ) {
                             if (that.client.getAccessToken()) {
                                 that.client.get('/platform/users/current', {
                                     Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                                 },
                                 function( error, userResponse ) {
+                                    if (that.client.handleError(error, userResponse))
+                                        return;
+                                    
                                     if(error || userResponse.data.errors){
                                         if (error) console.error(error);
                                         if (userResponse.data.errors) 
                                             userResponse.data.errors.forEach((error) => console.error(error));
+
                                         that.client.deleteAccessToken();
                                         // In case of any errors of current user, we first redirect user to homepage
                                         location.href = that.client.oauthRedirectURL();
@@ -133,7 +142,8 @@ angular.module( 'recordseekApp' )
                             that.client.get('/platform/sources/' + $rootScope.user.id +'/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                             }, function( error, response ) {
-                           
+                                if (that.client.handleError(error, response))
+                                    return;
                                 var collections = [];
                                 if (response && response.data) collections = response.data.collections;
                                 var data = {};
@@ -193,6 +203,8 @@ angular.module( 'recordseekApp' )
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { sourceDescriptions: [draft] }
                             }, function( error, response ) {
+                                if (that.client.handleError(error, response))
+                                    return reject(error);
                                 return resolve(response);
                             });
                         });
@@ -208,6 +220,8 @@ angular.module( 'recordseekApp' )
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { collections: [draft] }
                             }, function( error, response ) {
+                                if (that.client.handleError(error, response))
+                                    return reject(error);
                                 return resolve(response);
                             });
                         });
@@ -226,6 +240,8 @@ angular.module( 'recordseekApp' )
                             that.client.get('/platform/users/current', {
                                     Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                                 }, function( error, userResponse ) {
+                                    if (that.client.handleError(error, response))
+                                        return;
                                     if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
                                         $rootScope.user = userResponse.data.users[0];
                                         $scope.user = $rootScope.user;
@@ -245,6 +261,8 @@ angular.module( 'recordseekApp' )
                             that.client.get('/platform/sources/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                             }, function( error, response ) {
+                                if (that.client.handleError(error, response))
+                                    return reject(error);
                                 return resolve(response);
                             });
                         });
@@ -257,6 +275,8 @@ angular.module( 'recordseekApp' )
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { sourceDescriptions: [sourceDescription] }
                             }, function( error, response ) {
+                                if (that.client.handleError(error, response))
+                                    return reject(error);
                                 return resolve(response);
                             });
                         });
@@ -277,6 +297,8 @@ angular.module( 'recordseekApp' )
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { persons: [dataRequest] }
                             }, function( error, response ) {
+                                if (that.client.handleError(error, response))
+                                    return reject(error);
                                 return resolve(response);
                             });
                         });
