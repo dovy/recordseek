@@ -145,7 +145,7 @@ angular.module( 'recordseekApp' )
                     fsAPI.get('/platform/tree/persons/' + cleanSearchDataSearch, {
                         headers: { 'Accept': 'application/x-gedcomx-v1+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( error, response ) {
-                        fsAPI.handleError(error, response);
+                        if (fsAPI.handleError(error, response) === true) return;
                         $scope.searchResults = [];
 
                         if ( response.data ) {
