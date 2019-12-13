@@ -11,17 +11,19 @@ angular.module( 'recordseekApp' )
     .factory(
     'fsResult', function( _, $q, $rootScope ) {
         var data = null;
+        var id = null;
         var primaryPerson = null;
         var service = {};
 
-        service.setData = function(response) {
-            data = _.cloneDeep(response);
+        service.setData = function(personID, input) {
+            id = personID;
+            data = _.cloneDeep(input);
         }
         service.getPrimaryPerson = function () {
             let persons = this.getPersons(data);
             if (!persons) return null;
             for (let person of persons) {
-                if (person.id === data.id) {
+                if (person.id === id) {
                     primaryPerson = {
                         'pid': person.id,
                         'name': person.display.name,
@@ -40,7 +42,7 @@ angular.module( 'recordseekApp' )
         }
 
         service.getPersons = function() {
-            return maybe(maybe(data.content).gedcomx).persons;
+            return data.persons;
         }
         
         service.redirectURL = function($ID) {
@@ -61,7 +63,7 @@ angular.module( 'recordseekApp' )
         }
 
         service.getParentRelationshipIDs = function() {
-            let parentRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
+            let parentRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
             return _.map(parentRelationships, 'person1.resourceId');
         }
 
@@ -74,7 +76,7 @@ angular.module( 'recordseekApp' )
         }
 
         service.getSpouseRelationshipIDs = function() {
-            let spouseRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid);
+            let spouseRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid);
             return _.map(spouseRelationships, 'person1.resourceId');
         }
 
@@ -87,7 +89,7 @@ angular.module( 'recordseekApp' )
         }
 
         service.getChildrenRelationshipIDs = function() {
-            let childrenRelationships = _.filter(data.content.gedcomx.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
+            let childrenRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
             return _.map(childrenRelationships, 'person2.resourceId');
         }
         return service;

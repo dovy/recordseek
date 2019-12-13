@@ -93,7 +93,7 @@ angular.module( 'recordseekApp' )
                             location.href = that.client.oauthRedirectURL();
                             return true;
                         } else if(response.statusCode >= 400){
-                            alert('Oops, there should be something wrong with RecordSeek. Please contact the administrator.');
+                            alert('Ouch, looks like another change happens in Family Search API. Please contact the administrator.');
                             return true;
                         }
                         return false;

@@ -92,18 +92,16 @@ angular.module( 'recordseekApp' )
 
                 if ( searchData.eventType ) {
                     if ( searchData.eventDateFrom && searchData.eventDateFrom !== '' ) {
-                        searchData.eventDate += searchData.eventDateFrom;
-                        if ( searchData.eventDateTo && searchData.eventDateTo !== '' && searchData.eventDateFrom !== searchData.eventDateTo ) {
-                            searchData.eventDate += '-' + searchData.eventDateTo;
-                        }
-                    } else if ( searchData.eventDateTo && searchData.eventDateTo !== '' ) {
-                        searchData.eventDate = searchData.eventDateTo;
+                        searchData[searchData.eventType + 'Date.from'] = "%2B" + searchData.eventDateFrom;
+                        $checks.push( searchData.eventType + 'Date.from' );
+                    } 
+                    if ( searchData.eventDateTo && searchData.eventDateTo !== '' ) {
+                        searchData[searchData.eventType + 'Date.to'] = "%2B" + searchData.eventDateTo;
+                        $checks.push( searchData.eventType + 'Date.to' );
                     }
 
                     searchData[searchData.eventType + 'Place'] = searchData.eventPlace;
-                    searchData[searchData.eventType + 'Date'] = String( searchData.eventDate ) + '~';
                     $checks.push( searchData.eventType + 'Place' );
-                    $checks.push( searchData.eventType + 'Date' );
                 }
 
                 var cleanSearchData = {};
@@ -144,55 +142,49 @@ angular.module( 'recordseekApp' )
 
                     var cleanSearchDataSearch = $rootScope.data.search.pid;
 
-                    fsAPI.getPerson(
-                        cleanSearchDataSearch, {
-                            persons: true,
-                        }
-                    ).then(
-                        function( response ) {
+                    fsAPI.get('/platform/tree/persons/' + cleanSearchDataSearch, {
+                        headers: { 'Accept': 'application/x-gedcomx-v1+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
+                    }, function( error, response ) {
+                        fsAPI.handleError(error, response);
+                        $scope.searchResults = [];
 
-                            $scope.searchResults = [];
+                        if ( response.data ) {
+                            $scope.bigTotalItems = $scope.max = 1;
+                            fsResult.setData($rootScope.data.search.pid, respone.data);
+                            var data = fsResult.getPrimaryPerson();
+                            data.confidence = 5;
 
-                            var primaryPerson = response.getPrimaryPerson();
-
-                            if ( primaryPerson ) {
-                                $scope.bigTotalItems = $scope.max = 1;
-                                var data = fsUtils.getPrimaryPerson( primaryPerson );
-
-                                data.confidence = 5;
-
-                                try {
-                                    data.father = fsUtils.getRelativeData( response.getFathers() );
-                                } catch ( err ) {
-                                    $rootScope.log( err );
-                                }
-
-                                try {
-                                    data.mother = fsUtils.getRelativeData( response.getMothers() );
-                                } catch ( err ) {
-                                    $rootScope.log( err );
-                                }
-
-                                try {
-                                    data.spouse = fsUtils.getRelativeData( response.getSpouses() );
-                                } catch ( err ) {
-                                    $rootScope.log( err );
-                                }
-
-                                try {
-                                    data.children = fsUtils.getRelativeData( response.getChildren() );
-                                } catch ( err ) {
-                                    $rootScope.log( err );
-                                }
-
-                                $scope.searchResults.push(
-                                    data
-                                );
-                                $scope.goNext( data.pid, data.name, data.url );
-
+                            try {
+                                data.father = fsUtils.getRelativeData( fsResult.getFathers() );
+                            } catch ( err ) {
+                                $rootScope.log( err );
                             }
+
+                            try {
+                                data.mother = fsUtils.getRelativeData( fsResult.getMothers() );
+                            } catch ( err ) {
+                                $rootScope.log( err );
+                            }
+
+                            try {
+                                data.spouse = fsUtils.getRelativeData( fsResult.getSpouses() );
+                            } catch ( err ) {
+                                $rootScope.log( err );
+                            }
+
+                            try {
+                                data.children = fsUtils.getRelativeData( fsResult.getChildren() );
+                            } catch ( err ) {
+                                $rootScope.log( err );
+                            }
+
+                            $scope.searchResults.push(
+                                data
+                            );
+                            $scope.goNext( data.pid, data.name, data.url );
+
                         }
-                    ).catch( // Catch any errors
+                    }).catch( // Catch any errors
                         function( e ) {
                             $rootScope.log( 'Error' );
                             $scope.searchResults = [];
@@ -221,13 +213,16 @@ angular.module( 'recordseekApp' )
 
 
                     fsAPI.get('/platform/tree/search?' + queryString + 'count=20&offset=' + start, {
-                        headers: { Accept: 'application/x-gedcomx-atom+json', 'Content-Type': 'application/x-gedcomx-v1+json' }
+                        headers: { 'Accept': 'application/x-gedcomx-atom+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( err, response ) {
 
+                        if (fsAPI.handleError(err, response) === true) {
+                            return;
+                        }
                         $scope.searchResults = [];
                         var results = response.data.entries;
 
-                        if ( results.length === 0 ) {
+                        if ( !results || results.length === 0 ) {
                             $rootScope.log( 'EMPTY' );
                             $rootScope.safeApply();
                             return;
@@ -254,8 +249,8 @@ angular.module( 'recordseekApp' )
                             $rootScope.safeApply();
                         } else {
                             for ( var i = 0, len = results.length; i < len; i++ ) {
-                                var result = results[i];
-                                fsResult.setData(result);
+                                var result = results[i].content.gedcomx;
+                                fsResult.setData(results[i].id, result);
                                 var primaryPerson = fsResult.getPrimaryPerson();
                                 var data = _.cloneDeep(primaryPerson);
                                 data.confidence = results[i].confidence;
