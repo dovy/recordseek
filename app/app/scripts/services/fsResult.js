@@ -53,17 +53,23 @@ angular.module( 'recordseekApp' )
         service.getFathers = function() {
             var persons = this.getPersons();
             var parentIDs = this.getParentRelationshipIDs();
-            return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female") === false);
+            return _.filter(persons, function (person) {
+                return parentIDs.includes(person.id) && person.gender.type.includes("Female") === false
+            });
         }
 
         service.getMothers = function() {
             var persons = this.getPersons();
             var parentIDs = this.getParentRelationshipIDs();
-            return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female"));
+            return _.filter(persons, function(person){
+                return parentIDs.includes(person.id) && person.gender.type.includes("Female")
+            });
         }
 
         service.getParentRelationshipIDs = function() {
-            var parentRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
+            var parentRelationships = _.filter(data.relationships, function(relationship) {
+                return relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid;
+            });
             return _.map(parentRelationships, 'person1.resourceId');
         }
 
@@ -72,11 +78,15 @@ angular.module( 'recordseekApp' )
         service.getSpouses = function() {
             var persons = this.getPersons();
             var spouseIDs = this.getSpouseRelationshipIDs();
-            return _.filter(persons, (person) => spouseIDs.includes(person.id));
+            return _.filter(persons, function(person) {
+                spouseIDs.includes(person.id)
+            });
         }
 
         service.getSpouseRelationshipIDs = function() {
-            var spouseRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid);
+            var spouseRelationships = _.filter(data.relationships, function (relationship){
+                return relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid;
+            });
             return _.map(spouseRelationships, 'person1.resourceId');
         }
 
@@ -85,11 +95,15 @@ angular.module( 'recordseekApp' )
         service.getChildren = function() {
             var persons = this.getPersons();
             var childrenIDs = this.getChildrenRelationshipIDs();
-            return _.filter(persons, (person) => childrenIDs.includes(person.id));
+            return _.filter(persons, function (person) {
+                return childrenIDs.includes(person.id);
+            });
         }
 
         service.getChildrenRelationshipIDs = function() {
-            var childrenRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
+            var childrenRelationships = _.filter(data.relationships, function (relationship) {
+                return (relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
+            });
             return _.map(childrenRelationships, 'person2.resourceId');
         }
         return service;

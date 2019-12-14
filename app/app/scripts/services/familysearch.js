@@ -223,7 +223,7 @@ angular.module( 'recordseekApp' )
                         var draft = {}
                         Object.assign(draft, {}, collectionData);
                         console.log("DRAFT in createCollection", draft);
-                        return new Promise((resolve, reject) => {
+                        return new Promise(function (resolve, reject)  {
                             that.client.post('/platform/sources/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { collections: [draft] }
@@ -266,7 +266,7 @@ angular.module( 'recordseekApp' )
 
                     // Get source folder collections for user.
                     this.client.getCollectionsForUser = function() {
-                        return new Promise((resolve, reject) => {
+                        return new Promise(function(resolve, reject) {
                             if (!$rootScope.user || !$rootScope.user.personId) reject(null);
                             that.client.get('/platform/sources/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
@@ -280,7 +280,7 @@ angular.module( 'recordseekApp' )
 
                     // Moving already created source descriptions to the specified folder(sourceBoxURL)
                     this.client.moveSourceDescriptionsToCollection = function(sourceBoxURL, sourceDescription) {
-                        return new Promise((resolve, reject) => {
+                        return new Promise(function(resolve, reject) {
                             that.client.post(sourceBoxURL, {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { sourceDescriptions: [sourceDescription] }
@@ -302,7 +302,7 @@ angular.module( 'recordseekApp' )
                                     "tags" : tags
                                 } ]
                             };
-                        return new Promise((resolve, reject) => {
+                        return new Promise(function(resolve, reject) {
                             that.client.post('/platform/tree/persons/' + personPID, {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
                                 body: { persons: [dataRequest] }
