@@ -113,7 +113,7 @@ angular.module( 'recordseekApp' )
                                     if(error || userResponse.data.errors){
                                         if (error) console.error(error);
                                         if (userResponse.data.errors) 
-                                            userResponse.data.errors.forEach((error) => console.error(error));
+                                            userResponse.data.errors.forEach(function (error) {console.error(error)});
 
                                         that.client.deleteAccessToken();
                                         // In case of any errors of current user, we first redirect user to homepage
