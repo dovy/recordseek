@@ -78,7 +78,7 @@ angular.module( 'recordseekApp' )
                             }
                         }
                     );
-                    let that = this;
+                    var that = this;
                     
                     this.client.handleError = function(error, response) {
                         if (error) {
@@ -183,7 +183,7 @@ angular.module( 'recordseekApp' )
 
                     // create source description: prepare request object from general object and send the request to create a source description
                     this.client.createSourceDescription = function(sourceDescriptionData) {
-                        let draft = {};
+                        var draft = {};
                         if (sourceDescriptionData.about) draft.about = sourceDescriptionData.about;
                         if (sourceDescriptionData.citation) {
                             draft.citations = [];
@@ -220,7 +220,8 @@ angular.module( 'recordseekApp' )
 
                     // Create source box and return promise
                     this.client.createCollection = function(collectionData) {
-                        let draft = {...collectionData};
+                        var draft = {}
+                        Object.assign(draft, {}, collectionData);
                         console.log("DRAFT in createCollection", draft);
                         return new Promise((resolve, reject) => {
                             that.client.post('/platform/sources/collections', {
@@ -294,7 +295,7 @@ angular.module( 'recordseekApp' )
 
                     // attach created source description to the person
                     this.client.createPersonSourceRef = function(personPID, attribution, sourceDescriptionID, tags) {
-                        let dataRequest = {
+                        var dataRequest = {
                                 "sources" : [ {
                                     "attribution" : attribution,
                                     "description" : "https://api.familysearch.org/platform/sources/descriptions/" + sourceDescriptionID,

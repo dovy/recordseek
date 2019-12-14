@@ -20,9 +20,9 @@ angular.module( 'recordseekApp' )
             data = _.cloneDeep(input);
         }
         service.getPrimaryPerson = function () {
-            let persons = this.getPersons(data);
+            var persons = this.getPersons(data);
             if (!persons) return null;
-            for (let person of persons) {
+            for (var person of persons) {
                 if (person.id === id) {
                     primaryPerson = {
                         'pid': person.id,
@@ -51,45 +51,45 @@ angular.module( 'recordseekApp' )
 
         /* Parent Helpers */
         service.getFathers = function() {
-            let persons = this.getPersons();
-            let parentIDs = this.getParentRelationshipIDs();
+            var persons = this.getPersons();
+            var parentIDs = this.getParentRelationshipIDs();
             return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female") === false);
         }
 
         service.getMothers = function() {
-            let persons = this.getPersons();
-            let parentIDs = this.getParentRelationshipIDs();
+            var persons = this.getPersons();
+            var parentIDs = this.getParentRelationshipIDs();
             return _.filter(persons, (person) => parentIDs.includes(person.id) && person.gender.type.includes("Female"));
         }
 
         service.getParentRelationshipIDs = function() {
-            let parentRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
+            var parentRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person2.resourceId === primaryPerson.pid);
             return _.map(parentRelationships, 'person1.resourceId');
         }
 
 
         /* Spouse Helpers */
         service.getSpouses = function() {
-            let persons = this.getPersons();
-            let spouseIDs = this.getSpouseRelationshipIDs();
+            var persons = this.getPersons();
+            var spouseIDs = this.getSpouseRelationshipIDs();
             return _.filter(persons, (person) => spouseIDs.includes(person.id));
         }
 
         service.getSpouseRelationshipIDs = function() {
-            let spouseRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid);
+            var spouseRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("Couple") && relationship.person2.resourceId === primaryPerson.pid);
             return _.map(spouseRelationships, 'person1.resourceId');
         }
 
 
         /* Children Helpers */
         service.getChildren = function() {
-            let persons = this.getPersons();
-            let childrenIDs = this.getChildrenRelationshipIDs();
+            var persons = this.getPersons();
+            var childrenIDs = this.getChildrenRelationshipIDs();
             return _.filter(persons, (person) => childrenIDs.includes(person.id));
         }
 
         service.getChildrenRelationshipIDs = function() {
-            let childrenRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
+            var childrenRelationships = _.filter(data.relationships, (relationship) => relationship.type.includes("ParentChild") && relationship.person1.resourceId === primaryPerson.pid);
             return _.map(childrenRelationships, 'person2.resourceId');
         }
         return service;

@@ -62,7 +62,7 @@ angular.module( 'recordseekApp' )
                 if ( !$rootScope.data.sourceDescription && $rootScope.data.url ) {
                     $scope.status = 'Generating Source';
 
-                    let draftSourceDescription = fsUtils.removeEmptyProperties(
+                    var draftSourceDescription = fsUtils.removeEmptyProperties(
                     {
                         about: $rootScope.data.url.trim() ? $rootScope.data.url.trim() : '',
                         citation: $rootScope.data.citation.trim() ? $rootScope.data.citation.trim() : '',
@@ -160,7 +160,7 @@ angular.module( 'recordseekApp' )
                 $scope.status = 'Attaching Source to ' + $rootScope.data.attach.name;
                 $rootScope.safeApply();
 
-                let attribution = { "changeMessage": $rootScope.data.attach.justification ? $rootScope.data.attach.justification : "Attached by RecordSeek" };
+                var attribution = { "changeMessage": $rootScope.data.attach.justification ? $rootScope.data.attach.justification : "Attached by RecordSeek" };
                 var $tags = [];
                 angular.forEach($rootScope.data.tags, function(value, key) {
                     if ( value === true ) {
@@ -170,7 +170,7 @@ angular.module( 'recordseekApp' )
 
                 fsAPI.createPersonSourceRef($rootScope.data.attach.pid, attribution, $rootScope.data.sourceDescription.id, $tags).then(
                     function( response ) {
-                        let id = response.headers['x-entity-id'];
+                        var id = response.headers['x-entity-id'];
                         $rootScope.track(
                             {
                                 eventCategory: 'FamilySearch',
