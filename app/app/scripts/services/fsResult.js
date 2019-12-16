@@ -23,7 +23,7 @@ angular.module( 'recordseekApp' )
             var persons = this.getPersons(data);
             if (!persons) return null;
 
-            for (idx in persons) {
+            for (var idx in persons) {
                 var person = persons[idx];
                 if (person.id === id) {
                     primaryPerson = {

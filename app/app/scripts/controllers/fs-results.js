@@ -205,10 +205,10 @@ angular.module( 'recordseekApp' )
 
                     // Based on new search criteria, we prefix the search terms with "q."
                     var queryString = '';
-
-                    Object.entries(cleanSearchData).forEach(function(obj) {
-                        queryString += "q." + obj.term + "=" + obj.value + "&";
-                    });
+                    for (var idx in cleanSearchData) {
+                        let obj = cleanSearchData[idx];
+                        queryString += "q." + idx + "=" + obj + "&";
+                    }
 
                     var start = ($scope.currentPage - 1) * 20;
 
