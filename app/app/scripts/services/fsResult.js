@@ -22,7 +22,9 @@ angular.module( 'recordseekApp' )
         service.getPrimaryPerson = function () {
             var persons = this.getPersons(data);
             if (!persons) return null;
-            for (var person of persons) {
+
+            for (idx in persons) {
+                var person = persons[idx];
                 if (person.id === id) {
                     primaryPerson = {
                         'pid': person.id,
