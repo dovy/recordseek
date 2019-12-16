@@ -69,8 +69,7 @@ angular
             'ngRoute',
             'ngSanitize',
             'ngTouch',
-            'ui.bootstrap',
-            'ui-notification'
+            'ui.bootstrap'
         ]
     )
     .run(
@@ -535,16 +534,6 @@ angular
         }]
     )
     .constant( '_', _ )
-    .config(function(NotificationProvider) {
-        NotificationProvider.setOptions({
-            startTop: 20,
-            startRight: 10,
-            verticalSpacing: 20,
-            horizontalSpacing: 20,
-            positionX: 'right',
-            positionY: 'bottom'
-        });
-    })
     .config(
         ["$provide", "$routeProvider", function( $provide, $routeProvider ) {
             $provide.decorator(
