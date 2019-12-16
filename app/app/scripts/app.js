@@ -190,8 +190,9 @@ angular
                             out.push(key + '=' + encodeURIComponent(params[key]));
                         }
                     }
-                    let origin = ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) ) ? document.location.origin : '';
-                    var url = origin + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                    var url = document.location.origin + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                    if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
+                        url = document.location.origin + "/shared/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
                     location.href = url;
                 }
                 fsAPI.oauthToken(params.code, function(error, tokenResponse){
@@ -214,8 +215,9 @@ angular
                             out.push(key + '=' + encodeURIComponent(params[key]));
                         }
                     }
-                    let origin = ( ( document.location.origin !== 'http://recordseek.com' && document.location.origin !== 'https://recordseek.com' ) ) ? document.location.origin : '';
-                    var url = origin + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                    var url = document.location.origin + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                    if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
+                        url = document.location.origin + "/shared/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
                     location.href = url;
 
                 });
