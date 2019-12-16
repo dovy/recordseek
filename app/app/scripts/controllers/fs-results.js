@@ -205,15 +205,14 @@ angular.module( 'recordseekApp' )
 
                     // Based on new search criteria, we prefix the search terms with "q."
                     var queryString = '';
-                    for (var idx in cleanSearchData) {
-                        let obj = cleanSearchData[idx];
-                        queryString += "q." + idx + "=" + obj + "&";
-                    }
-
+                    var paramsArary = _.map(Object.entries(cleanSearchData), function(item) {
+                        return "q." + item[0] + "=" + item[1];
+                    });
+                    queryString = paramsArary.join("&");
                     var start = ($scope.currentPage - 1) * 20;
 
 
-                    fsAPI.get('/platform/tree/search?' + queryString + 'count=20&offset=' + start, {
+                    fsAPI.get('/platform/tree/search?' + queryString + '&count=20&offset=' + start, {
                         headers: { 'Accept': 'application/x-gedcomx-atom+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( err, response ) {
 
