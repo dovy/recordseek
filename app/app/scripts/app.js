@@ -25,7 +25,7 @@ RecordSeek.helpers = {
                     if (kv && kv[0]) {
                         var key = decodeURIComponent(kv[0]);
                         var value = (kv[1] != null ? decodeURIComponent(kv[1]) : kv[1]); // catches null and undefined
-                        if (obj[key] != null && !utils.isArray(obj[key])) {
+                        if (obj[key] != null && !Array.isArray(obj[key])) {
                             obj[key] = [ obj[key] ];
                         }
                         if (obj[key] != null) {
@@ -39,7 +39,90 @@ RecordSeek.helpers = {
             }
         }
         return obj;
+    },
+    /**
+     * Append query parameters object to a url
+     * @param {string} url
+     * @param {Object} params
+     * @returns {String} url + query string
+     */
+    appendQueryParameters: function(url, params) {
+        var queryString = this.encodeQueryString(params);
+        if (queryString.length === 0) {
+            return url;
+        }
+        return url + (url.indexOf('?') >= 0 ? '&' : '?') + queryString;
+    },
+    /**
+     * Remove the query string from the url
+     * @param {string} url url
+     * @returns {string} url without query string
+     */
+    removeQueryString: function(url) {
+        if (url) {
+            var pos = url.indexOf('?');
+            if (pos !== -1) {
+                url = url.substring(0, pos);
+            }
+        }
+        return url;
+    },
+    /**
+     * Create a URL-encoded query string from an object
+     * @param {Object} params Parameters
+     * @returns {string} URL-encoded string
+     */
+    encodeQueryString: function(params) {
+        var arr = [];
+        this.forEach(params, function(value, key) {
+            key = encodeURIComponent(key);
+            var param;
+            if (Array.isArray(value)) {
+                param = _.map(value, function(elm) {
+                    //noinspection JSValidateTypes
+                    return key + '=' + encodeURIComponent(elm);
+                }).join('&');
+            }
+            else if (value != null) { // catches null and undefined
+                param = key + '=' + encodeURIComponent(value);
+            }
+            else {
+                param = key;
+            }
+            arr.push(param);
+        });
+        return arr.join('&');
+    },
+
+    /**
+     * borrowed from underscore.js
+     * @param {Array|Object} obj Object or array to iterate over
+     * @param {function(elm)} iterator Function to call
+     * @param {Object=} context Object for this
+     */
+    forEach: function(obj, iterator, context) {
+        if (obj == null) { // also catches undefined
+            return;
+        }
+        if (Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
+            obj.forEach(iterator, context);
+        } else if (obj.length === +obj.length) {
+            for (var i = 0, length = obj.length; i < length; i++) {
+                if (iterator.call(context, obj[i], i, obj) === {}) {
+                    return;
+                }
+            }
+        } else {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (iterator.call(context, obj[key], key, obj) === {}) {
+                        return;
+                    }
+                }
+            }
+        }
     }
+
 };
 
 if ( 'addEventListener' in document ) {
@@ -331,7 +414,7 @@ angular
                     // Clean up the Ancestry search URLs
                     if ( $rootScope.data.url && ( $rootScope.data.url.indexOf(
                             'www.ancestry.' ) > -1 || $rootScope.data.url.indexOf( 'search.ancestry.' ) > -1 ) ) {
-                        var urlData = fsAPI.helpers.decodeQueryString( $rootScope.data.url );
+                        var urlData = RecordSeek.helpers.decodeQueryString( $rootScope.data.url );
                         var $x = urlData['dbid'] ? 'dbid' : 'db';
                         var newURL = {
                             indiv: 'try',
@@ -339,8 +422,8 @@ angular
                         };
                         newURL[$x] = urlData[$x];
 
-                        $rootScope.data.url = fsAPI.helpers.appendQueryParameters(
-                            fsAPI.helpers.removeQueryString( $rootScope.data.url ), newURL
+                        $rootScope.data.url = RecordSeek.helpers.appendQueryParameters(
+                            RecordSeek.helpers.removeQueryString( $rootScope.data.url ), newURL
                         );
                     }
 
