@@ -127,9 +127,9 @@ angular
             $rootScope.logout = function() {
                 $rootScope.log( fsAPI );
                 if ( $rootScope.service === "FamilySearch" ) {
-                    fsAPI.deleteAccessToken();
-                    $rootScope.user = ""
-                    $location.path( '/' );
+                    fsAPI.completeLogout().then(function() {
+                        window.location.href = "/";
+                    });
                 }
             };
 
@@ -180,8 +180,8 @@ angular
             }
 
             if (params.code) {
-                if (fsAPI.getAccessToken()) {
-                    // redirect to non params URL
+                if (fsAPI.getAccessToken() && fsAPI.getAccessToken() != "undefined") {
+                    // redirect to non code URL
                     var out = [];
 
                     for (var key in params) {
@@ -202,6 +202,7 @@ angular
                     // to make sure the user successfully signed in.
                     if(error || tokenResponse.statusCode >= 400){
                         console.log("From oauthToken", error || tokenResponse.statusCode);
+                        return;
                     }
 
                     fsAPI.setAccessToken(tokenResponse.data.access_token);

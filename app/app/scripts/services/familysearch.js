@@ -32,9 +32,7 @@ angular.module( 'recordseekApp' )
             if ( document.location.origin !== 'http://localhost:9000' && document.location.origin !== 'http://localhost:9001' ) {
                 this.redirect_uri += '/share/';
             }
-            this.logout = function() {
-                // alert( 'Logout' )
-            }
+
 
             this.$get = function( $window, $http, $q, $timeout, $rootScope, $injector, $location ) {
                 if ( this.client_id && this.environment && this.redirect_uri ) {
@@ -88,9 +86,14 @@ angular.module( 'recordseekApp' )
                             alert("Oops, it's not you, neither us, I suspect it is the problem of FamilySearch. Please try again.");
                             return true;
                         } else if(response.statusCode == 401){
-                            that.client.deleteAccessToken();
-                            // In case of any errors of current user, we first redirect user to homepage
-                            location.href = that.client.oauthRedirectURL();
+                            if (that.client.getAccessToken() && that.client.getAccessToken() != "undefined")
+                                that.client.completeLogout().then(function () {
+                                    // In case of any errors of current user, we first redirect user to homepage
+                                    location.href = that.client.oauthRedirectURL();
+                                });
+                            else
+                                location.href = that.client.oauthRedirectURL();
+
                             return true;
                         } else if(response.statusCode >= 400){
                             alert('Ouch, looks like an another change in Family Search API. Please notify the administrator.');
@@ -100,13 +103,12 @@ angular.module( 'recordseekApp' )
                     }
                     this.client.displayUser = function( $scope ) {
                         if (!$rootScope.user ) {
-                            if (that.client.getAccessToken()) {
+                            if (that.client.getAccessToken() && that.client.getAccessToken() != "undefined") {
                                 that.client.get('/platform/users/current', {
                                     Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
                                 },
                                 function( error, userResponse ) {
                                     if (that.client.handleError(error, userResponse)){
-
                                         return;
                                     }
                                     
@@ -132,13 +134,13 @@ angular.module( 'recordseekApp' )
                                 
                             } else {
                                 location.href = that.client.oauthRedirectURL();
-                                that.client.deleteAccessToken();
                             }
                         }
                         that.client.fetchCollections($scope);
 
                     }
 
+                    // User Data: Folders
                     that.client.fetchCollections = function($scope) {
 
                         if ( !$rootScope.sourcebox && $rootScope.user && $rootScope.user.id && $rootScope.user.personId ) {
@@ -161,6 +163,7 @@ angular.module( 'recordseekApp' )
                                         }
                                     }, data
                                 );
+                                // Folder Handling
                                 if ( !data['RecordSeek'] ) {
                                     data['RecordSeek'] = "CREATE";
                                 }
@@ -236,9 +239,17 @@ angular.module( 'recordseekApp' )
                     }
 
                     this.client.completeLogout = function() {
-                        that.client.deleteAccessToken();
-                        delete $rootScope.user;
-                        $location.path( '/' );
+                        return new Promise(function (resolve, reject)  {
+                            that.client.post('/platform/logout', {
+                                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
+                            }, function( error, response) {
+                                that.client.deleteAccessToken();
+                                delete $rootScope.user;
+                                // if (that.client.handleError(error, response) == false) return resolve(response);
+                                if (error) return reject(error);
+                                return resolve(response);
+                            });
+                        });
                     }
 
                     // Not sure it's called from somewhere, however made this function to be compatible with new library
