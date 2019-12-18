@@ -290,17 +290,11 @@ angular
 
                     fsAPI.setAccessToken(tokenResponse.data.access_token);
 
-                    // redirect to non params URL
-                    var out = [];
 
-                    for (var key in params) {
-                        if (params.hasOwnProperty(key) && key !== 'code') {
-                            out.push(key + '=' + encodeURIComponent(params[key]));
-                        }
-                    }
-                    var url = document.location.origin + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                    var url = document.location.origin + "/#" + localStorage.getItem("url");
                     if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
-                        url = document.location.origin + "/share/#!/?" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                        url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
+                    localStorage.removeItem("url");
                     location.href = url;
 
                 });

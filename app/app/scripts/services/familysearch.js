@@ -77,6 +77,7 @@ angular.module( 'recordseekApp' )
                         }
                     );
                     var that = this;
+
                     
                     this.client.handleError = function(error, response) {
                         if (error) {
@@ -86,13 +87,23 @@ angular.module( 'recordseekApp' )
                             alert("Oops, it's not you, neither us, I suspect it is the problem of FamilySearch. Please try again.");
                             return true;
                         } else if(response.statusCode == 401){
+                            var split = document.URL.split( '#' );
+                            var params = $rootScope.helpers.decodeQueryString( split[0] );
+                            var out = [];
+
+                            for (var key in params) {
+                                if (params.hasOwnProperty(key) && key !== 'code') {
+                                    out.push(key + '=' + encodeURIComponent(params[key]));
+                                }
+                            }
+                            localStorage.setItem( "url",  ((split && split[1]) ? split[1] : '') + out.join('&'));
                             if (that.client.getAccessToken() && that.client.getAccessToken() != "undefined")
                                 that.client.completeLogout().then(function () {
                                     // In case of any errors of current user, we first redirect user to homepage
-                                    location.href = that.client.oauthRedirectURL();
+                                    location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');;
                                 });
                             else
-                                location.href = that.client.oauthRedirectURL();
+                                location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');;
 
                             return true;
                         } else if(response.statusCode >= 400){
@@ -118,8 +129,18 @@ angular.module( 'recordseekApp' )
                                             userResponse.data.errors.forEach(function (error) {console.error(error)});
 
                                         that.client.deleteAccessToken();
+                                        var split = document.URL.split( '#' );
+                                        var params = $rootScope.helpers.decodeQueryString( split[0] );
+                                        var out = [];
+
+                                        for (var key in params) {
+                                            if (params.hasOwnProperty(key) && key !== 'code') {
+                                                out.push(key + '=' + encodeURIComponent(params[key]));
+                                            }
+                                        }
+                                        localStorage.setItem( "url",  ((split && split[1]) ? split[1] : '') + out.join('&'));
                                         // In case of any errors of current user, we first redirect user to homepage
-                                        location.href = that.client.oauthRedirectURL();
+                                        location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
 
                                     } else {
                                         if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
@@ -131,9 +152,18 @@ angular.module( 'recordseekApp' )
                                         }
                                     }
                                 });
-                                
                             } else {
-                                location.href = that.client.oauthRedirectURL();
+                                var split = document.URL.split( '#' );
+                                var params = $rootScope.helpers.decodeQueryString( split[0] );
+                                var out = [];
+
+                                for (var key in params) {
+                                    if (params.hasOwnProperty(key) && key !== 'code') {
+                                        out.push(key + '=' + encodeURIComponent(params[key]));
+                                    }
+                                }
+                                localStorage.setItem( "url",  ((split && split[1]) ? split[1] : '') + out.join('&'));
+                                location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
                             }
                         }
                         that.client.fetchCollections($scope);
