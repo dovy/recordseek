@@ -96,14 +96,14 @@ angular.module( 'recordseekApp' )
                                     out.push(key + '=' + encodeURIComponent(params[key]));
                                 }
                             }
-                            localStorage.setItem( "url",  ((split && split[1]) ? split[1] : '') + out.join('&'));
+                            localStorage.setItem( "url",  out.join('&amp;') + "#" + ((split && split[1]) ? split[1] : ''));
                             if (that.client.getAccessToken() && that.client.getAccessToken() != "undefined")
                                 that.client.completeLogout().then(function () {
                                     // In case of any errors of current user, we first redirect user to homepage
-                                    location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');;
+                                    location.href = that.client.oauthRedirectURL();
                                 });
                             else
-                                location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');;
+                                location.href = that.client.oauthRedirectURL();
 
                             return true;
                         } else if(response.statusCode >= 400){
@@ -138,9 +138,9 @@ angular.module( 'recordseekApp' )
                                                 out.push(key + '=' + encodeURIComponent(params[key]));
                                             }
                                         }
-                                        localStorage.setItem( "url",  ((split && split[1]) ? split[1] : '') + out.join('&'));
+                                        localStorage.setItem( "url",  out.join('&amp;') + "#" + ((split && split[1]) ? split[1] : ''));
                                         // In case of any errors of current user, we first redirect user to homepage
-                                        location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                                        location.href = that.client.oauthRedirectURL();
 
                                     } else {
                                         if (userResponse.data && userResponse.data.users && userResponse.data.users.length > 0) {
@@ -162,8 +162,8 @@ angular.module( 'recordseekApp' )
                                         out.push(key + '=' + encodeURIComponent(params[key]));
                                     }
                                 }
-                                localStorage.setItem( "url",  ((split && split[1]) ? split[1] : '') + out.join('&'));
-                                location.href = that.client.oauthRedirectURL() + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                                localStorage.setItem( "url",  out.join('&amp;') + '#' + ((split && split[1]) ? split[1] : ''));
+                                location.href = that.client.oauthRedirectURL();
                             }
                         }
                         that.client.fetchCollections($scope);
@@ -364,7 +364,10 @@ angular.module( 'recordseekApp' )
 
                         $rootScope.status = 'Authenticating, please wait.';
                         $location.path( '/loading' );
-                        var redirect = '#/fs-source';
+                        var url = document.location.origin + localStorage.getItem("url") ? "?" + localStorage.getItem("url") : "/#!/fs-source";
+                        if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
+                            url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
+                        var redirect = url;
                         if (!this.client.getAccessToken()) {
                             this.client.oauthToken(this.urlParams.code, function(error, tokenResponse){
         

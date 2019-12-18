@@ -534,9 +534,10 @@ module.exports = function( grunt ) {
             'concat',
             'ngAnnotate',
             'copy:dist',
+            'uglify',
             'cdnify',
             'cssmin:dist',
-            'uglify',
+
             'filerev',
             'usemin',
             'htmlmin',

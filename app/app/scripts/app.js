@@ -19,7 +19,8 @@ RecordSeek.helpers = {
         if (url) {
             var pos = url.indexOf('?');
             if (pos !== -1) {
-                var segments = url.substring(pos+1).split('&');
+                var segments;
+                if (url.indexOf('amp;') > 0) segments = decodeURIComponent(url).substring(pos+1).split('&amp;'); else segments = decodeURIComponent(url).substring(pos+1).split('&');
                 segments.forEach(function(segment) {
                     var kv = segment.split('=', 2);
                     if (kv && kv[0]) {
@@ -264,17 +265,11 @@ angular
 
             if (params.code) {
                 if (fsAPI.getAccessToken() && fsAPI.getAccessToken() != "undefined") {
-                    // redirect to non code URL
-                    var out = [];
-
-                    for (var key in params) {
-                        if (params.hasOwnProperty(key) && key !== 'code') {
-                            out.push(key + '=' + encodeURIComponent(params[key]));
-                        }
-                    }
-                    var url = document.location.origin + "/#" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                    
+                    var url = document.location.origin + "/#" + localStorage.getItem("url");
                     if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
-                        url = document.location.origin + "/share/#!/?" + ((split && split[1]) ? split[1] : '') + out.join('&');
+                        url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
+
                     location.href = url;
                 }
                 fsAPI.oauthToken(params.code, function(error, tokenResponse){
@@ -290,11 +285,9 @@ angular
 
                     fsAPI.setAccessToken(tokenResponse.data.access_token);
 
-
                     var url = document.location.origin + "/#" + localStorage.getItem("url");
                     if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
                         url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
-                    localStorage.removeItem("url");
                     location.href = url;
 
                 });
