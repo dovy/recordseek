@@ -1,4 +1,4 @@
-<span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a ng-click="logout()">Not {{user.givenName}}?</a></span>
+<span class="pull-right ng-hide text-muted hello-user" ng-show="user">Hello {{user.displayName}}. <a class="logout" ng-click="logout()">Not {{user.givenName}}?</a></span>
 <h3>Search for an existing person</h3>
 <div class="row container-fluid">
     <form class="personSearch" ng-init="isDisabled = false" ng-submit="goNext()">
