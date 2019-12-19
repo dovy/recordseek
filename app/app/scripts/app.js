@@ -178,7 +178,7 @@ angular
             $rootScope.helpers = RecordSeek.helpers;
             $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
-            $rootScope.debug = fsAPI.environment == 'production' ? false : true;
+            $rootScope.debug = true; //fsAPI.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
@@ -266,11 +266,11 @@ angular
             if (params.code) {
                 if (fsAPI.getAccessToken() && fsAPI.getAccessToken() != "undefined") {
                     
-                    var url = document.location.origin + "/#" + localStorage.getItem("url");
+/*                     var url = document.location.origin + "/#" + localStorage.getItem("url");
                     if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
                         url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
 
-                    location.href = url;
+                    location.href = url; */
                 }
                 fsAPI.oauthToken(params.code, function(error, tokenResponse){
     
@@ -285,9 +285,11 @@ angular
 
                     fsAPI.setAccessToken(tokenResponse.data.access_token);
 
-                    var url = document.location.origin + "/#" + localStorage.getItem("url");
+
+
+                    var url = document.location.origin + "/#";
                     if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
-                        url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
+                        url = document.location.origin + "/share/#!/?";
                     location.href = url;
 
                 });
@@ -335,6 +337,7 @@ angular
 
             if ( params ) {
                 var obj = params;
+                console.log("Object", obj);
                 var personData = {};
                 var skip = [
                     'h1'
@@ -357,6 +360,21 @@ angular
                         }
                     }
                 }
+
+                // special handling for fs-source, to fill in the data from/to localStorage.
+                var sourceMaps = ['title', 'url', 'citation', 'notes'];
+                sourceMaps.forEach(function (key) {
+                    var localStorageValue = localStorage.getItem(key);
+                    if (!personData[key] && (!$rootScope.data || !$rootScope.data[key])) {
+                        if (localStorageValue && localStorageValue != "") {
+                            personData[key] = localStorageValue;
+                            obj[key] = localStorageValue;
+                        }
+                    } else {
+                        localStorage.setItem(key, personData[key]);
+                    }
+                });
+                
 
                 if ( !angular.equals( {}, personData ) ) {
                     $rootScope.log( personData );
@@ -424,6 +442,7 @@ angular
 
                         var publisher = '';
                         var has_publisher = '';
+                        if (! $rootScope.data.title )  $rootScope.data.title  = '';
                         var title = $rootScope.data.title.split('|')[0];
 
                         var split_key = '';

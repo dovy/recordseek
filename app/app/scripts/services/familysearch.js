@@ -255,7 +255,6 @@ angular.module( 'recordseekApp' )
                     this.client.createCollection = function(collectionData) {
                         var draft = {}
                         Object.assign(draft, {}, collectionData);
-                        console.log("DRAFT in createCollection", draft);
                         return new Promise(function (resolve, reject)  {
                             that.client.post('/platform/sources/collections', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
@@ -269,6 +268,7 @@ angular.module( 'recordseekApp' )
                     }
 
                     this.client.completeLogout = function() {
+                        localStorage.clear();
                         return new Promise(function (resolve, reject)  {
                             that.client.post('/platform/logout', {
                                 Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}

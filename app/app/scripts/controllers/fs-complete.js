@@ -13,6 +13,7 @@ angular.module( 'recordseekApp' )
     ['fsAPI', '$rootScope', '$scope', '$location', '$cookies', 'fsUtils', function( fsAPI, $rootScope, $scope, $location, $cookie, $fsUtils ) {
         $rootScope.service = 'FamilySearch';
         $cookie.remove( 'recordseek-auth' );
+        localStorage.clear();
         $scope.fsRedirect = function($url) {
             return $fsUtils.redirectURL($url);
         };
