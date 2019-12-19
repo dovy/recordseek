@@ -178,7 +178,8 @@ angular
             $rootScope.helpers = RecordSeek.helpers;
             $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
-            $rootScope.debug = true; //fsAPI.environment == 'production' ? false : true;
+            // $rootScope.debug = true; //fsAPI.environment == 'production' ? false : true;
+            $rootScope.debug = fsAPI.environment == 'production' ? false : true;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
@@ -272,16 +273,16 @@ angular
                             out.push(key + '=' + encodeURIComponent(params[key]));
                         }
                     }
-                    if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
+                    if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) )
                         url = document.location.origin + "/share/#!/?" + out.join('&amp;') + "#" + ((split && split[1]) ? split[1] : '');
                     location.href = 'http://localhost:9000/?' + out.join('&') + "#" + ((split && split[1]) ? split[1] : '');
 
                 }
                 fsAPI.oauthToken(params.code, function(error, tokenResponse){
-    
+
                     // error will be set when there was a networking error (i.e. the request
                     // didn't make it to the FS API or we didn't receive the response from the
-                    // API). If we did get a response then we still check the status code 
+                    // API). If we did get a response then we still check the status code
                     // to make sure the user successfully signed in.
                     if(error || tokenResponse.statusCode >= 400){
                         console.log("From oauthToken", error || tokenResponse.statusCode);
@@ -293,7 +294,7 @@ angular
 
 
                     var url = document.location.origin + "/#";
-                    if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
+                    if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) )
                         url = document.location.origin + "/share/#!/?";
                     location.href = url;
 
@@ -378,7 +379,7 @@ angular
                         localStorage.setItem(key, personData[key]);
                     }
                 });
-                
+
 
                 if ( !angular.equals( {}, personData ) ) {
                     $rootScope.log( personData );
