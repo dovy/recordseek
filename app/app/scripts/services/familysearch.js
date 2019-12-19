@@ -78,7 +78,7 @@ angular.module('recordseekApp')
               return true;
             } else if (response.statusCode >= 400) {
               if (response.body !== undefined && response.body) {
-                let the_errors = JSON.parse(response.body);
+                var the_errors = JSON.parse(response.body);
                 the_alert = 'The FamilySearch API returned the following error: \n' + the_errors.errors[0].stacktrace;
               } else {
                 the_alert = 'Ouch, looks like an another change in Family Search API. Please contact support and let us know!';
