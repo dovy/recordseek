@@ -65,6 +65,7 @@ angular.module('recordseekApp')
               the_alert = 'Network Error';
             } else if (response.statusCode >= 500) {
               the_alert = 'Oops, it\'s not you, neither us, I suspect it is the problem of FamilySearch. Please try again.';
+              hide_alert = undefined;
             } else if (response.statusCode == 401) {
               var split = document.URL.split('#');
               var params = $rootScope.helpers.decodeQueryString(split[0]);
