@@ -342,7 +342,6 @@ angular
 
             if ( params ) {
                 var obj = params;
-                console.log("Object", obj);
                 var personData = {};
                 var skip = [
                     'h1'

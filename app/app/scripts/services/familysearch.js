@@ -103,16 +103,6 @@ angular.module( 'recordseekApp' )
                                             userResponse.data.errors.forEach(function (error) {console.error(error)});
 
                                         that.client.deleteAccessToken();
-                                        var split = document.URL.split( '#' );
-                                        var params = $rootScope.helpers.decodeQueryString( split[0] );
-                                        var out = [];
-
-                                        for (var key in params) {
-                                            if (params.hasOwnProperty(key) && key !== 'code') {
-                                                out.push(key + '=' + encodeURIComponent(params[key]));
-                                            }
-                                        }
-                                        localStorage.setItem( "url",  out.join('&amp;') + "#" + ((split && split[1]) ? split[1] : ''));
                                         // In case of any errors of current user, we first redirect user to homepage
                                         location.href = that.client.oauthRedirectURL();
 
@@ -127,16 +117,6 @@ angular.module( 'recordseekApp' )
                                     }
                                 });
                             } else {
-                                var split = document.URL.split( '#' );
-                                var params = $rootScope.helpers.decodeQueryString( split[0] );
-                                var out = [];
-
-                                for (var key in params) {
-                                    if (params.hasOwnProperty(key) && key !== 'code') {
-                                        out.push(key + '=' + encodeURIComponent(params[key]));
-                                    }
-                                }
-                                localStorage.setItem( "url",  out.join('&amp;') + '#' + ((split && split[1]) ? split[1] : ''));
                                 location.href = that.client.oauthRedirectURL();
                             }
                         }
@@ -338,9 +318,9 @@ angular.module( 'recordseekApp' )
 
                         $rootScope.status = 'Authenticating, please wait.';
                         $location.path( '/loading' );
-                        var url = document.location.origin + localStorage.getItem("url") ? "?" + localStorage.getItem("url") : "/#!/fs-source";
+                        var url = document.location.origin + "/#!/fs-source";
                         if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
-                            url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
+                            url = document.location.origin + "/share/#!/fs-source";
                         var redirect = url;
                         if (!this.client.getAccessToken()) {
                             this.client.oauthToken(this.urlParams.code, function(error, tokenResponse){
