@@ -145,8 +145,8 @@ angular.module( 'recordseekApp' )
                     fsAPI.get('/platform/tree/persons/' + cleanSearchDataSearch, {
                         headers: { 'Accept': 'application/x-gedcomx-v1+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( error, response ) {
-                        if (fsAPI.handleError(error, response) === true) {
-                          response.data = null;
+                        if (fsAPI.handleError(error, response, false) === true) {
+                          delete response.data;
                         }
                         $scope.searchResults = [];
 
@@ -218,8 +218,10 @@ angular.module( 'recordseekApp' )
                         headers: { 'Accept': 'application/x-gedcomx-atom+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( err, response ) {
 
-                        if (fsAPI.handleError(err, response) === true) {
-                            return;
+                        if (fsAPI.handleError(err, response, false) === true) {
+                          $scope.searchResults = [];
+                          $rootScope.safeApply();
+                          return;
                         }
                         $scope.searchResults = [];
                         var results = response.data.entries;
@@ -282,7 +284,6 @@ angular.module( 'recordseekApp' )
                     // catch for errors
                     function( e ) {
                         $rootScope.log( e );
-                        $rootScope.log( 'there' );
                         $scope.searchResults = [];
                         $rootScope.safeApply();
                     });
