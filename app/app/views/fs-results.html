@@ -18,11 +18,11 @@
 
             </thead>
             <tbody style="max-height: {{windowHeight - 305}}px;">
-            <tr class="active rowNotice" class="ng-hide" ng-show="bigTotalItems">
+            <tr class="active rowNotice no-animate" class="ng-hide" ng-show="bigTotalItems">
                 <td colspan="5"><span class="pull-right">{{min}}-{{max}} of {{bigTotalItems}} results</span>
                 </th>
             </tr>
-            <tr class="loading" ng-hide="searchResults">
+            <tr class="loading no-animate" ng-hide="searchResults">
                 <td colspan="5"><i class="glyphicon glyphicon-time"></i></td>
             </tr>
             <tr class="loading ng-hide" ng-hide="!searchResults || searchResults.length > 0">
