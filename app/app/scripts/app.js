@@ -179,7 +179,7 @@ angular
             $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
             // $rootScope.debug = true; //fsAPI.environment == 'production' ? false : true;
-            $rootScope.debug = fsAPI.environment == 'production' ? false : true;
+            $rootScope.debug = location.hostname === "localhost" ? true : false;
 
             if ( !$rootScope.debug ) {
                 ga( 'create', 'UA-16096334-10' );
