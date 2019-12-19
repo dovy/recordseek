@@ -142,7 +142,7 @@ angular.module( 'recordseekApp' )
 
                     var cleanSearchDataSearch = $rootScope.data.search.pid;
 
-                    fsAPI.get('/platform/tree/persons/' + cleanSearchDataSearch, {
+                    var call = fsAPI.get('/platform/tree/persons/' + cleanSearchDataSearch, {
                         headers: { 'Accept': 'application/x-gedcomx-v1+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( error, response ) {
                         if (fsAPI.handleError(error, response, false) === true) {
@@ -186,14 +186,24 @@ angular.module( 'recordseekApp' )
                             $scope.goNext( data.pid, data.name, data.url );
 
                         }
-                    }).catch( // Catch any errors
+                    });
+                    if (call !== undefined) {
+                      call.catch( // Catch any errors
                         function( e ) {
-                            $rootScope.log( 'Error' );
-                            $scope.searchResults = [];
-                            $rootScope.safeApply();
-                            // $scope.$apply();
+                          $rootScope.log( 'Error' );
+                          $scope.searchResults = [];
+                          $rootScope.safeApply();
+                          // $scope.$apply();
                         }
-                    );
+                      );
+                    } else {
+                      $rootScope.log( 'Error' );
+                      $scope.searchResults = [];
+                      $rootScope.safeApply();
+                      // $scope.$apply();
+                    }
+
+
                 } else {
                     $rootScope.log( 'Non-PID Search' );
                     if ( $scope.searchContent ) {
