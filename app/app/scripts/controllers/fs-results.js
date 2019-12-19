@@ -201,6 +201,7 @@ angular.module( 'recordseekApp' )
                       $scope.searchResults = [];
                       $rootScope.safeApply();
                       // $scope.$apply();
+                      return;
                     }
 
 
