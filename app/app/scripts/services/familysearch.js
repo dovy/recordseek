@@ -54,26 +54,7 @@ angular.module( 'recordseekApp' )
                             http_function: $http,
                             deferred_function: $q.defer,
                             auto_expire: true,
-                            timeout_function: $timeout,
-                            expire_callback: function( FS ) {
-                                var urlParams = FS.helpers.decodeQueryString( document.URL );
-                                // Don't redirect if we already have a code!
-                                if ( !urlParams || ( urlParams && !urlParams.code && !urlParams.state ) ) {
-                                    var url = FS.helpers.removeQueryString( document.URL );
-                                    if ( $rootScope.data.sourceDescription && $rootScope.data.sourceDescription.id != '' ) {
-                                        $rootScope.personData.sourceDescription = {
-                                            id: $rootScope.data.sourceDescription.id
-                                        }
-                                    }
-
-                                    $rootScope.setCookie( 'recordseek-auth', angular.toJson( $rootScope.data ) );
-                                    url = FS.helpers.appendQueryParameters( url, {r: 1, '_': $rootScope.data['_']} );
-                                    $rootScope.log( url );
-
-                                    redirect = FS.getOAuth2AuthorizeURL( url );
-                                    window.location = redirect;
-                                }
-                            }
+                            timeout_function: $timeout
                         }
                     );
                     var that = this;
@@ -89,14 +70,7 @@ angular.module( 'recordseekApp' )
                         } else if(response.statusCode == 401){
                             var split = document.URL.split( '#' );
                             var params = $rootScope.helpers.decodeQueryString( split[0] );
-                            var out = [];
 
-                            for (var key in params) {
-                                if (params.hasOwnProperty(key) && key !== 'code') {
-                                    out.push(key + '=' + encodeURIComponent(params[key]));
-                                }
-                            }
-                            localStorage.setItem( "url",  out.join('&amp;') + "#" + ((split && split[1]) ? split[1] : ''));
                             if (that.client.getAccessToken() && that.client.getAccessToken() != "undefined")
                                 that.client.completeLogout().then(function () {
                                     // In case of any errors of current user, we first redirect user to homepage

@@ -212,7 +212,7 @@ angular
                 $rootScope.log( fsAPI );
                 if ( $rootScope.service === "FamilySearch" ) {
                     fsAPI.completeLogout().then(function() {
-                        window.location.href = "/";
+                        window.location.href = fsAPI.oauthRedirectURL();
                     });
                 }
             };
@@ -265,12 +265,17 @@ angular
 
             if (params.code) {
                 if (fsAPI.getAccessToken() && fsAPI.getAccessToken() != "undefined") {
-                    
-/*                     var url = document.location.origin + "/#" + localStorage.getItem("url");
+                    var out = [];
+                    var url = '';
+                    for (var key in params) {
+                        if (params.hasOwnProperty(key) && key !== 'code') {
+                            out.push(key + '=' + encodeURIComponent(params[key]));
+                        }
+                    }
                     if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
-                        url = document.location.origin + "/share/#!/?" + localStorage.getItem("url");
+                        url = document.location.origin + "/share/#!/?" + out.join('&amp;') + "#" + ((split && split[1]) ? split[1] : '');
+                    location.href = 'http://localhost:9000/?' + out.join('&') + "#" + ((split && split[1]) ? split[1] : '');
 
-                    location.href = url; */
                 }
                 fsAPI.oauthToken(params.code, function(error, tokenResponse){
     
