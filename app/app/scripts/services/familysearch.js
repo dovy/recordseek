@@ -59,9 +59,10 @@ angular.module( 'recordseekApp' )
                     );
                     var that = this;
 
-                    
+
                     this.client.handleError = function(error, response) {
                         if (error) {
+
                             alert("Network Error");
                             return true;
                         } else if(response.statusCode >= 500){
@@ -81,8 +82,13 @@ angular.module( 'recordseekApp' )
 
                             return true;
                         } else if(response.statusCode >= 400){
+                          if (response.body) {
+                            let the_errors = JSON.parse(response.body);
+                            alert('The FamilySearch API returned the following error: \n'+the_errors.errors[0].stacktrace);
+                          } else {
                             alert('Ouch, looks like an another change in Family Search API. Please notify the administrator.');
-                            return true;
+                          }
+                            return false;
                         }
                         return false;
                     }
@@ -96,10 +102,10 @@ angular.module( 'recordseekApp' )
                                     if (that.client.handleError(error, userResponse)){
                                         return;
                                     }
-                                    
+
                                     if(error || userResponse.data.errors){
                                         if (error) console.error(error);
-                                        if (userResponse.data.errors) 
+                                        if (userResponse.data.errors)
                                             userResponse.data.errors.forEach(function (error) {console.error(error)});
 
                                         that.client.deleteAccessToken();
@@ -319,15 +325,15 @@ angular.module( 'recordseekApp' )
                         $rootScope.status = 'Authenticating, please wait.';
                         $location.path( '/loading' );
                         var url = document.location.origin + "/#!/fs-source";
-                        if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) ) 
+                        if ( ( document.location.origin === 'http://recordseek.com' || document.location.origin === 'https://recordseek.com' ) )
                             url = document.location.origin + "/share/#!/fs-source";
                         var redirect = url;
                         if (!this.client.getAccessToken()) {
                             this.client.oauthToken(this.urlParams.code, function(error, tokenResponse){
-        
+
                                 // error will be set when there was a networking error (i.e. the request
                                 // didn't make it to the FS API or we didn't receive the response from the
-                                // API). If we did get a response then we still check the status code 
+                                // API). If we did get a response then we still check the status code
                                 // to make sure the user successfully signed in.
                                 if(error || tokenResponse.statusCode >= 400){
                                     $rootScope.log(error || restError(tokenResponse));
@@ -338,11 +344,11 @@ angular.module( 'recordseekApp' )
                         }
                     }
                     $rootScope.fsURL = "https://api.familysearch.org";
-/*                   
+/*
                     $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
                     $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree';
                     $rootScope.fsURL = this.client.settings.apiServer[this.client.settings.environment];
-                    $rootScope.fsAccessToken = this.client.settings.accessToken;                   
+                    $rootScope.fsAccessToken = this.client.settings.accessToken;
 */
                 }
 

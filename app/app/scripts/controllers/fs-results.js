@@ -94,7 +94,7 @@ angular.module( 'recordseekApp' )
                     if ( searchData.eventDateFrom && searchData.eventDateFrom !== '' ) {
                         searchData[searchData.eventType + 'Date.from'] = "%2B" + searchData.eventDateFrom;
                         $checks.push( searchData.eventType + 'Date.from' );
-                    } 
+                    }
                     if ( searchData.eventDateTo && searchData.eventDateTo !== '' ) {
                         searchData[searchData.eventType + 'Date.to'] = "%2B" + searchData.eventDateTo;
                         $checks.push( searchData.eventType + 'Date.to' );
@@ -145,12 +145,14 @@ angular.module( 'recordseekApp' )
                     fsAPI.get('/platform/tree/persons/' + cleanSearchDataSearch, {
                         headers: { 'Accept': 'application/x-gedcomx-v1+json', 'Authorization': 'Bearer ' + fsAPI.getAccessToken() }
                     }, function( error, response ) {
-                        if (fsAPI.handleError(error, response) === true) return;
+                        if (fsAPI.handleError(error, response) === true) {
+                          response.data = null;
+                        }
                         $scope.searchResults = [];
 
                         if ( response.data ) {
                             $scope.bigTotalItems = $scope.max = 1;
-                            fsResult.setData($rootScope.data.search.pid, respone.data);
+                            fsResult.setData($rootScope.data.search.pid, response.data);
                             var data = fsResult.getPrimaryPerson();
                             data.confidence = 5;
 
