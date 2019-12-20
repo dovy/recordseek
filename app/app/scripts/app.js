@@ -22,10 +22,11 @@ RecordSeek.helpers = {
                 var segments;
                 if (url.indexOf('amp;') > 0) segments = decodeURIComponent(url).substring(pos+1).split('&amp;'); else segments = decodeURIComponent(url).substring(pos+1).split('&');
                 segments.forEach(function(segment) {
+                    var posEqual = segment.indexOf('=');
                     var kv = segment.split('=', 2);
                     if (kv && kv[0]) {
                         var key = decodeURIComponent(kv[0]);
-                        var value = (kv[1] != null ? decodeURIComponent(kv[1]) : kv[1]); // catches null and undefined
+                        var value = (kv[1] != null ? decodeURIComponent(segment.substring(posEqual+1)) : kv[1]); // catches null and undefined
                         if (obj[key] != null && !Array.isArray(obj[key])) {
                             obj[key] = [ obj[key] ];
                         }
