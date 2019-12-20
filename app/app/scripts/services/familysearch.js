@@ -238,16 +238,19 @@ angular.module('recordseekApp')
             localStorage.clear();
             return new Promise(function (resolve, reject) {
               that.client.post('/platform/logout', {
-                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()}
+                Header: {'Authorization': 'Bearer ' + that.client.getAccessToken()},
               }, function (error, response) {
+                if (that.client.handleError(error, response) == false) {
+                  if (error) {
+                    return reject(error);
+                  }
+                }
                 that.client.deleteAccessToken();
                 delete $rootScope.user;
-                // if (that.client.handleError(error, response) == false) return resolve(response);
-                if (error) return reject(error);
                 return resolve(response);
               });
             });
-          }
+          };
 
           // Not sure it's called from somewhere, however made this function to be compatible with new library
           this.client.user = function () {
@@ -267,10 +270,10 @@ angular.module('recordseekApp')
                     $scope.$apply();
                   }
                 }
-              )
+              );
             }
             return $rootScope.user;
-          }
+          };
 
           // Get source folder collections for user.
           this.client.getCollectionsForUser = function () {
@@ -342,14 +345,14 @@ angular.module('recordseekApp')
                 // API). If we did get a response then we still check the status code
                 // to make sure the user successfully signed in.
                 if (error || tokenResponse.statusCode >= 400) {
-                  $rootScope.log(error || restError(tokenResponse));
+                  $rootScope.log(error);
                 }
                 that.client.setAccessToken(tokenResponse.data.access_token);
                 window.location = redirect;
               });
             }
           }
-          $rootScope.fsURL = "https://api.familysearch.org";
+          $rootScope.fsURL = 'https://api.familysearch.org';
           /*
                               $rootScope.sourceBoxURL = this.client.settings.apiServer[this.client.settings.environment] + '/links-pages/sourceBox';
                               $rootScope.treeViewURL = this.client.settings.apiServer[this.client.settings.environment] + '/tree/#view=tree';
