@@ -164,7 +164,7 @@ angular.module( 'recordseekApp' )
                 var $tags = [];
                 angular.forEach($rootScope.data.tags, function(value, key) {
                     if ( value === true ) {
-                        this.push('http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 ));
+                        this.push({'resource': 'http://gedcomx.org/' + key.charAt( 0 ).toUpperCase() + key.slice( 1 )});
                     }
                 }, $tags);
 
