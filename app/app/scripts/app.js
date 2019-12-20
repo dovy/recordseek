@@ -368,7 +368,7 @@ angular
                 }
 
                 // special handling for fs-source, to fill in the data from/to localStorage.
-                var sourceMaps = ['title', 'url', 'citation', 'notes'];
+                var sourceMaps = ['title', 'url', 'citation', 'notes', '_'];
                 sourceMaps.forEach(function (key) {
                     var localStorageValue = localStorage.getItem(key);
                     if (!personData[key] && (!$rootScope.data || !$rootScope.data[key])) {
