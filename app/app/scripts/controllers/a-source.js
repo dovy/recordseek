@@ -17,6 +17,11 @@ angular.module( 'recordseekApp' )
                 $rootScope.data.media_url = "";
             }
 
+            // Shim to fix Ancestry URLs
+            if ($rootScope.data.media_url === undefined) {
+              $rootScope.data.media_url = 'https://recordseek.com/assets/images/ancestry.jpg';
+            }
+
             $scope.goNext = function() {
                 if ( $rootScope.debug ) {
                     $cookie.remove( 'recordseek' );
@@ -33,7 +38,7 @@ angular.module( 'recordseekApp' )
                     "sourcePublishedLocation": "",
                     "sourcePublisherName": $rootScope.data.domain,
                     "sourceTitle": $rootScope.data.title
-                }
+                };
 
                 function htmlToPlaintext(text) {
                     return text ? String(text).replace(/<[^>]+>/gm, '') : '';
