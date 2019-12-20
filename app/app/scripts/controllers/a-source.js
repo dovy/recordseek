@@ -48,11 +48,15 @@ angular.module( 'recordseekApp' )
 
                 $rootScope.track( {eventCategory: 'Ancestry', eventAction: 'Source', eventLabel: $url} );
 
-
-
                 // $("form").get(0).setAttribute( "action", $url );
                 return false;
 
+            };
+
+            $scope.sourceFormats = $rootScope.sourceFormats;
+            $scope.sourceFormat = $rootScope.data.sourceFormat;
+            $scope.changeFormat= function() {
+              $rootScope.setCitationFormat($scope.sourceFormat);
             };
 
             $scope.goBack = function() {
