@@ -523,7 +523,7 @@ angular
           $rootScope.data.title = title;
 
           if (publisher === '') {
-            publisher = $rootScope.data.url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+            publisher = $rootScope.data.url.replace('http://','').replace('www.','').replace('https://','').split(/[/?#]/)[0].split('.')[0];
           }
           $rootScope.data.publisher = publisher;
 
