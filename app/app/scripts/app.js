@@ -513,7 +513,6 @@ angular
             title = title.replace(split_key + publisher, '');
             title = title.replace(split_key + ' ' + publisher, '').trim();
           }
-
           if (title.includes('"')) {
             title = title.replace(new RegExp('"', 'g'), "'");
           }
@@ -521,23 +520,15 @@ angular
             title = title.replace($rootScope.data.url, '');
           }
           $rootScope.data.title = title;
-
           if (publisher === '') {
             publisher = $rootScope.data.url.replace('http://','').replace('www.','').replace('https://','').split(/[/?#]/)[0].split('.')[0];
           }
-
-          const capitalize = (s) => {
-            if (typeof s !== 'string') return ''
-            return s.charAt(0).toUpperCase() + s.slice(1)
-          };
-
-          $rootScope.data.publisher = capitalize(publisher);
+          $rootScope.data.publisher = publisher.charAt(0).toUpperCase() + publisher.slice(1);
 
           // if ($rootScope.data.url && $rootScope.data.url.indexOf('billiongraves.com') > -1) {
           //           //   var $split = $rootScope.data.url.split('/');
           //           //   $rootScope.data.citation = '"Billion Graves Record," BillionGraves (' + $rootScope.data.url + ' accessed ' + $rootScope.data.time + '), ' + $rootScope.data.title + ' Record #' + $split[($split.length - 1)] + '. Citing BillionGraves, Headstones, BillionGraves.com.';
           //           // }
-
 
           if ($rootScope.data.url) {
             var $dSplit = $rootScope.data.url.split('//');
