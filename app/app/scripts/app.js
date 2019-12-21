@@ -525,7 +525,13 @@ angular
           if (publisher === '') {
             publisher = $rootScope.data.url.replace('http://','').replace('www.','').replace('https://','').split(/[/?#]/)[0].split('.')[0];
           }
-          $rootScope.data.publisher = publisher;
+
+          const capitalize = (s) => {
+            if (typeof s !== 'string') return ''
+            return s.charAt(0).toUpperCase() + s.slice(1)
+          };
+
+          $rootScope.data.publisher = capitalize(publisher);
 
           // if ($rootScope.data.url && $rootScope.data.url.indexOf('billiongraves.com') > -1) {
           //           //   var $split = $rootScope.data.url.split('/');
