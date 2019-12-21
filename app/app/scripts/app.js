@@ -229,7 +229,7 @@ angular
       $rootScope.sourceFormats = {
         'APA': '{title}. ({year}, {month_full} {date}). Retrieved from {url}',
         'Harvard - AGPS': '{title}. [online] Available at: <{url}> [Accessed {date} {month}. {year}]',
-        'MLA': '"{title}." {publisher}{hasPublisher}{url}. Accessed {date} {month}. {year}.',
+        'MLA': '"{title}." {publisher} {url}. Accessed {date} {month}. {year}.',
         'Chicago': '"{title}", {publisher}, accessed {month_full} {date}, {year}, {url}',
       };
       $rootScope.generateCitation = function() {
