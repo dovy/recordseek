@@ -485,7 +485,7 @@ angular
             var $x = urlData['dbid'] ? 'dbid' : 'db';
             var newURL = {
               indiv: 'try',
-              h: urlData['h'],
+              h: params['h'],
             };
             newURL[$x] = urlData[$x];
 
@@ -496,7 +496,7 @@ angular
 
           var publisher = '';
           if (!$rootScope.data.title) $rootScope.data.title = '';
-          var title = $rootScope.data.title.split('|')[0];
+          var title = $rootScope.data.title;
 
           var split_key = '';
           if ($rootScope.data.title.includes('|')) {
