@@ -62,7 +62,7 @@ RecordSeek.helpers = {
 
     if (obj['url'] !== undefined) {
       var defaultElements = ['_', 'h1', 'citation', 'title', 'e', 'ev', 'tags', 'url', 'notes'];
-      var obj2 = {...obj};
+      var obj2 = JSON.parse(JSON.stringify(obj));
       for (var i = 0; i < defaultElements.length; i++) {
         // uh-oh... throws a TypeError when i == 1
         delete obj2[defaultElements[i]];
@@ -366,7 +366,7 @@ angular
       if (!params.url) {
         var cData = $cookie.get('recordseek-auth');
         if (cData) {
-          let testParams = angular.fromJson(cData);
+          var testParams = angular.fromJson(cData);
           if (testParams) {
             params = testParams;
           }
