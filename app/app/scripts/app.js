@@ -14,23 +14,38 @@ RecordSeek.helpers = {
   isNotString: function (str) {
     return (typeof str !== 'string');
   },
+
   decodeQueryString: function (url) {
     var obj = {};
     if (url) {
+
+      url = decodeURIComponent(url).replace(/(\r\n|\n|\r)/gm, ' ').replace(/ +(?= )/g, '');
+
       var pos = url.indexOf('?');
       if (pos !== -1) {
-        var segments = "";
-        if (url.indexOf('amp;') > 0) {
+        var segments = '';
+        if (url.indexOf('amp;') != -1) {
           segments = decodeURIComponent(url).substring(pos + 1).split('&amp;');
         } else {
           segments = decodeURIComponent(url).substring(pos + 1).split('&');
         }
+
         segments.forEach(function (segment) {
           var posEqual = segment.indexOf('=');
           var kv = segment.split('=', 2);
           if (kv && kv[0]) {
-            var key = decodeURIComponent(kv[0]);
+            var key = kv[0].trim();
             var value = (kv[1] != null ? decodeURIComponent(segment.substring(posEqual + 1)) : kv[1]); // catches null and undefined
+            if (!value) {
+              return;
+            }
+            value = value.replace(/(\r\n|\n|\r)/gm, ' ').replace(/ +(?= )/g, '').trim();
+            if (value.indexOf('#!/') !== -1) {
+              value = value.split('#!')[0];
+            }
+            if (obj[key]) {
+              console.log('KEY ALREADY EXISTS');
+            }
             if (obj[key] != null && !Array.isArray(obj[key])) {
               obj[key] = [obj[key]];
             }
@@ -41,6 +56,25 @@ RecordSeek.helpers = {
             }
           }
         });
+      }
+
+    }
+
+    if (obj['url'] !== undefined) {
+      var defaultElements = ['_', 'h1', 'citation', 'title', 'e', 'ev', 'tags', 'url', 'notes'];
+      var obj2 = {...obj};
+      for (var i = 0; i < defaultElements.length; i++) {
+        // uh-oh... throws a TypeError when i == 1
+        delete obj2[defaultElements[i]];
+      }
+      if (Object.keys(obj2).length > 0) {
+        var extra_query_args = jQuery.param(obj2);
+        if (obj.url.indexOf('?') === -1) {
+          obj.url += '?';
+        } else {
+          obj.url += '&';
+        }
+        obj.url += extra_query_args;
       }
     }
     return obj;
@@ -180,6 +214,21 @@ angular
       $rootScope.helpers = RecordSeek.helpers;
       $rootScope.attachMsg = 'Source created by RecordSeek.com';
 
+      $rootScope.saveSession = function () {
+        // special handling for fs-source, to fill in the data from/to localStorage.
+        Object.keys($rootScope.data).forEach(function (key) {
+          var localStorageValue = localStorage.getItem(key);
+          if (!personData[key] && (!$rootScope.data || !$rootScope.data[key])) {
+            if (localStorageValue && localStorageValue != "") {
+              personData[key] = localStorageValue;
+              obj[key] = localStorageValue;
+            }
+          } else {
+            localStorage.setItem(key, personData[key]);
+          }
+        });
+      };
+
       // $rootScope.debug = true; //fsAPI.environment == 'production' ? false : true;
       $rootScope.debug = location.hostname === "localhost" ? true : false;
 
@@ -232,7 +281,7 @@ angular
         'MLA': '"{title}." {publisher} {url}. Accessed {date} {month}. {year}.',
         'Chicago': '"{title}", {publisher}, accessed {month_full} {date}, {year}, {url}',
       };
-      $rootScope.generateCitation = function() {
+      $rootScope.generateCitation = function () {
         if (!$rootScope.data.sourceFormat) {
           var cookieCheck = $rootScope.getCookie('recordseek_source_format');
           if (cookieCheck !== '' && $rootScope.sourceFormats[cookieCheck] !== undefined) {
@@ -264,6 +313,7 @@ angular
         $rootScope.log(fsAPI);
         if ($rootScope.service === "FamilySearch") {
           fsAPI.completeLogout().then(function () {
+            // $rootScope.saveSession();
             window.location.href = fsAPI.oauthRedirectURL();
           });
         }
@@ -309,7 +359,19 @@ angular
       };
 
       var split = document.URL.split('#');
+
       var params = $rootScope.helpers.decodeQueryString(split[0]);
+
+      // Restore the saved data on redirect
+      if (!params.url) {
+        var cData = $cookie.get('recordseek-auth');
+        if (cData) {
+          let testParams = angular.fromJson(cData);
+          if (testParams) {
+            params = testParams;
+          }
+        }
+      }
 
       if ($rootScope.debug) {
         console.log(params);
@@ -351,7 +413,7 @@ angular
         });
       }
 
-      if (params.tags) {
+      if (params.tags && !angular.equals({}, params.tags)) {
         var $todo = params.tags.split(',');
         params.tags = {};
         $todo.map(
@@ -383,13 +445,6 @@ angular
         }
       }
 
-      if ($location.$$absUrl.indexOf('?_') > -1 && $location.$$absUrl.indexOf('/#') === -1) {
-        //var $url = $location.$$absUrl.replace( '?_', '#/?_' );
-        //$window.location.href = $url;
-        //return;
-      }
-
-      //$rootScope.log(document.location.origin+'/');
 
       if (params) {
         var obj = params;
@@ -415,21 +470,6 @@ angular
             }
           }
         }
-
-        // special handling for fs-source, to fill in the data from/to localStorage.
-        var sourceMaps = ['title', 'url', 'citation', 'notes', '_', 'publisher', 'year', 'month', 'date', 'full_month'];
-        sourceMaps.forEach(function (key) {
-          var localStorageValue = localStorage.getItem(key);
-          if (!personData[key] && (!$rootScope.data || !$rootScope.data[key])) {
-            if (localStorageValue && localStorageValue != "") {
-              personData[key] = localStorageValue;
-              obj[key] = localStorageValue;
-            }
-          } else {
-            localStorage.setItem(key, personData[key]);
-          }
-        });
-
 
         if (!angular.equals({}, personData)) {
           $rootScope.log(personData);
@@ -470,6 +510,7 @@ angular
 
         if ($rootScope.data.url && $rootScope.data.url !== '') {
           if ($rootScope.data.url.indexOf('ancestry') > -1) {
+            console.log('yo!!');
             $rootScope.data.url = $rootScope.data.url.replace(
               'ancestryinstitution.com', 'ancestry.com'
             ).replace('ancestrylibrary.com', 'ancestry.com').replace(
@@ -485,7 +526,7 @@ angular
             var $x = urlData['dbid'] ? 'dbid' : 'db';
             var newURL = {
               indiv: 'try',
-              h: params['h'],
+              h: urlData['h'],
             };
             newURL[$x] = urlData[$x];
 
@@ -521,7 +562,7 @@ angular
           }
           $rootScope.data.title = title;
           if (publisher === '') {
-            publisher = $rootScope.data.url.replace('http://','').replace('www.','').replace('https://','').split(/[/?#]/)[0].split('.')[0];
+            publisher = $rootScope.data.url.replace('http://', '').replace('www.', '').replace('https://', '').split(/[/?#]/)[0].split('.')[0];
           }
           $rootScope.data.publisher = publisher.charAt(0).toUpperCase() + publisher.slice(1);
 

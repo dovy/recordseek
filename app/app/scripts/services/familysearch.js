@@ -34,15 +34,18 @@ angular.module('recordseekApp')
       }
 
 
+
+
       this.$get = function ($window, $http, $q, $timeout, $rootScope, $injector, $location) {
         if (this.client_id && this.environment && this.redirect_uri) {
           this.getEnvironment = function () {
             return this.environment;
           }
 
-
           $http.defaults.useXDomain = true;
           delete $http.defaults.headers.common['X-Requested-With'];
+
+
 
           /* globals FamilySearch */
           this.client = new FamilySearch(
@@ -57,7 +60,16 @@ angular.module('recordseekApp')
               timeout_function: $timeout
             }
           );
+
           var that = this;
+
+          var old = FamilySearch.prototype.oauthRedirectURL;
+          FamilySearch.prototype.oauthRedirectURL = function() {
+            $rootScope.setCookie( 'recordseek-auth', angular.toJson( $rootScope.data ) );
+            var ret = old.apply(this);
+            // hook after call
+            return ret;
+          };
 
           this.client.handleError = function (error, response, hide_alert) {
             var the_alert = '';
@@ -69,6 +81,7 @@ angular.module('recordseekApp')
             } else if (response.statusCode == 401) {
               var split = document.URL.split('#');
               var params = $rootScope.helpers.decodeQueryString(split[0]);
+              // $rootScope.saveSession();
               if (that.client.getAccessToken() && that.client.getAccessToken() != "undefined")
                 that.client.completeLogout().then(function () {
                   // In case of any errors of current user, we first redirect user to homepage
