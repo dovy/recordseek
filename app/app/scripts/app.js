@@ -510,7 +510,7 @@ angular
 
         if ($rootScope.data.url && $rootScope.data.url !== '') {
           if ($rootScope.data.url.indexOf('ancestry') > -1) {
-            console.log('yo!!');
+
             $rootScope.data.url = $rootScope.data.url.replace(
               'ancestryinstitution.com', 'ancestry.com'
             ).replace('ancestrylibrary.com', 'ancestry.com').replace(
@@ -524,11 +524,19 @@ angular
             'www.ancestry.') > -1 || $rootScope.data.url.indexOf('search.ancestry.') > -1)) {
             var urlData = RecordSeek.helpers.decodeQueryString($rootScope.data.url);
             var $x = urlData['dbid'] ? 'dbid' : 'db';
+
             var newURL = {
               indiv: 'try',
               h: urlData['h'],
+              _phsrc: urlData['_phsrc'] ? urlData['_phsrc'] : '',
+              pid: urlData['pid'] ? urlData['pid'] : '',
             };
             newURL[$x] = urlData[$x];
+            Object.keys(newURL).forEach(function(key) {
+              if (newURL[key] === "") {
+                delete newURL[key];
+              }
+            });
 
             $rootScope.data.url = RecordSeek.helpers.appendQueryParameters(
               RecordSeek.helpers.removeQueryString($rootScope.data.url), newURL
