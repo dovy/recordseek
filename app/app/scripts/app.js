@@ -275,6 +275,9 @@ angular
           }
         );
       };
+      $rootScope.deleteCookie = function ($key) {
+        $cookie.delete( $key );
+      };
       $rootScope.sourceFormats = {
         'APA': '{title}. ({year}, {month_full} {date}). Retrieved from {url}',
         'Harvard - AGPS': '{title}. [online] Available at: <{url}> [Accessed {date} {month}. {year}]',
