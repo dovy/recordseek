@@ -417,13 +417,15 @@ angular
       }
 
       if (params.tags && !angular.equals({}, params.tags)) {
-        var $todo = params.tags.split(',');
-        params.tags = {};
-        $todo.map(
-          function (item) {
-            params.tags[item.toLowerCase()] = true;
-          }
-        );
+        if (typeof params.tags === 'string' || params.tags instanceof String) {
+          var $todo = params.tags.split(',');
+          params.tags = {};
+          $todo.map(
+            function (item) {
+              params.tags[item.toLowerCase()] = true;
+            }
+          );
+        }
       } else {
         params.tags = {};
       }
