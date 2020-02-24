@@ -71,42 +71,42 @@ angular.module('recordseekApp')
         $rootScope.safeApply();
       };
 
-      if ($rootScope.personData) {
-        var $test = $rootScope.personData;
-        if ($test.title) {
-          delete $test.title;
-        }
-        if ($test.notes) {
-          delete $test.notes;
-        }
-        if ($test.citation) {
-          delete $test.citation;
-        }
-        if ($test.url) {
-          delete $test.url;
-        }
-        if ($test.sourceFormat) {
-          delete $test.sourceFormat;
-        }
-        if ($test.time) {
-          delete $test.time;
-        }
-        if ($test.domain) {
-          delete $test.domain;
-        }
-        if ($test.tags) {
-          delete $test.tags;
-        }
-        if ($test['_']) {
-          delete $test['_'];
-        }
-        if ($test && !angular.equals({}, $test) && !$rootScope.skipSource) {
-          $rootScope.skipSource = 1;
-          $rootScope.log($test);
-          $scope.goNext();
-        }
-        $rootScope.log($rootScope.personData);
-      }
+      // if ($rootScope.personData) {
+      //   var $test = $rootScope.personData;
+      //   if ($test.title) {
+      //     delete $test.title;
+      //   }
+      //   if ($test.notes) {
+      //     delete $test.notes;
+      //   }
+      //   if ($test.citation) {
+      //     delete $test.citation;
+      //   }
+      //   if ($test.url) {
+      //     delete $test.url;
+      //   }
+      //   if ($test.sourceFormat) {
+      //     delete $test.sourceFormat;
+      //   }
+      //   if ($test.time) {
+      //     delete $test.time;
+      //   }
+      //   if ($test.domain) {
+      //     delete $test.domain;
+      //   }
+      //   if ($test.tags) {
+      //     delete $test.tags;
+      //   }
+      //   if ($test['_']) {
+      //     delete $test['_'];
+      //   }
+      //   if ($test && !angular.equals({}, $test) && !$rootScope.skipSource) {
+      //     $rootScope.skipSource = 1;
+      //     $rootScope.log($test);
+      //     $scope.goNext();
+      //   }
+      //   $rootScope.log($rootScope.personData);
+      // }
 
       $scope.sourceFormats = $rootScope.sourceFormats;
       $scope.sourceFormat = $rootScope.data.sourceFormat;
